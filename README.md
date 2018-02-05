@@ -16,7 +16,7 @@ Applications that use Symfony Flex
 Open a command console, enter your project directory and execute:
 
 ```console
-$ composer require hillrange/security
+$ composer require hillrange/symfony-form
 ```
 
 Applications that don't use Symfony Flex
@@ -28,7 +28,7 @@ Open a command console, enter your project directory and execute the
 following command to download the latest stable version of this bundle:
 
 ```console
-$ composer require hillrange/security-form "~0"
+$ composer require hillrange/symfony-form "~0"
 ```
 
 This command requires you to have Composer installed globally, as explained
