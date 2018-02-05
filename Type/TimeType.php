@@ -21,7 +21,7 @@ class TimeType extends AbstractType
 
 	public function getBlockPrefix()
 	{
-		return 'bee_time';
+		return 'hillrange_time';
 	}
 
 	public function getParent()

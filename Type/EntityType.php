@@ -36,7 +36,7 @@ class EntityType extends AbstractType
 	 */
 	public function getBlockPrefix()
 	{
-		return 'bee_entity';
+		return 'hillrange_entity';
 	}
 
 	public function getParent()

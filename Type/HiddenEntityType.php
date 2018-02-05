@@ -16,7 +16,7 @@ class HiddenEntityType extends AbstractType
 	private $manager;
 
 	/**
-	 * StaffType constructor.
+	 * HiddenEntityType constructor.
 	 *
 	 * @param EntityManagerInterface $manager
 	 */
@@ -38,7 +38,7 @@ class HiddenEntityType extends AbstractType
 	 */
 	public function getBlockPrefix()
 	{
-		return 'bee_entity_hidden';
+		return 'hillrange_entity_hidden';
 	}
 
 	public function getParent()

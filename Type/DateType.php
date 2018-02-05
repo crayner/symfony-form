@@ -18,7 +18,7 @@ class DateType extends AbstractType
 	{
 		$resolver->setDefaults(
 			[
-				'format' => 'D, jS M/Y',
+				'format' => 'yyyyMMMdd',
 			]
 		);
 	}

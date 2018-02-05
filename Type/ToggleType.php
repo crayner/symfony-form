@@ -19,7 +19,7 @@ class ToggleType extends AbstractType
 
 	public function getBlockPrefix()
 	{
-		return 'bee_toggle';
+		return 'hillrange_toggle';
 	}
 
 	public function buildView(FormView $view, FormInterface $form, array $options)

@@ -25,6 +25,6 @@ class TextType extends AbstractType
 
 	public function getBlockPrefix()
 	{
-		return 'bee_text';
+		return 'hillrange_text';
 	}
 }
