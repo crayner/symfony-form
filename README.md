@@ -1,6 +1,10 @@
 # Form Extension
 Symfony 4 Form Extension Bundle
 
+Version
+-------
+0.0.00
+
 Development ONLY
 ----------------
 
