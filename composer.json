@@ -24,7 +24,7 @@
             "Hillrange\\Form\\": "/"
         },
         "exclude-from-classmap": [
-            "/Tests/"
+            "/tests/"
         ]
     },
     "autoload-dev": {
