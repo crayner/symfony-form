@@ -1,5 +1,5 @@
 {
-    "bundles":
+    "bundles": {
         "Hillrange\\Form\\HillrangeFormBundle": ["all"]
     },
     "copy-from-recipe": {

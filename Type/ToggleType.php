@@ -11,6 +11,15 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ToggleType extends AbstractType
 {
+    /**
+     * @var string
+     */
+    private $buttonClassOff;
+
+    /**
+     * @var array
+     */
+    private $buttonToggleSwap;
 
 	public function getParent()
 	{
@@ -29,8 +38,8 @@ class ToggleType extends AbstractType
 				'div_class' => $options['div_class'],
 			)
 		);
-		$view->vars['use_toggle'] = $options['use_toggle'];
-		$view->vars['button_class_off'] = $options['button_class_off'];
+        $view->vars['button_class_off'] = $options['button_class_off'] ?: $this->buttonClassOff;
+        $view->vars['button_toggle_swap'] = $options['button_toggle_swap'] ?: $this->buttonToggleSwap;
 	}
 
 	public function configureOptions(OptionsResolver $resolver)
@@ -40,12 +49,8 @@ class ToggleType extends AbstractType
 				'compound'   => false,
 				'required'   => false,
 				'div_class'  => 'toggleRight',
-				'use_toggle' => false,
-				'button_class_off' => 'btn btn-danger halflings halflings-thumbs-down',
-				'button_toggle_on' => [
-					'btn-danger' => 'btn-success',
-					'halflings-thumbs-down' => 'halflings-thumbs-up'
-				],
+				'button_class_off' => null,
+				'button_toggle_swap' => null,
 			)
 		);
 	}
@@ -54,4 +59,33 @@ class ToggleType extends AbstractType
 	{
 		$builder->addModelTransformer(new ToggleTransformer());
 	}
+
+    /**
+     * @param string $buttonClassOff
+     * @return $this
+     */
+    public function setButtonClassOff(string $buttonClassOff = 'btn btn-danger toggle toggle-thumbs-down')
+    {
+        $this->buttonClassOff = $buttonClassOff;
+
+        return $this;
+    }
+
+    /**
+     * @param array $buttonToggleSwap
+     * @return $this
+     */
+    public function setButtonToggleSwap(array $buttonToggleSwap = [])
+    {
+        if (empty($buttonToggleSwap))
+            $buttonToggleSwap = [
+                'btn-danger',
+                'btn-success',
+                'toggle-thumbs-down',
+                'toggle-thumbs-up',
+            ];
+        $this->buttonToggleSwap = $buttonToggleSwap;
+
+        return $this;
+    }
 }

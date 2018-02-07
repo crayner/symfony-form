@@ -2,7 +2,8 @@
 
 {% block image_label -%}
     {% if imageExists(data) %}
-        <img src="{{ asset( imagePath(data) ) }}" class="{{ attr.imageClass }} card-img"/>
+        {% if attr.imageClass is defined %}{% set imageClass = attr.imageClass %}{% endif %}
+        <img src="{{ asset( imagePath(data) ) }}" class="{{ imageClass }} card-img"/>
         {{- form_label(form) -}}
         {% if deletePhoto is not null %}
             {% set imageDelete = 0 %}
@@ -162,33 +163,45 @@
     {% endif %}
 {%- endblock checkbox_widget %}
 
-{% block bee_toggle_row -%}
-    {% set button_class = button_class_off|default('btn btn-danger halflings halflings-thumbs-down') %}
+{% block hillrange_toggle_row -%}
+    {% set button_class = button_class_off|default('btn btn-danger toggle toggle-thumbs-down') %}
 
-    {% set button_toggle_on = button_toggle_on|default({'btn-danger': 'btn-success', 'halflings-thumbs-down': 'halflings-thumbs-up', 'btn-success': 'btn-danger', 'halflings-thumbs-up': 'halflings-thumbs-down'}) %}
+    {% set button_toggle_swap = button_toggle_swap|default(['btn-danger', 'btn-success', 'toggle-thumbs-down', 'toggle-thumbs-up']) %}
     {% if value == '1' %}
-        {% set button_class = button_class|replace(button_toggle_on) %}
+        {% set button_class = button_class|replace(button_toggle_swap) %}
     {% endif %}
 
     {% set swap_list = '' %}
-    {% for x,y in button_toggle_on %}
-        {% if y not in swap_list  %}
-            {% set swap_list = swap_list ~ ' ' ~ y|trim %}
-        {% endif %}
-        {% if x not in swap_list  %}
-            {% set swap_list = swap_list ~ ' ' ~ x|trim %}
-        {% endif %}
+    {% for y in button_toggle_swap %}
+        {% set swap_list = swap_list ~ ' ' ~ y %}
     {% endfor %}
 
-    <div data-toggle="buttons">
-        {%- set parent_label_class = parent_label_class|default(label_attr.class|default('')) -%}
-        <label class="control-label">{{ (translation_domain is same as(false) ? label : label|trans({}, translation_domain)) }}
-        {% if required %}
-            <br/><span class="field-required">&nbsp;{{ 'form.required'|trans({}, 'FormTheme') }}</span>
-        {% endif %}</label>
-        <span class="{{ button_class }} {{ div_class }}" toggle_swap="{{ swap_list|trim }}"><input type="hidden" value="{{ value }}" id="{{ id }}" name="{{ full_name }}" /></span>
-    </div>
+
+    {% if 'toggle' in button_class %}
+        <div data-toggle="buttons">
+            {%- set parent_label_class = parent_label_class|default(label_attr.class|default('')) -%}
+            <label class="control-label">
+                <span class="{{ button_class }} {{ div_class }}" toggle_swap="{{ swap_list|trim }}">
+                <input type="hidden" value="{{ value }}" id="{{ id }}" name="{{ full_name }}" />
+                </span>
+                {{ (translation_domain is same as(false) ? label : label|trans({}, translation_domain)) }}
+                {% if required %}
+                    <br/><span class="field-required">&nbsp;{{ 'form.required'|trans({}, 'FormTheme') }}</span>
+                {% endif %}</label>
+        </div>
+    {% else %}
+        <div data-toggle="buttons">
+            {%- set parent_label_class = parent_label_class|default(label_attr.class|default('')) -%}
+            <label class="control-label">
+                <span class="{{ button_class }} {{ div_class }}" toggle_swap="{{ swap_list|trim }}">
+                <input type="hidden" value="{{ value }}" id="{{ id }}" name="{{ full_name }}" /></span>
+                {{ (translation_domain is same as(false) ? label : label|trans({}, translation_domain)) }}
+            {% if required %}
+                <br/><span class="field-required">&nbsp;{{ 'form.required'|trans({}, 'FormTheme') }}</span>
+            {% endif %}</label>
+        </div>
+    {% endif %}
     {{- form_errors(form) -}}
 
-{%- endblock bee_toggle_row %}
+{%- endblock hillrange_toggle_row %}
 

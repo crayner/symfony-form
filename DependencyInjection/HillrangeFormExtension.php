@@ -1,6 +1,8 @@
 <?php
 namespace Hillrange\Form\DependencyInjection;
 
+use Hillrange\Form\Type\EventSubscriber\ImageSubscriber;
+use Hillrange\Form\Type\ToggleType;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
@@ -20,5 +22,43 @@ class HillrangeFormExtension extends Extension
 		);
 		$loader->load('services.yaml');
 
-	}
+        if (!empty($config['upload_path'])) {
+            $container
+                ->getDefinition(ImageSubscriber::class)
+                ->addMethodCall('setTargetDir', [$config['upload_path']]);
+        } else {
+            $container
+                ->getDefinition(ImageSubscriber::class)
+                ->addMethodCall('setTargetDir', []);
+        }
+
+        $this->registerButtons($config, $container);
+    }
+
+    /**
+     * @param array            $config
+     * @param ContainerBuilder $container
+     */
+    private function registerButtons(array $config, ContainerBuilder $container)
+    {
+        if (!empty($config['button_class_off'])) {
+            $container
+                ->getDefinition(ToggleType::class)
+                ->addMethodCall('setButtonClassOff', [$config['button_class_off']]);
+        } else {
+            $container
+                ->getDefinition(ToggleType::class)
+                ->addMethodCall('setButtonClassOff', []);
+        }
+
+        if (!empty($config['button_toggle_swap'])) {
+            $container
+                ->getDefinition(ToggleType::class)
+                ->addMethodCall('setButtonToggleSwap', [$config['button_toggle_swap']]);
+        } else {
+            $container
+                ->getDefinition(ToggleType::class)
+                ->addMethodCall('setButtonToggleSwap', []);
+        }
+    }
 }

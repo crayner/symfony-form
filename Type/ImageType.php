@@ -2,7 +2,7 @@
 namespace Hillrange\Form\Type;
 
 use Hillrange\Form\Type\Transform\ImageToStringTransformer;
-use App\Core\Subscriber\ImageSubscriber;
+use Hillrange\Form\Type\EventSubscriber\ImageSubscriber;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -39,14 +39,13 @@ class ImageType extends AbstractType
 				'type'         => 'file',
 				'deleteTarget' => '_self',
 				'deleteParams' => null,
+                'imageClass'   => null,
 			]
 		);
 
 		$resolver->setRequired(
 			[
 				'deletePhoto',
-				'deleteTarget',
-				'deleteParams',
 				'fileName',
 			]
 		);
@@ -88,6 +87,7 @@ class ImageType extends AbstractType
 	{
 		$view->vars['deletePhoto']  = $options['deletePhoto'];
 		$view->vars['deleteTarget'] = $options['deleteTarget'];
-		$view->vars['deleteParams'] = $options['deleteParams'];
+        $view->vars['deleteParams'] = $options['deleteParams'];
+        $view->vars['imageClass']   = $options['imageClass'];
 	}
 }
