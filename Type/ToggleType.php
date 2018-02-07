@@ -52,6 +52,6 @@ class ToggleType extends AbstractType
 
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
-	//	$builder->addModelTransformer(ToggleTransformer::class);
+		$builder->addModelTransformer(new ToggleTransformer());
 	}
 }
