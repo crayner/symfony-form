@@ -164,11 +164,18 @@
 {%- endblock checkbox_widget %}
 
 {% block hillrange_toggle_row -%}
-    {% set button_class = button_class_off|default('btn btn-danger toggle toggle-thumbs-down') %}
+    {% set button_class = button_class_off|default('toggle toggle-thumbs-down') %}
 
-    {% set button_toggle_swap = button_toggle_swap|default(['btn-danger', 'btn-success', 'toggle-thumbs-down', 'toggle-thumbs-up']) %}
+    {% set button_toggle_swap = button_toggle_swap|default(['toggle-thumbs-down', 'toggle-thumbs-up']) %}
+
     {% if value == '1' %}
-        {% set button_class = button_class|replace(button_toggle_swap) %}
+        {% for swap in button_toggle_swap %}
+            {% if swap in button_class %}
+                {% set button_class = button_class|replace({(swap): ""})|trim %}
+            {% else %}
+                {% set button_class = button_class ~ ' ' ~ swap %}
+            {% endif %}
+        {% endfor %}
     {% endif %}
 
     {% set swap_list = '' %}
@@ -177,16 +184,19 @@
     {% endfor %}
 
 
-        <div>
-            {%- set parent_label_class = parent_label_class|default(label_attr.class|default('')) -%}
-            <label class="control-label">
-                <span class="{{ button_class }} {{ div_class }}" toggle_swap="{{ swap_list|trim }}" data-toggle="buttons">
-                <input type="hidden" value="{{ value }}" id="{{ id }}" name="{{ full_name }}" /></span>
-                {{ (translation_domain is same as(false) ? label : label|trans({}, translation_domain)) }}
-            {% if required %}
-                <br/><span class="field-required">&nbsp;{{ 'form.required'|trans({}, 'FormTheme') }}</span>
-            {% endif %}</label>
-        </div>
+    <div>
+        {%- set parent_label_class = parent_label_class|default(label_attr.class|default('')) -%}
+        {% set inputClass = '' %}
+        {% if attr.class is defined %}{% set inputClass = 'class=' ~ attr.class  %}{% endif %}
+        <label class="control-label">
+            <span class="{{ button_class }} {{ div_class }}" toggle_swap="{{ swap_list|trim }}" data-toggle="buttons">
+            <input type="hidden" value="{{ value }}" id="{{ id }}" name="{{ full_name }}" {{ inputClass }} /></span>
+            {{ (translation_domain is same as(false) ? label : label|trans({}, translation_domain)) }}
+        {% if required %}
+            <br/><span class="field-required">&nbsp;{{ 'form.required'|trans({}, 'FormTheme') }}</span>
+        {% endif %}
+        </label>
+    </div>
     {{- form_errors(form) -}}
 
 {%- endblock hillrange_toggle_row %}

@@ -64,10 +64,10 @@ Extends the standard HiddenType to create a toggle button.
         div_class: 'toggleRight'.  The button is enclosed in a div element.  This class is applied to the ecloding div.
 The classes must be pre-loaded by adding the stylesheet to the header.  include the template::
                         @HillrangeForm/Toggle/style.html.twig
-        button_class_off: 'btn btn-danger halflings halflings-thumbs-down'
-        button_toggle_on:
-            'btn-danger' => 'btn-success',
-            'halflings-thumbs-down' => 'halflings-thumbs-up'
+        button_class_off: 'toggle toggle-thumbs-down'
+        button_toggle_swap:
+            - 'toggle-thumbs-down'
+            - 'toggle-thumbs-up'
 
 The ToggleType showes a
 
