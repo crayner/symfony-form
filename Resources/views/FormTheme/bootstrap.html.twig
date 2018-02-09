@@ -177,30 +177,16 @@
     {% endfor %}
 
 
-    {% if 'toggle' in button_class %}
-        <div data-toggle="buttons">
+        <div>
             {%- set parent_label_class = parent_label_class|default(label_attr.class|default('')) -%}
             <label class="control-label">
-                <span class="{{ button_class }} {{ div_class }}" toggle_swap="{{ swap_list|trim }}">
-                <input type="hidden" value="{{ value }}" id="{{ id }}" name="{{ full_name }}" />
-                </span>
-                {{ (translation_domain is same as(false) ? label : label|trans({}, translation_domain)) }}
-                {% if required %}
-                    <br/><span class="field-required">&nbsp;{{ 'form.required'|trans({}, 'FormTheme') }}</span>
-                {% endif %}</label>
-        </div>
-    {% else %}
-        <div data-toggle="buttons">
-            {%- set parent_label_class = parent_label_class|default(label_attr.class|default('')) -%}
-            <label class="control-label">
-                <span class="{{ button_class }} {{ div_class }}" toggle_swap="{{ swap_list|trim }}">
+                <span class="{{ button_class }} {{ div_class }}" toggle_swap="{{ swap_list|trim }}" data-toggle="buttons">
                 <input type="hidden" value="{{ value }}" id="{{ id }}" name="{{ full_name }}" /></span>
                 {{ (translation_domain is same as(false) ? label : label|trans({}, translation_domain)) }}
             {% if required %}
                 <br/><span class="field-required">&nbsp;{{ 'form.required'|trans({}, 'FormTheme') }}</span>
             {% endif %}</label>
         </div>
-    {% endif %}
     {{- form_errors(form) -}}
 
 {%- endblock hillrange_toggle_row %}

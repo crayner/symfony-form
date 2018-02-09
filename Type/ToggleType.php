@@ -64,7 +64,7 @@ class ToggleType extends AbstractType
      * @param string $buttonClassOff
      * @return $this
      */
-    public function setButtonClassOff(string $buttonClassOff = 'btn btn-danger toggle toggle-thumbs-down')
+    public function setButtonClassOff(string $buttonClassOff = 'toggle toggle-thumbs-down')
     {
         $this->buttonClassOff = $buttonClassOff;
 
@@ -79,8 +79,6 @@ class ToggleType extends AbstractType
     {
         if (empty($buttonToggleSwap))
             $buttonToggleSwap = [
-                'btn-danger',
-                'btn-success',
                 'toggle-thumbs-down',
                 'toggle-thumbs-up',
             ];
