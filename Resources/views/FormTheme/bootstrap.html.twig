@@ -171,7 +171,9 @@
     {% if value == '1' %}
         {% for swap in button_toggle_swap %}
             {% if swap in button_class %}
-                {% set button_class = button_class|replace({(swap): ""})|trim %}
+                {% set button_class = button_class|replace({(swap): ""}) %}
+                {% set button_class = button_class|replace({'  ': ' '}) %}
+                {% set button_class = button_class|trim %}
             {% else %}
                 {% set button_class = button_class ~ ' ' ~ swap %}
             {% endif %}
