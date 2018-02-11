@@ -1,6 +1,7 @@
 <?php
 namespace Hillrange\Form\DependencyInjection;
 
+use Hillrange\Form\Extension\ToggleTypeExtension;
 use Hillrange\Form\Type\EventSubscriber\ImageSubscriber;
 use Hillrange\Form\Type\ToggleType;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -43,9 +44,15 @@ class HillrangeFormExtension extends Extension
     {
         if (!empty($config['button_class_off'])) {
             $container
+                ->getDefinition(ToggleTypeExtension::class)
+                ->addMethodCall('setButtonClassOff', [$config['button_class_off']]);
+            $container
                 ->getDefinition(ToggleType::class)
                 ->addMethodCall('setButtonClassOff', [$config['button_class_off']]);
         } else {
+            $container
+                ->getDefinition(ToggleTypeExtension::class)
+                ->addMethodCall('setButtonClassOff', []);
             $container
                 ->getDefinition(ToggleType::class)
                 ->addMethodCall('setButtonClassOff', []);
@@ -53,9 +60,15 @@ class HillrangeFormExtension extends Extension
 
         if (!empty($config['button_toggle_swap'])) {
             $container
+                ->getDefinition(ToggleTypeExtension::class)
+                ->addMethodCall('setButtonToggleSwap', [$config['button_toggle_swap']]);
+            $container
                 ->getDefinition(ToggleType::class)
                 ->addMethodCall('setButtonToggleSwap', [$config['button_toggle_swap']]);
         } else {
+            $container
+                ->getDefinition(ToggleTypeExtension::class)
+                ->addMethodCall('setButtonToggleSwap', []);
             $container
                 ->getDefinition(ToggleType::class)
                 ->addMethodCall('setButtonToggleSwap', []);

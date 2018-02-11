@@ -9,6 +9,16 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ToggleTypeExtension extends AbstractTypeExtension
 {
+    /**
+     * @var string
+     */
+    private $buttonClassOff;
+
+    /**
+     * @var array
+     */
+    private $buttonToggleSwap;
+
 	public function buildView(FormView $view, FormInterface $form, array $options)
 	{
 		$view->vars = array_replace($view->vars,
@@ -17,8 +27,8 @@ class ToggleTypeExtension extends AbstractTypeExtension
 			)
 		);
 		$view->vars['use_toggle'] = $options['use_toggle'];
-        $view->vars['button_class_off'] = $options['button_class_off'];
-        $view->vars['button_class_swap'] = $options['button_class_swap'];
+        $view->vars['button_class_off'] = $options['button_class_off'] ?: $this->buttonClassOff;
+        $view->vars['button_toggle_swap'] = $options['button_toggle_swap'] ?: $this->buttonToggleSwap;
 	}
 
 	public function configureOptions(OptionsResolver $resolver)
@@ -46,4 +56,31 @@ class ToggleTypeExtension extends AbstractTypeExtension
 	{
 		return CheckboxType::class;
 	}
+
+    /**
+     * @param string $buttonClassOff
+     * @return $this
+     */
+    public function setButtonClassOff(string $buttonClassOff = 'toggle toggle-thumbs-down')
+    {
+        $this->buttonClassOff = $buttonClassOff;
+
+        return $this;
+    }
+
+    /**
+     * @param array $buttonToggleSwap
+     * @return $this
+     */
+    public function setButtonToggleSwap(array $buttonToggleSwap = [])
+    {
+        if (empty($buttonToggleSwap))
+            $buttonToggleSwap = [
+                'toggle-thumbs-down',
+                'toggle-thumbs-up',
+            ];
+        $this->buttonToggleSwap = $buttonToggleSwap;
+
+        return $this;
+    }
 }
