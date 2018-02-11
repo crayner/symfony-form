@@ -1,5 +1,5 @@
 <?php
-namespace Hillrange\Type\Extension;
+namespace Hillrange\Form\Type\Extension;
 
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;

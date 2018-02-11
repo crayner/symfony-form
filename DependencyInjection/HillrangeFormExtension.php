@@ -1,8 +1,8 @@
 <?php
 namespace Hillrange\Form\DependencyInjection;
 
-use Hillrange\Form\Extension\ToggleTypeExtension;
 use Hillrange\Form\Type\EventSubscriber\ImageSubscriber;
+use Hillrange\Form\Type\Extension\ToggleTypeExtension;
 use Hillrange\Form\Type\ToggleType;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
