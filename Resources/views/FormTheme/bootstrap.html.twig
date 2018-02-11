@@ -138,26 +138,40 @@
         {% set use_toggle = true %}
     {% endif %}
     {% if use_toggle %}
-        {% set button_class = button_class_off|default('btn btn-danger halflings halflings-thumbs-down') %}
+        {% set button_class = button_class_off|default('toggle toggle-thumbs-down') %}
 
-        {% set button_toggle_on = button_toggle_on|default({'btn-danger': 'btn-success', 'halflings-thumbs-down': 'halflings-thumbs-up'}) %}
+        {% set button_toggle_swap = button_toggle_swap|default({'toggle-thumbs-down': 'toggle-thumbs-up'}) %}
         {% if checked %}
-            {% set button_class = button_class|replace(button_toggle_on) %}
+            {% for swap in button_toggle_swap %}
+                {% if swap in button_class %}
+                    {% set button_class = button_class|replace({(swap): ""}) %}
+                    {% set button_class = button_class|replace({'  ': ' '}) %}
+                    {% set button_class = button_class|trim %}
+                {% else %}
+                    {% set button_class = button_class ~ ' ' ~ swap %}
+                {% endif %}
+            {% endfor %}
         {% endif %}
 
         {% set swap_list = '' %}
-        {% for x,y in button_toggle_on %}
-            {% set swap_list = swap_list ~ ' ' ~ y ~ ' ' ~ x|trim %}
+        {% for y in button_toggle_swap %}
+            {% set swap_list = swap_list ~ ' ' ~ y %}
         {% endfor %}
 
-        <div class="{{ div_class }}">
-            <div data-toggle="buttons">
-                <span class="{{ button_class }}" toggle_swap="{{ swap_list|trim }}"><input type="hidden" value="{% if checked %}1{% else %}0{% endif %}" id="{{ id }}" name="{{ full_name }}" /></span>
-            </div>
+        <div>
+            {%- set parent_label_class = parent_label_class|default(label_attr.class|default('')) -%}
+            {% set inputClass = '' %}
+            {% if attr.class is defined %}{% set inputClass = 'class=' ~ attr.class  %}{% endif %}
+            <label class="control-label">
+            <span class="{{ button_class }} {{ div_class }}" toggle_swap="{{ swap_list|trim }}" data-toggle="buttons">
+            <input type="hidden" value="{{ value }}" id="{{ id }}" name="{{ full_name }}" {{ inputClass }} /></span>
+                {{ (translation_domain is same as(false) ? label : label|trans({}, translation_domain)) }}
+                {% if required %}
+                    <br/><span class="field-required">&nbsp;{{ 'form.required'|trans({}, 'FormTheme') }}</span>
+                {% endif %}
+            </label>
         </div>
-
-        {%- set parent_label_class = parent_label_class|default(label_attr.class|default('')) -%}
-        <label class="control-label">{{ (translation_domain is same as(false) ? label : label|trans({}, translation_domain)) }}</label>
+        {{- form_errors(form) -}}
     {% else %}
         {{ parent() }}
     {% endif %}

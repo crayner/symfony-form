@@ -18,4 +18,15 @@ $('[data-toggle="buttons"]').on('click', function () {
 
     return false;
 });
+
+$(document).ready(function(){
+
+    if (document.createStyleSheet){  // Bloody IE
+        document.createStyleSheet('{{ asset('@HillrangeForm/Toggle/style.html.twig') }}');
+    }
+    else {
+        $("head").append($("<link rel='stylesheet' href='{{ asset('@HillrangeForm/Toggle/style.html.twig') }}' type='text/css' media='screen' />"));
+    }
+});
+
 </script>

@@ -1,5 +1,5 @@
 <?php
-namespace Hillrange\Form\Twig\Extension;
+namespace Hillrange\Form\Extension;
 
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -17,7 +17,8 @@ class ToggleTypeExtension extends AbstractTypeExtension
 			)
 		);
 		$view->vars['use_toggle'] = $options['use_toggle'];
-		$view->vars['button_class_off'] = $options['button_class_off'];
+        $view->vars['button_class_off'] = $options['button_class_off'];
+        $view->vars['button_class_swap'] = $options['button_class_swap'];
 	}
 
 	public function configureOptions(OptionsResolver $resolver)
@@ -29,10 +30,10 @@ class ToggleTypeExtension extends AbstractTypeExtension
 				'required'   => false,
 				'div_class'  => 'toggleRight',
 				'use_toggle' => false,
-				'button_class_off' => 'btn btn-danger halflings halflings-thumbs-down',
-				'button_toggle_on' => [
-					'btn-danger' => 'btn-success',
-					'halflings-thumbs-down' => 'halflings-thumbs-up'
+				'button_class_off' => 'toggle toggle-thumbs-down',
+				'button_toggle_swap' => [
+					'toggle-thumbs-down',
+                    'toggle-thumbs-up'
 				],
 			)
 		);
