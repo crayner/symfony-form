@@ -1,9 +1,9 @@
 <?php
-namespace Hillrange\Form;
+namespace Hillrange\Form\Util;
 
 class VersionManager
 {
-    const VERSION = '0.0.01';
+    const VERSION = '0.0.02';
 
     /**
      * @return string
