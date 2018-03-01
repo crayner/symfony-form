@@ -3,7 +3,7 @@
 {% block image_label -%}
     {% if imageExists(data) %}
         {% if attr.imageClass is defined %}{% set imageClass = attr.imageClass %}{% endif %}
-        <img src="{{ asset( imagePath(data) ) }}" class="{{ imageClass }} card-img"/><!-- Hillrange Image -->{% dump %}
+        <img src="{{ asset( imagePath(data) ) }}" class="{{ imageClass }} card-img"/><!-- Hillrange Image -->
         {{- form_label(form) -}}
         {% if deletePhoto is not null %}
             {% set imageDelete = 0 %}
