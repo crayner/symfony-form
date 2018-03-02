@@ -9,7 +9,7 @@ class NoWhiteSpace extends Constraint
 	/**
 	 * @var string
 	 */
-	public $message = 'nowhitespace.error';
+	public $message = 'no_white_space.validator.error';
 
 	/**
 	 * @var bool
