@@ -28,7 +28,7 @@ class EntityType extends AbstractType
 	 */
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
-		$builder->addModelTransformer(new EntityToStringTransformer($this->manager, $options));
+        $builder->addViewTransformer(new EntityToStringTransformer($this->manager, $options));
 	}
 
 	/**

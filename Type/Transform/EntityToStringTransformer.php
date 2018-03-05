@@ -1,6 +1,7 @@
 <?php
 namespace Hillrange\Form\Type\Transform;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
@@ -49,9 +50,9 @@ class EntityToStringTransformer implements DataTransformerInterface
 	 */
 	public function transform($entity)
 	{
-		if (!$this->isMultiple())
+        if (!$this->isMultiple())
 		{
-			if (is_null($entity) || !$entity instanceof $this->entityClass)
+			if (is_null($entity) || ! $entity instanceof $this->entityClass)
 			{
 				return '';
 			}
@@ -59,6 +60,8 @@ class EntityToStringTransformer implements DataTransformerInterface
 			return strval($entity->getId());
 		}
 
+		if (is_array($entity))
+		    $entity = new ArrayCollection($entity);
 		if (is_iterable($entity))
 			if ($entity->count() == 0)
 				return [];
@@ -66,6 +69,7 @@ class EntityToStringTransformer implements DataTransformerInterface
 			{
 				return $entity->toArray();
 			}
+
 		throw new \Exception('What to do with: ' . json_encode($entity));
 	}
 
@@ -78,7 +82,8 @@ class EntityToStringTransformer implements DataTransformerInterface
 	 */
 	public function reverseTransform($id)
 	{
-		if (!$id || $id === 'Add' || empty($id))
+dump($id);
+        if ($id === 'Add' || empty($id))
 		{
 			return null;
 		}

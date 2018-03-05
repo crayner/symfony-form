@@ -3,7 +3,7 @@ Symfony 4 Form Extension Bundle
 
 Version
 -------
-0.0.00
+0.1.00
 
 Development ONLY
 ----------------
@@ -32,7 +32,7 @@ Open a command console, enter your project directory and execute the
 following command to download the latest stable version of this bundle:
 
 ```console
-$ composer require hillrange/symfony-form "~0"
+$ composer require hillrange/symfony-form "~0.0"
 ```
 
 This command requires you to have Composer installed globally, as explained

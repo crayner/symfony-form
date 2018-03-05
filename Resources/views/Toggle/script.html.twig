@@ -1,6 +1,6 @@
 <!-- Toggle Script -->
-<script>
-$('[data-toggle="buttons"]').on('click', function () {
+<script type="text/javascript" lang="jquery">
+$(document).on('click', '[data-toggle="buttons"]', function () {
     // toggle style
     var swap = $(this).attr('toggle_swap');
     $(this).toggleClass(swap);
@@ -22,10 +22,10 @@ $('[data-toggle="buttons"]').on('click', function () {
 $(document).ready(function(){
 
     if (document.createStyleSheet){  // Bloody IE
-        document.createStyleSheet('{{ asset('@HillrangeForm/Toggle/style.html.twig') }}');
+        document.createStyleSheet('{{ asset('bundles/hillrangeform/css/toggle.css') }}');
     }
     else {
-        $("head").append($("<link rel='stylesheet' href='{{ asset('@HillrangeForm/Toggle/style.html.twig') }}' type='text/css' media='screen' />"));
+        $("head").append($("<link rel='stylesheet' href='{{ asset('bundles/hillrangeform/css/toggle.css') }}' type='text/css' media='screen' />"));
     }
 });
 
