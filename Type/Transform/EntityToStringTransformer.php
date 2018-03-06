@@ -32,13 +32,19 @@ class EntityToStringTransformer implements DataTransformerInterface
 		$this->setMultiple($options['multiple']);
 	}
 
-	public function setEntityClass($entityClass)
+    /**
+     * @param $entityClass
+     */
+    public function setEntityClass($entityClass)
 	{
 		$this->entityClass = $entityClass;
 		$this->setEntityRepository($entityClass);
 	}
 
-	public function setEntityRepository($entityClass)
+    /**
+     * @param $entityClass
+     */
+    public function setEntityRepository($entityClass)
 	{
 		$this->entityRepository = $this->om->getRepository($entityClass);
 	}
@@ -82,8 +88,7 @@ class EntityToStringTransformer implements DataTransformerInterface
 	 */
 	public function reverseTransform($id)
 	{
-dump($id);
-        if ($id === 'Add' || empty($id))
+        if (!$id || $id === 'Add' || empty($id))
 		{
 			return null;
 		}
