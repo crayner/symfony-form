@@ -205,8 +205,17 @@
         {%- set parent_label_class = parent_label_class|default(label_attr.class|default('')) -%}
         {% set inputClass = '' %}
         {% if attr.class is defined %}{% set inputClass = 'class=' ~ attr.class  %}{% endif %}
-        <label class="control-label">
-            <span class="{{ button_class }} {{ div_class }}" toggle_swap="{{ swap_list|trim }}" data-toggle="buttons">
+
+        {% set label_class = label_attr.class|default('') %}
+        {% set label_class = (label_class ~ ' control-label')|trim %}
+        {% if label_attr.id is defined %}
+            {% set label_id = ' id="' ~ label_attr.id ~ '"' %}
+        {% endif %}
+
+        {% set value = value|default('0') %}
+
+        <label class="{{ label_class }}"{{ label_id|default('') }}>
+            <span class="{{ button_class }} {{ div_class }}" toggle_swap="{{ swap_list|trim }}" data-toggle="buttons" id="{{ id ~ '_span' }}">
             <input type="hidden" value="{{ value }}" id="{{ id }}" name="{{ full_name }}" {{ inputClass }} /></span>
             {{ (translation_domain is same as(false) ? label : label|trans({}, translation_domain)) }}
         {% if required %}
