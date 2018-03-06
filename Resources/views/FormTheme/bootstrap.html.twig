@@ -201,7 +201,7 @@
     {% endfor %}
 
 
-    <div>
+    <div class="toggle-label">
         {%- set parent_label_class = parent_label_class|default(label_attr.class|default('')) -%}
         {% set inputClass = '' %}
         {% if attr.class is defined %}{% set inputClass = 'class=' ~ attr.class  %}{% endif %}

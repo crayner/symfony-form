@@ -72,3 +72,6 @@
 .toggle:not([disabled]):not(.disabled) {
     cursor: pointer;
 }
+.toggle-label .control-label {
+    width: 100%;
+}
