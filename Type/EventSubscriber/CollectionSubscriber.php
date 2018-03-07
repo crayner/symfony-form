@@ -1,7 +1,10 @@
 <?php
 namespace Hillrange\Form\Type\EventSubscriber;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\PersistentCollection;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -19,9 +22,9 @@ class CollectionSubscriber implements EventSubscriberInterface
     private $entityManager;
 
     /**
-     * @var string
+     * @var Collection
      */
-    private $name;
+    private $collection;
 
     /**
      * CollectionSubscriber constructor.
@@ -44,34 +47,45 @@ class CollectionSubscriber implements EventSubscriberInterface
         ];
     }
 
+    /**
+     * @param FormEvent $event
+     */
     public function preSubmit(FormEvent $event)
     {
         $data = $event->getData();
+
         $parentData = $event->getForm()->getParent()->getData();
-        $this->name = ucfirst($event->getForm()->getConfig()->getName());
         $getName = 'get' . ucfirst($event->getForm()->getConfig()->getName());
-
-        if ($this->options['sequence_manage'] === true) {
+        $this->setCollection($parentData->$getName());
+        if ($this->getOption('sequence_manage') === true)
+        {
             $data = $this->manageSequence($data);
-            $data = $this->reOrderForm($data, $parentData->$getName());
+            $event->setData($data);
         }
-        if ($this->options['remove_manage'] === true) {
-            $q = [];
-            foreach ($data as $w)
-                $q[] = $w[$this->options['remove_key']];
 
-            $func = 'get' . $this->options['remove_key'];
-            $remove = $parentData->$getName()->filter(function($entry) use ($q, $func) {
-                    return ! in_array($entry->$func(), $q);
-                }
-            );
-            foreach($remove->getIterator() as $entity) {
+        if ($this->getOption('remove_manage') === true) {
+            if (empty($data) && $this->getCollection()->count() == 0)
+                return ;
+
+            if (! empty($data)) {
+                $q = [];
+                foreach ($data as $w)
+                    $q[] = $w[$this->getOption('remove_key')];
+
+                $func = 'get' . $this->getOption('remove_key');
+                $remove =  $this->getCollection()->filter(function ($entry) use ($q, $func)
+                    {
+                        return !in_array($entry->$func(), $q);
+                    }
+                );
+            } else
+                $remove = $this->getCollection();
+
+            foreach($remove->getIterator() as $entity)
                 $this->entityManager->remove($entity);
-            }
+
             $this->entityManager->flush();
         }
-
-        $event->setData($data);
     }
 
     /**
@@ -93,47 +107,100 @@ class CollectionSubscriber implements EventSubscriberInterface
     {
         if (empty($data))
             return null;
+
+        $needOrder = false;
         $s = 0;
         foreach($data as $q=>$w)
-            if (isset($w['sequence']) && $w['sequence'] > $s)
+            if (! empty($w['sequence']) && $w['sequence'] > $s)
                 $s = $w['sequence'];
+            else
+                $needOrder = true;
 
-        $s = $s > 100 ? 1 : 101 ;
+        if ($needOrder) {
+            $s = $s > 500 ? 1 : 501;
 
-        foreach($data as $q=>$w)
-            if (isset($w['sequence']))
-                $data[$q]['sequence'] = $s++;
+            foreach ($data as $q => $w)
+                if (isset($w['sequence']))
+                    $data[$q]['sequence'] = strval($s++);
 
+            return $this->reOrderForm($data);
+        }
         return $data;
     }
 
     /**
      * @param $data
-     * @param $collection
      * @return array
-     * @throws \Exception
      */
-    private function reOrderForm($data, $collection)
+    private function reOrderForm($data): ?array
     {
-        if (! is_iterable($collection))
-            throw new \Exception('The form data must be a Collection for ' . $this->name);
+        if (empty($data))
+            return null;
+
+        if ($this->getCollection()->count() === 0)
+            return $data;
 
         $result = [];
 
         $func = 'get' . $this->options['remove_key'];
 
-        foreach($collection->getIterator() as $q=>$entity)
+        foreach($this->getCollection()->getIterator() as $q=>$entity)
         {
-            foreach($data as $w)
-            {
-                if ($entity->$func() == $w[$this->options['remove_key']])
+            if (! empty($data))
+                foreach($data as $w)
                 {
-                    $result[$q] = $w;
-                    break ;
+                    if ($entity->$func() == $w[$this->options['remove_key']])
+                    {
+                        $result[$q] = $w;
+                        break ;
+                    }
                 }
-            }
         }
 
         return $result;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getCollection(): Collection
+    {
+        if (empty($this->collection))
+            $this->collection = new ArrayCollection();
+
+        if ($this->collection instanceof PersistentCollection && ! $this->collection->isInitialized())
+            $this->collection->initialize();
+
+        return $this->collection;
+    }
+
+    /**
+     * @param Collection $collection
+     * @return CollectionSubscriber
+     */
+    public function setCollection(Collection $collection): CollectionSubscriber
+    {
+        $this->collection = $collection;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getOptions(): array
+    {
+        if (empty($this->options))
+            $this->options = [];
+        return $this->options;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOption($name)
+    {
+        if (isset($this->options[$name]))
+            return $this->options[$name];
+        return null;
     }
 }

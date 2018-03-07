@@ -36,11 +36,21 @@ class TransformDataExtension extends AbstractExtension
      */
     public function transformData($data): string
     {
-        if (is_object($data))
+        if (is_array($data)) {
+            if (! empty($data['value']))
+                return strval($data['value']);
+            if (! empty($data['data']))
+                $data = $data['data'];
+            else
+                return '';
+        }
+
+        if (is_object($data)) {
             if (method_exists($data, 'getId'))
                 return strval($data->getId());
             else
                 return '';
+        }
 
         return empty($data) ? '' : strval($data);
     }
