@@ -61,9 +61,7 @@ Extends the standard HiddenType to create a toggle button.
     Defaults:
         compound: false
         required: false
-        div_class: 'toggleRight'.  The button is enclosed in a div element.  This class is applied to the ecloding div.
-The classes must be pre-loaded by adding the stylesheet to the header.  Include the template::
-                        @HillrangeForm/Toggle/style.html.twig
+        div_class: 'toggleRight'.  The button is enclosed in a div element.  This class is applied to the enclosing div.
         button_class_off: 'toggle toggle-thumbs-down'
         button_toggle_swap:
             - 'toggle-thumbs-down'
@@ -80,7 +78,8 @@ The classes must be pre-loaded by adding the stylesheet to the header.  Include 
             - 'halflings-thumbs-down'
             - 'halflings-thumbs-up'
 
-The ToggleType shows a button in lieu of a checkbox. You will need to call the script in your tempale as well.
+The ToggleType shows a button in lieu of a checkbox. You will need to call the script in your template as well to load
+required scripts and styles.
     @HillrangeForm/Toggle/script.html.twig
 
 
