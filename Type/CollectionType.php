@@ -45,6 +45,11 @@ class CollectionType extends AbstractType
                 'remove_key' => 'id',
             ]
         );
+        $resolver->setRequired(
+            [
+                'entity_class',
+            ]
+        );
     }
     public function getParent()
     {
