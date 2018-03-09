@@ -61,8 +61,6 @@ class CollectionSubscriber implements EventSubscriberInterface
     {
         $data = $event->getData();
 
-        dump($event->getForm());
-
         $parentData = $event->getForm()->getParent()->getData();
         $getName = 'get' . ucfirst($event->getForm()->getConfig()->getName());
 
