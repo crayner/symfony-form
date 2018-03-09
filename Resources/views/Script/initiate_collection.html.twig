@@ -8,11 +8,15 @@
         remove: '{{ deleteButton({transDomain: collection.vars.translation_domain, title: collection.vars.id ~ '.remove.title', colour: 'warning'})|raw }}',
         add_at_the_end: true,
         before_remove: function (collection, element) {
+            var path = '{{ path(route, {id: app.request.get('id'), cid: '__cid__'}) }}';
 
-            var path = '{{ path('remove_collection_element', {parentClass: parentClass, pid: pid, childClass: childClass, cid: '__cid__'}) }}';
+            if (element === '')
+                path = path.replace('__cid__', 'ignore');
 
-            collectionRemoveElement(path, element);
-            return true;
+            var target = '{{ contentTarget }}';
+
+            collectionRemoveElement(path, target, element);
+            return false;
         }
     });
 </script>
