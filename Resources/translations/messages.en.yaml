@@ -2,7 +2,7 @@ collection:
     parent_class.missing: 'The parent class "%{class}" was not found in the App\Entity directory.'
     child_class.missing: 'The child class "%{class}" was not found in the App\Entity directory.'
     parent_id.not_found: 'The parent entity "%{class}" was not found for id = %{id}.'
-    child_id.not_found: 'The child entity "%{class}" was not found for id = %{id}.'
+    child_id.not_found: 'The child entity "%{class}" was not found for id = %{id}.  An undefined id may indicate that you have not set the removeElement class on the unique_id.'
     child.delete.restricted: 'The child entity "%{class}" is locked, and removal is restricted.'
     parent.child.remove.missing: 'The method to remove the child from the parent %{class} is missing. %{remove}'
     child.removed: '%{class}-%{id} was removed successfully.'

@@ -11,7 +11,8 @@
 
             var path = '{{ path('remove_collection_element', {parentClass: parentClass, pid: pid, childClass: childClass, cid: '__cid__'}) }}';
 
-            return collectionRemoveElement(path, element);
+            collectionRemoveElement(path, element);
+            return true;
         }
     });
 </script>

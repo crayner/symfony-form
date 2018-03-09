@@ -8,6 +8,7 @@ use Doctrine\ORM\PersistentCollection;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class CollectionSubscriber implements EventSubscriberInterface
 {
@@ -27,12 +28,18 @@ class CollectionSubscriber implements EventSubscriberInterface
     private $collection;
 
     /**
+     * @var RequestStack
+     */
+    private $requestStack;
+
+    /**
      * CollectionSubscriber constructor.
      * @param EntityManagerInterface $entityManager
      */
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, RequestStack $requestStack)
     {
         $this->entityManager = $entityManager;
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -54,16 +61,17 @@ class CollectionSubscriber implements EventSubscriberInterface
     {
         $data = $event->getData();
 
+        dump($event->getForm());
+
         $parentData = $event->getForm()->getParent()->getData();
         $getName = 'get' . ucfirst($event->getForm()->getConfig()->getName());
-        $setName = 'set' . ucfirst($event->getForm()->getConfig()->getName());
+
         $this->setCollection($parentData->$getName());
 
         if ($this->getOption('sequence_manage') === true)
-        {
             $data = $this->manageSequence($data);
-            $event->setData($data);
-        }
+
+        $event->setData($data);
     }
 
     /**
@@ -89,9 +97,11 @@ class CollectionSubscriber implements EventSubscriberInterface
         $needOrder = false;
         $s = 0;
         foreach($data as $q=>$w)
-            if (! empty($w['sequence']) && $w['sequence'] > $s)
+            if (! empty($w['sequence']) && $w['sequence'] > $s) {
+                if ($w['sequence'] > $s + 1)
+                    $needOrder = true;
                 $s = $w['sequence'];
-            else
+            } else
                 $needOrder = true;
 
         if ($needOrder) {
@@ -120,20 +130,24 @@ class CollectionSubscriber implements EventSubscriberInterface
 
         $result = [];
 
-        $func = 'get' . $this->options['remove_key'];
+        $func = 'get' . ucfirst($this->options['unique_key']);
 
         foreach($this->getCollection()->getIterator() as $q=>$entity)
         {
             if (! empty($data))
-                foreach($data as $w)
+                foreach($data as $e=>$w)
                 {
-                    if ($entity->$func() == $w[$this->options['remove_key']])
+                    if ($entity->$func() == $w[$this->options['unique_key']])
                     {
                         $result[$q] = $w;
+                        unset($data[$e]);
                         break ;
                     }
                 }
         }
+
+        foreach($data as $w)
+            $result[] = $w;
 
         return $result;
     }

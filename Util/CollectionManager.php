@@ -48,14 +48,6 @@ class CollectionManager
      */
     public function handle($parentClass, $pid, $childClass, $cid)
     {
-        return new JsonResponse(
-            [
-                'status' => 'warning',
-                'message' => $this->translator->trans('Should not remove the element.'),
-            ],
-            200
-        );
-
         $class = "App\\Entity\\" . $parentClass;
         if (! class_exists($class))
             return new JsonResponse(
@@ -125,12 +117,13 @@ class CollectionManager
         $this->parent->$remove($this->child);
 
         $this->entityManager->remove($this->child);
+        $this->entityManager->persist($this->parent);
         $this->entityManager->flush();
 
         return new JsonResponse(
             [
                 'status' => 'success',
-                'message' => $this->translator->trans('collection.child.removed', ['%{class}' => $childClass, '%{id}' => $pid]),
+                'message' => $this->translator->trans('collection.child.removed', ['%{class}' => $this->child->__toString(), '%{id}' => $cid]),
             ],
             200
         );

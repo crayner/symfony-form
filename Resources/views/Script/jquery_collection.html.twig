@@ -2,9 +2,8 @@
 <script type="text/javascript" lang="jquery">
     function collectionRemoveElement(path, element) {
         var source = $(element[0]).find('.removeElement');
-        var cid = source.attr('value');
 
-        if (typeof cid === 'undefined') return true;
+        var cid = source.attr('value');
 
         path = path.replace('__cid__', cid);
 
@@ -23,7 +22,6 @@
                     message = message.replace('__message__', data.message);
                     $("#collectionMessage").html(message);
                     $("#collectionMessage").fadeIn(100);
-                    return true;
                 }
                 if (data.status == 'warning'){
                     message = message.replace('__level__', 'warning');
@@ -39,6 +37,5 @@
                 $("#collectionMessage").fadeIn(100);
             }
         });
-        return false;
     }
 </script>
