@@ -3,7 +3,7 @@ namespace Hillrange\Form\Util;
 
 class VersionManager
 {
-    const VERSION = '0.1.08';
+    const VERSION = '0.1.09';
 
     /**
      * @return string

@@ -1,1 +1,44 @@
 <script src="{{ asset('bundles/hillrangeform/js/jquery.collection.js') }}"></script>
+<script type="text/javascript" lang="jquery">
+    function collectionRemoveElement(path, element) {
+        var source = $(element[0]).find('.removeElement');
+        var cid = source.attr('value');
+
+        if (typeof cid === 'undefined') return true;
+
+        path = path.replace('__cid__', cid);
+
+        var message = '<div class="alert alert-__level__ alert-dismissable show hide">__message__<button title="{{ 'Close Message'|trans }}" type="button" class="close" data-dismiss="alert" aria-label="Close" ><span aria-hidden="true" class="halflings halflings-remove-circle"></span></button></div>';
+
+        $.ajax({
+            url: path,
+            type: "POST",
+            success: function (data) {
+                if (data.status == 'error'){
+                    message = message.replace('__level__', 'danger');
+                    message = message.replace('__message__', data.message);
+                }
+                if (data.status == 'success'){
+                    message = message.replace('__level__', 'success');
+                    message = message.replace('__message__', data.message);
+                    $("#collectionMessage").html(message);
+                    $("#collectionMessage").fadeIn(100);
+                    return true;
+                }
+                if (data.status == 'warning'){
+                    message = message.replace('__level__', 'warning');
+                    message = message.replace('__message__', data.message);
+                }
+                $("#collectionMessage").html(message);
+                $("#collectionMessage").fadeIn(100);
+            },
+            error: function (req, status, err) {
+                message = message.replace('__level__', 'danger');
+                message = message.replace('__message__', err);
+                $("#collectionMessage").html(message);
+                $("#collectionMessage").fadeIn(100);
+            }
+        });
+        return false;
+    }
+</script>
