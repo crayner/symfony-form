@@ -29,5 +29,6 @@
         {% set attr = attr|merge({'data-allow-remove': allow_delete ? 1 : 0 }) %}
         {% set attr = attr|merge({'data-name-prefix': full_name}) %}
         {{ block('form_widget') }}
+        <div class="{{ id }}" data-collection="{{ id }}"></div>
     {% endspaceless %}
 {% endblock collection_widget %}

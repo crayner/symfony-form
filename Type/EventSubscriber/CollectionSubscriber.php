@@ -58,45 +58,11 @@ class CollectionSubscriber implements EventSubscriberInterface
         $getName = 'get' . ucfirst($event->getForm()->getConfig()->getName());
         $setName = 'set' . ucfirst($event->getForm()->getConfig()->getName());
         $this->setCollection($parentData->$getName());
+
         if ($this->getOption('sequence_manage') === true)
         {
             $data = $this->manageSequence($data);
             $event->setData($data);
-        }
-
-        if ($this->getOption('remove_manage') === true) {
-            if (empty($data) && $this->getCollection()->count() == 0)
-                return ;
-
-            if (! empty($data)) {
-                $q = [];
-                if (false === $this->getOption('remove_key')) {
-                    $q = $data;
-                    $func = 'getId';
-                } else {
-                    foreach ($data as $w)
-                        $q[] = $w[$this->getOption('remove_key')];
-                    $func = 'get' . $this->getOption('remove_key');
-                }
-
-                $remove =  $this->getCollection()->filter(function ($entry) use ($q, $func)
-                    {
-                        return !in_array($entry->$func(), $q);
-                    }
-                );
-            } else
-                $remove = $this->getCollection();
-
-            foreach($remove->getIterator() as $entity)
-            {
-                $this->getCollection()->removeElement($entity);
-                $this->entityManager->remove($entity);
-            }
-            $this->entityManager->flush();
-
-            $parentData->$setName($this->getCollection());
-
-            $event->getForm()->getParent()->setData($parentData);
         }
     }
 

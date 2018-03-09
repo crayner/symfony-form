@@ -1,0 +1,17 @@
+<!-- Initiate Collection -->
+<script type="text/javascript" language="JavaScript">
+    $(".{{ collection.vars.id }}").collection({
+        name_prefix: '{{ collection.vars.full_name }}',
+        allow_up: {% if collection.vars.allow_up %}true{% else %}false{% endif %},
+        allow_down: {% if collection.vars.allow_down %}true{% else %}false{% endif %},
+        add: '{{ addButton({transDomain: collection.vars.translation_domain, title: collection.vars.id ~ '.add.title'})|raw }}',
+        remove: '{{ deleteButton({transDomain: collection.vars.translation_domain, title: collection.vars.id ~ '.remove.title', colour: 'warning'})|raw }}',
+        add_at_the_end: true,
+        before_remove: function (collection, element) {
+
+            var path = '{{ path('remove_collection_element', {parentClass: parentClass, pid: pid, childClass: childClass, cid: '__cid__'}) }}';
+
+            return collectionRemoveElement(path, element);
+        }
+    });
+</script>
