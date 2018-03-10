@@ -43,7 +43,7 @@ class CollectionType extends AbstractType
         $resolver->setDefaults(
             [
                 'unique_key' => 'id',
-                'sequence_manage' => false,
+                'sort_manage' => false,
                 'allow_up' => false,
                 'allow_down' => false,
             ]
