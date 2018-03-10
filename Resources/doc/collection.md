@@ -320,6 +320,7 @@ this value.  A value of ignore is placed into the cid if the element is empty.
     });
 </script>
 ```
-
+####Display the Collection
 ![Display Collection](displayCollection.jpg)
+####Remove Element
 ![Remove Element](removeElement.jpg)
