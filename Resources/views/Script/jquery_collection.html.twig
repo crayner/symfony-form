@@ -6,6 +6,10 @@
 
            var cid = source.attr('value');
 
+           if (typeof cid === 'undefined') {
+               cid = 'ignore';
+           }
+
            path = path.replace('__cid__', cid);
         }
         $.ajax({
