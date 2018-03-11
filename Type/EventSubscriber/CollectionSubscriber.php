@@ -229,7 +229,7 @@ class CollectionSubscriber implements EventSubscriberInterface
         $x = 0;
         while ($form->has($x)) {
             $child = $form->get($x);
-            if (! $form->has($this->getOption('unique_key')))
+            if (! $child->has($this->getOption('unique_key')))
                 $child->add($this->getOption('unique_key'), HiddenType::class,
                     [
                         'attr' => [

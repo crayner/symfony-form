@@ -75,5 +75,6 @@ class CollectionType extends AbstractType
     {
         $view->vars['allow_up'] = $options['allow_up'];
         $view->vars['allow_down'] = $options['allow_down'];
+        $view->vars['unique_key'] = $options['unique_key'];
     }
 }
