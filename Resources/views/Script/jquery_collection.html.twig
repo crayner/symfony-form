@@ -4,9 +4,13 @@
         if (element !== '') {
            var source = $(element[0]).find('.removeElement');
 
-           var cid = source.attr('value');
+           if (source.is('select')) {
+               var cid = source.val();
+           } else {
+               var cid = source.attr('value');
+           }
 
-           if (typeof cid === 'undefined') {
+           if (typeof cid === 'undefined' || (!cid)) {
                cid = 'ignore';
            }
 

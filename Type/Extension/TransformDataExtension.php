@@ -34,7 +34,7 @@ class TransformDataExtension extends AbstractExtension
      * @param $data
      * @return string
      */
-    public function transformData($data, $unique_key): string
+    public function transformData($data, $unique_key = 'id'): string
     {
         if (is_array($data)) {
             if (! empty($data['value']) && is_string($data['value']))

@@ -5,6 +5,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\PersistentCollection;
+use Hillrange\Form\Type\CollectionEntityType;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormEvent;
@@ -63,7 +64,6 @@ class CollectionSubscriber implements EventSubscriberInterface
     public function preSubmit(FormEvent $event)
     {
         $data = $event->getData();
-
         $parentData = $event->getForm()->getParent()->getData();
         $getName = 'get' . ucfirst($event->getForm()->getConfig()->getName());
 
@@ -88,6 +88,8 @@ class CollectionSubscriber implements EventSubscriberInterface
         $form = $event->getForm();
 
         $this->updateFormElements($form);
+
+
     }
 
 
@@ -226,20 +228,23 @@ class CollectionSubscriber implements EventSubscriberInterface
      */
     private function updateFormElements(FormInterface $form)
     {
-        $x = 0;
-        while ($form->has($x)) {
-            $child = $form->get($x);
-            if (! $child->has($this->getOption('unique_key')))
-                $child->add($this->getOption('unique_key'), HiddenType::class,
-                    [
-                        'attr' => [
-                            'class' => 'removeElement',
-                        ],
-                    ]
-                );
-            if ($this->getOption('sort_manage') && ! $child->has('sequence'))
-                $child->add('sequence', HiddenType::class);
-            $x++;
+        if ($this->getOption('entry_type') !== CollectionEntityType::class) {
+            $x = 0;
+
+            while ($form->has($x)) {
+                $child = $form->get($x);
+                if (!$child->has($this->getOption('unique_key')))
+                    $child->add($this->getOption('unique_key'), HiddenType::class,
+                        [
+                            'attr' => [
+                                'class' => 'removeElement',
+                            ],
+                        ]
+                    );
+                if ($this->getOption('sort_manage') && !$child->has('sequence'))
+                    $child->add('sequence', HiddenType::class);
+                $x++;
+            }
         }
     }
 }

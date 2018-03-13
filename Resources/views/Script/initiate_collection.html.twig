@@ -10,13 +10,10 @@
         before_remove: function (collection, element) {
             var path = '{{ path(route, {id: app.request.get('id'), cid: '__cid__'}) }}';
 
-            if (element === '')
-                path = path.replace('__cid__', 'ignore');
-
             var target = '{{ contentTarget }}';
 
             manageCollection(path, target, element);
-            return false;
+            return true;
         }
     });
 </script>
