@@ -64,6 +64,8 @@ class CollectionEntityType extends AbstractType
 		);
         $resolver->setDefaults(
             [
+                'unique_key' => 'id',
+                'sort_manage' => false,
                 'multiple' => false,
                 'attr' => [
                     'class' => 'removeElement',

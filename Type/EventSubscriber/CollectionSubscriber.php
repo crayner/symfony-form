@@ -230,10 +230,9 @@ class CollectionSubscriber implements EventSubscriberInterface
     {
         if ($this->getOption('entry_type') !== CollectionEntityType::class) {
             $x = 0;
-
             while ($form->has($x)) {
                 $child = $form->get($x);
-                if (!$child->has($this->getOption('unique_key')))
+                if (! $child->has($this->getOption('unique_key')))
                     $child->add($this->getOption('unique_key'), HiddenType::class,
                         [
                             'attr' => [
@@ -241,7 +240,7 @@ class CollectionSubscriber implements EventSubscriberInterface
                             ],
                         ]
                     );
-                if ($this->getOption('sort_manage') && !$child->has('sequence'))
+                if ($this->getOption('sort_manage') && ! $child->has('sequence'))
                     $child->add('sequence', HiddenType::class);
                 $x++;
             }
