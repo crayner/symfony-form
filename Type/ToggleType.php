@@ -21,17 +21,28 @@ class ToggleType extends AbstractType
      */
     private $buttonToggleSwap;
 
-	public function getParent()
+    /**
+     * @return null|string
+     */
+    public function getParent()
 	{
 		return HiddenType::class;
 	}
 
-	public function getBlockPrefix()
+    /**
+     * @return null|string
+     */
+    public function getBlockPrefix()
 	{
 		return 'hillrange_toggle';
 	}
 
-	public function buildView(FormView $view, FormInterface $form, array $options)
+    /**
+     * @param FormView $view
+     * @param FormInterface $form
+     * @param array $options
+     */
+    public function buildView(FormView $view, FormInterface $form, array $options)
 	{
 		$view->vars = array_replace($view->vars,
 			array(
@@ -42,7 +53,10 @@ class ToggleType extends AbstractType
         $view->vars['button_toggle_swap'] = $options['button_toggle_swap'] ?: $this->buttonToggleSwap;
 	}
 
-	public function configureOptions(OptionsResolver $resolver)
+    /**
+     * @param OptionsResolver $resolver
+     */
+    public function configureOptions(OptionsResolver $resolver)
 	{
 		$resolver->setDefaults(
 			array(
@@ -55,7 +69,11 @@ class ToggleType extends AbstractType
 		);
 	}
 
-	public function buildForm(FormBuilderInterface $builder, array $options)
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 		$builder->addModelTransformer(new ToggleTransformer());
 	}

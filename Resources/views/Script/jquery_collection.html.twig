@@ -21,16 +21,23 @@
             type: "POST",
             success: function (data) {
                 $('#' + contentTarget).html(data.content);
-                $("#collectionMessage").html(data.message);
-                $("#collectionMessage").fadeIn(100);
+                mergeCollectionMessage(data.message);
             },
             error: function (req, status, err) {
                 var message = '<div class="alert alert-__level__ alert-dismissable show hide">__message__<button title="{{ 'Close Message'|trans }}" type="button" class="close" data-dismiss="alert" aria-label="Close" ><span aria-hidden="true" class="halflings halflings-remove-circle"></span></button></div>';
                 message = message.replace('__level__', 'danger');
                 message = message.replace('__message__', err);
-                $("#collectionMessage").html(message);
-                $("#collectionMessage").fadeIn(100);
+                mergeCollectionMessage(message);
             }
         });
+    }
+    function mergeCollectionMessage(message) {
+        if (!message.trim()) {
+            return;
+        }
+
+        var exists = $("#collectionMessage").html();
+        $("#collectionMessage").html(exists + message);
+        $("#collectionMessage").fadeIn(100);
     }
 </script>
