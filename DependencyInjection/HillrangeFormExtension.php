@@ -27,10 +27,12 @@ class HillrangeFormExtension extends Extension
             $container
                 ->getDefinition(ImageSubscriber::class)
                 ->addMethodCall('setTargetDir', [$config['upload_path']]);
+            $container->setParameter('upload_path', $config['upload_path']);
         } else {
             $container
                 ->getDefinition(ImageSubscriber::class)
-                ->addMethodCall('setTargetDir', []);
+                ->addMethodCall('setTargetDir', ['uploads']);
+            $container->setParameter('upload_path', 'uploads');
         }
 
         $this->registerButtons($config, $container);
