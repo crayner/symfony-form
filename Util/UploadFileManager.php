@@ -12,6 +12,11 @@ class UploadFileManager extends Filesystem
     private $uploadPath;
 
     /**
+     * @var string
+     */
+    private $fileName;
+
+    /**
      * UploadFileManager constructor.
      * @param SettingManager $settingManager
      */
@@ -37,5 +42,35 @@ class UploadFileManager extends Filesystem
         $this->uploadPath = $uploadPath;
 
         return $this;
+    }
+
+    /**
+     * @param string $core
+     * @param string $type
+     * @return string
+     */
+    public function createFileName(string $core, string $type): string
+    {
+        $this->setFileName($core . '_' . mb_substr(md5(uniqid()), mb_strlen($core) + 1) . '.' . $type);
+
+        return $this->getFileName();
+    }
+
+    /**
+     * @param string $fileName
+     * @return UploadFileManager
+     */
+    public function setFileName(string $fileName): UploadFileManager
+    {
+        $this->fileName = $fileName;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFileName(): string
+    {
+        return $this->fileName;
     }
 }
