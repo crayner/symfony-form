@@ -38,6 +38,9 @@ class TransformDataExtension extends AbstractExtension
      */
     public function transformData($data, $unique_key = 'id'): string
     {
+        if (is_object($data) && $data instanceof FormView)
+            $data = $data->vars;
+
         if (is_array($data)) {
             if (! empty($data['value']) && is_string($data['value']))
                 return strval($data['value']);
