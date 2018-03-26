@@ -69,14 +69,14 @@ Extends the standard HiddenType to create a toggle button.
 
     Additional styles are toggle-switch-off and toggle-switch-on.
 
-    Using Bootstrap and Glyphicons.
-        To use bootstrap with glyphicons replace the toggle class above with btn and glyphicon statements. So:
-        button_class_off: 'btn btn-danger halflings halflings-thumbs-down'
+    Using Bootstrap and Font Awesome.
+        To use bootstrap with font awesome replace the toggle class above with btn and font awesome statements. So:
+        button_class_off: 'btn btn-danger far fa-thumbs-down'
         button_toggle_swap:
             - 'btn-danger'
             - 'btn-success'
-            - 'halflings-thumbs-down'
-            - 'halflings-thumbs-up'
+            - 'fa-thumbs-down'
+            - 'fa-thumbs-up'
 
 The ToggleType shows a button in lieu of a checkbox. You will need to call the script in your template as well to load
 required scripts and styles.
