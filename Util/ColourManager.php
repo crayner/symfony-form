@@ -25,7 +25,7 @@ class ColourManager
 
         $x = preg_match('/^(?:[0-9a-fA-F]{3}){2,2}$/', $colour);
         if ($x !== false && $x > 0)
-            return $colour;
+            return '#' . $colour;
 
         return null;
     }
