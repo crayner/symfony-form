@@ -40,4 +40,17 @@
         $("#collectionMessage").html(exists + message);
         $("#collectionMessage").fadeIn(100);
     }
+
+    $(document).ready(function () {
+        {{ getResetScripts()|raw }}
+    });
+
+    $("form button[type=submit]").click(function () {
+        $("button[type=submit]", $(this).parents("form")).removeAttr("clicked");
+        $(this).attr("clicked", "true");
+    });
+
+    $("form button[type=reset]").click(function () {
+        {{ getResetScripts()|raw }}
+    })
 </script>
