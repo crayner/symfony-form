@@ -32,6 +32,10 @@
         });
     }
     function mergeCollectionMessage(message) {
+        if (! message) {
+            return ;
+        }
+
         if (!message.trim()) {
             return;
         }

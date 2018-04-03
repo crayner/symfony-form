@@ -7,6 +7,7 @@
         add: '{{ addButton({transDomain: collection.vars.translation_domain, title: collection.vars.id ~ '.add.title'})|raw }}',
         remove: '{{ deleteButton({transDomain: collection.vars.translation_domain, title: collection.vars.id ~ '.remove.title', colour: 'warning'})|raw }}',
         add_at_the_end: true,
+        hide_useless_buttons: true,
         before_remove: function (collection, element) {
             var path = '{{ path(route, {id: app.request.get('id'), cid: '__cid__'}) }}';
 
