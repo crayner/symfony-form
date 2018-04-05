@@ -6,19 +6,38 @@ use Symfony\Component\Validator\Constraint;
 
 class UniqueOrBlank extends Constraint
 {
+    /**
+     * @var string
+     */
 	public $message = 'unique.blank.invalid';
 
+    /**
+     * @var
+     */
 	public $data_class;
 
+    /**
+     * @var string
+     */
 	public $field;
 
-	public function validatedBy()
+    /**
+     * @var string
+     */
+    public $transDomain = 'validators';
+
+    /**
+     * @return string
+     */
+    public function validatedBy()
 	{
 		return UniqueOrBlankValidator::class;
 	}
 
-
-	public function getRequiredOptions()
+    /**
+     * @return array
+     */
+    public function getRequiredOptions()
 	{
 		return [
 			'field',

@@ -50,6 +50,7 @@ class UniqueOrBlankValidator extends ConstraintValidator
 		{
 			$this->context->buildViolation($constraint->message)
 				->setParameter('%string%', $value)
+                ->setTranslationDomain($constraint->transDomain)
 				->addViolation();
 		}
 

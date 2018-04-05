@@ -4,12 +4,12 @@ namespace Hillrange\Form\Validator;
 use Hillrange\Form\Validator\Constraints\NoWhiteSpaceValidator;
 use Symfony\Component\Validator\Constraint;
 
-class NoWhiteSpace extends Constraint
+class UpperCaseOnly extends Constraint
 {
 	/**
 	 * @var string
 	 */
-	public $message = 'no_white_space.validator.error';
+	public $message = 'upper_case_only.validator.error';
 
 	/**
 	 * @var bool
@@ -19,13 +19,13 @@ class NoWhiteSpace extends Constraint
     /**
      * @var string
      */
-    public $transDomain = 'validators';
+	public $transDomain = 'validators';
 
 	/**
 	 * @return string
 	 */
 	public function validatedBy()
 	{
-		return NoWhiteSpaceValidator::class;
+		return UpperCaseOnly::class;
 	}
 }

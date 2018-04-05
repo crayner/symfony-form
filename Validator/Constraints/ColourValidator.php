@@ -21,6 +21,7 @@ class ColourValidator extends ConstraintValidator
         if (empty($value))
             $this->context->buildViolation($constraint->message)
                 ->setParameter('%{colour}', $value)
+                ->setTranslationDomain($constraint->transDomain)
                 ->addViolation();
     }
 }

@@ -4,8 +4,7 @@ namespace Hillrange\Form\Validator\Constraints;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
-
-class IntegerValidator extends ConstraintValidator
+class UpperCaseOnlyValidator extends ConstraintValidator
 {
 	/**
 	 * @param mixed      $value
@@ -13,14 +12,15 @@ class IntegerValidator extends ConstraintValidator
 	 */
 	public function validate($value, Constraint $constraint)
 	{
-		if (empty($value))
-			return;
+		if ($constraint->repair)
+			$value = strtoupper($value);
 
-		if (intval($value) != $value)
+		if (preg_match('/[a-z]/', $value))
 			$this->context->buildViolation($constraint->message)
 				->setParameter('%value%', $value)
-				->setParameter('%type%', gettype($value))
                 ->setTranslationDomain($constraint->transDomain)
 				->addViolation();
+
+		return $value;
 	}
 }

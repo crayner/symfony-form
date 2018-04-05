@@ -12,6 +12,11 @@ class Colour extends Constraint
     public $message = 'colour.validation.error';
 
     /**
+     * @var string
+     */
+    public $transDomain = 'validators';
+
+    /**
      * @return string
      */
     public function validatedBy()

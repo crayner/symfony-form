@@ -19,6 +19,7 @@ class NoWhiteSpaceValidator extends ConstraintValidator
 		if (preg_match('/\s/', $value))
 			$this->context->buildViolation($constraint->message)
 				->setParameter('%value%', $value)
+                ->setTranslationDomain($constraint->transDomain)
 				->addViolation();
 
 		return $value;
