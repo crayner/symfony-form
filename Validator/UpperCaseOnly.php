@@ -1,7 +1,7 @@
 <?php
 namespace Hillrange\Form\Validator;
 
-use Hillrange\Form\Validator\Constraints\NoWhiteSpaceValidator;
+use Hillrange\Form\Validator\Constraints\UpperCaseOnlyValidator;
 use Symfony\Component\Validator\Constraint;
 
 class UpperCaseOnly extends Constraint
@@ -26,6 +26,6 @@ class UpperCaseOnly extends Constraint
 	 */
 	public function validatedBy()
 	{
-		return UpperCaseOnly::class;
+		return UpperCaseOnlyValidator::class;
 	}
 }
