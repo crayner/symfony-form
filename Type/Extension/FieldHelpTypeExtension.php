@@ -12,7 +12,8 @@ class FieldHelpTypeExtension extends AbstractTypeExtension
 	public function buildView(FormView $view, FormInterface $form, array $options)
 	{
 		$view->vars['help'] = $options['help'];
-		$view->vars['help_params'] = $options['help_params'];
+        $view->vars['help_params'] = $options['help_params'];
+        $view->vars['element_class'] = $options['element_class'];
 	}
 
 	public function configureOptions(OptionsResolver $resolver)
@@ -21,6 +22,7 @@ class FieldHelpTypeExtension extends AbstractTypeExtension
 			[
 				'help'  => null,
 				'help_params' => [],
+                'element_class' => '',
 			]
 		);
 	}

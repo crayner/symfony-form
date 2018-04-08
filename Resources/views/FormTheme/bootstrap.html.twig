@@ -71,7 +71,10 @@
         {% if help_params is not defined or help_params is not iterable %}
             {% set help_params = {} %}
         {% endif %}
-        <small class="form-text text-muted">{{ (translation_domain is same as(false) ? help : help|trans(help_params, translation_domain)) }}</small>
+        {% if translation_domain is not same as(false) %}{% set help = help|trans(help_params, translation_domain) %}{% endif %}
+        {% if help is not empty %}
+        <small class="form-text text-muted">{{ help }}</small>
+            {% endif %}
     {% endif %}
 {%- endblock form_errors %}
 
@@ -95,13 +98,13 @@
 
 {% block choice_row -%}
     {% if expanded %}
-        <div class="form-group{% if (not compound or force_error|default(false)) and not valid %} has-danger{% endif %}">
+        <div class="form-group{% if (not compound or force_error|default(false)) and not valid %} has-danger{% endif %}{% if element_class is not empty%} {{ element_class }}{% endif %}">
             {{- form_widget(form) -}}
             {{- form_label(form) -}}
             {{- form_errors(form) -}}
         </div>
     {% else %}
-        <div class="form-group{% if (not compound or force_error|default(false)) and not valid %} has-danger{% endif %}">
+        <div class="form-group{% if (not compound or force_error|default(false)) and not valid %} has-danger{% endif %}{% if element_class is not empty%} {{ element_class }}{% endif %}">
             {{- form_widget(form) -}}
             {{- form_label(form) -}}
             {{- form_errors(form) -}}
@@ -113,11 +116,14 @@
     {% if form.vars.block_prefixes.1 == 'choice' %}
         {{- block('choice_row') -}}
     {% else %}
-        <div class="form-group{% if (not compound or force_error|default(false)) and not valid %} has-danger{% endif %}">
+        {%- if compound is defined and compound -%}
+            {%- set element = 'fieldset' -%}
+        {%- endif -%}
+        <{{ element|default('div') }} class="form-group{% if element_class is not empty%} {{ element_class }}{% endif %}">
             {{- form_widget(form) -}}
             {{- form_label(form) -}}
             {{- form_errors(form) -}}
-        </div>
+        </{{ element|default('div') }}>
     {% endif %}
 {%- endblock form_row %}
 
