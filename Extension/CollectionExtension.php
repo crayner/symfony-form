@@ -137,13 +137,10 @@ class CollectionExtension extends AbstractExtension
 
         foreach($children as $child) {
             $collection = $form->children[$child];
-            dump($collection);
             if (!empty($collection->vars['route']))
                 $xx .= "manageCollection('" . $this->router->generate($collection->vars['route'], array_merge($default, $collection->vars['route_params'])) . "','" . $collection->vars['id'] . "_target','')\n";
         }
-        dump($form);
-        dump($children);
-        dump($xx);
+
         $x = $this->twig->render('@HillrangeForm/Script/collection_manage.html.twig',
             [
                 'calls' => $xx,

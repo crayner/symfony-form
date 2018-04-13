@@ -2,6 +2,7 @@
 namespace Hillrange\Form\Type;
 
 use Hillrange\Form\Type\EventSubscriber\CollectionSubscriber;
+use Hillrange\Form\Util\ButtonManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -16,12 +17,17 @@ class CollectionType extends AbstractType
     private $collectionSubscriber;
 
     /**
+     * @var ButtonManager
+     */
+    private $buttonManager;
+    /**
      * CollectionType constructor.
      * @param CollectionSubscriber $collectionSubscriber
      */
-    public function __construct(CollectionSubscriber $collectionSubscriber)
+    public function __construct(CollectionSubscriber $collectionSubscriber, ButtonManager $buttonManager)
     {
         $this->collectionSubscriber = $collectionSubscriber;
+        $this->buttonManager = $buttonManager;
     }
 
     /**
@@ -46,6 +52,7 @@ class CollectionType extends AbstractType
                 'sort_manage'           => false,
                 'allow_up'              => false,
                 'allow_down'            => false,
+                'allow_duplicate'       => false,
                 'route'                 => '',
                 'route_params'          => [],
                 'display_script'        => false,
@@ -53,6 +60,8 @@ class CollectionType extends AbstractType
                 'remove_button'         => '',
                 'up_button'             => '',
                 'down_button'           => '',
+                'duplicate_button'      => '',
+                'button_merge_class'    => '',
             ]
         );
     }
@@ -80,8 +89,23 @@ class CollectionType extends AbstractType
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
+        if ($options['button_merge_class'])
+        {
+            if (empty($options['add_button']))
+                $options['add_button'] = $this->buttonManager->addButton(['mergeClass' => $options['button_merge_class']]);
+            if (empty($options['remove_button']))
+                $options['remove_button'] = $this->buttonManager->removeButton(['mergeClass' => $options['button_merge_class']]);
+            if (empty($options['up_button']))
+                $options['up_button'] = $this->buttonManager->upButton(['mergeClass' => $options['button_merge_class']]);
+            if (empty($options['down_button']))
+                $options['down_button'] = $this->buttonManager->downButton(['mergeClass' => $options['button_merge_class']]);
+            if (empty($options['duplicate_button']))
+                $options['duplicate_button'] = $this->buttonManager->duplicateButton(['mergeClass' => $options['button_merge_class']]);
+        }
+
         $view->vars['allow_up']             = $options['sort_manage'] ?: $options['up_button'];
         $view->vars['allow_down']           = $options['sort_manage'] ?: $options['down_button'];
+        $view->vars['allow_duplicate']      = $options['allow_duplicate'];
         $view->vars['unique_key']           = $options['unique_key'];
         $view->vars['route']                = $options['route'];
         $view->vars['route_params']         = $options['route_params'];
@@ -90,5 +114,6 @@ class CollectionType extends AbstractType
         $view->vars['remove_button']        = $options['remove_button'];
         $view->vars['up_button']            = $options['up_button'];
         $view->vars['down_button']          = $options['down_button'];
+
     }
 }
