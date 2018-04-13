@@ -42,10 +42,17 @@ class CollectionType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'unique_key' => 'id',
-                'sort_manage' => false,
-                'allow_up' => false,
-                'allow_down' => false,
+                'unique_key'            => 'id',
+                'sort_manage'           => false,
+                'allow_up'              => false,
+                'allow_down'            => false,
+                'route'                 => '',
+                'route_params'          => [],
+                'display_script'        => false,
+                'add_button'            => '',
+                'remove_button'         => '',
+                'up_button'             => '',
+                'down_button'           => '',
             ]
         );
     }
@@ -73,8 +80,15 @@ class CollectionType extends AbstractType
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $view->vars['allow_up'] = $options['allow_up'];
-        $view->vars['allow_down'] = $options['allow_down'];
-        $view->vars['unique_key'] = $options['unique_key'];
+        $view->vars['allow_up']             = $options['sort_manage'] ?: $options['up_button'];
+        $view->vars['allow_down']           = $options['sort_manage'] ?: $options['down_button'];
+        $view->vars['unique_key']           = $options['unique_key'];
+        $view->vars['route']                = $options['route'];
+        $view->vars['route_params']         = $options['route_params'];
+        $view->vars['display_script']       = $options['display_script'];
+        $view->vars['add_button']           = $options['add_button'];
+        $view->vars['remove_button']        = $options['remove_button'];
+        $view->vars['up_button']            = $options['up_button'];
+        $view->vars['down_button']          = $options['down_button'];
     }
 }

@@ -64,6 +64,7 @@ class CollectionSubscriber implements EventSubscriberInterface
     public function preSubmit(FormEvent $event)
     {
         $data = $event->getData();
+
         $parentData = $event->getForm()->getParent()->getData();
         $getName = 'get' . ucfirst($event->getForm()->getConfig()->getName());
 
@@ -79,7 +80,6 @@ class CollectionSubscriber implements EventSubscriberInterface
         $event->setData($data);
     }
 
-
     /**
      * @param FormEvent $event
      */
@@ -90,18 +90,6 @@ class CollectionSubscriber implements EventSubscriberInterface
         $this->updateFormElements($form);
 
 
-    }
-
-
-    /**
-     * @param array $options
-     * @return CollectionSubscriber
-     */
-    public function setOptions(array $options): CollectionSubscriber
-    {
-        $this->options = $options;
-
-        return $this;
     }
 
     /**
@@ -115,6 +103,7 @@ class CollectionSubscriber implements EventSubscriberInterface
 
         $needOrder = false;
         $s = 0;
+
         foreach($data as $q=>$w) {
             if (empty($w['sequence'])) {
                 $w['sequence'] = $data[$q]['sequence'] = '0';
@@ -211,6 +200,17 @@ class CollectionSubscriber implements EventSubscriberInterface
         if (empty($this->options))
             $this->options = [];
         return $this->options;
+    }
+
+    /**
+     * @param array $options
+     * @return CollectionSubscriber
+     */
+    public function setOptions(array $options): CollectionSubscriber
+    {
+        $this->options = $options;
+
+        return $this;
     }
 
     /**
