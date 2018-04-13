@@ -117,7 +117,7 @@
         {{- block('choice_row') -}}
     {% else %}
         {%- if compound is defined and compound -%}
-            {%- set element = 'fieldset' -%}
+             {%- set element = 'div' -%}
         {%- endif -%}
         <{{ element|default('div') }} class="form-group{% if element_class is not empty%} {{ element_class }}{% endif %}">
             {{- form_widget(form) -}}
