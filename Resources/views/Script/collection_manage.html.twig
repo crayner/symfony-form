@@ -1,3 +1,4 @@
+{% autoescape false %}
 <script src="{{ asset('bundles/hillrangeform/js/jquery.collection.js') }}"></script>
 <script type="text/javascript" language="JavaScript">
     function manageCollection(path, contentTarget, element) {
@@ -62,3 +63,4 @@
         {{ calls|raw }}
     })
 </script>
+{% endautoescape %}
