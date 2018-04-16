@@ -1,5 +1,5 @@
 <?php
-namespace Hillrange\Form\Type\Extension;
+namespace Hillrange\Form\Extension;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormView;
@@ -29,6 +29,8 @@ class TransformDataExtension extends AbstractExtension
         return [
             new \Twig_SimpleFunction('transformData', [$this, 'transformData']),
             new \Twig_SimpleFunction('getObject', [$this, 'getObject']),
+            new \Twig_SimpleFunction('getObjectId', [$this, 'getObjectId']),
+            new \Twig_SimpleFunction('getValueData', [$this, 'getValueData']),
         ];
     }
 
@@ -76,5 +78,34 @@ class TransformDataExtension extends AbstractExtension
         if (is_object($form->vars['data']))
             return $form->vars['data'];
         return null;
+    }
+
+    /**
+     * @param FormView $form
+     * @param string $name
+     * @return mixed
+     */
+    public function getObjectId(FormView $form, $name = 'id')
+    {
+        $object = $this->getObject($form);
+
+        $func = 'get' . ucfirst($name);
+
+        if ( is_object($object) && method_exists($object, $func))
+            return $object->$func();
+
+        return '0';
+    }
+
+    /**
+     * @param FormView $form
+     * @return mixed
+     */
+    public function getValueData(FormView $form)
+    {
+        if (empty($form->vars['value']))
+            return $form->vars['data'];
+
+        return $form->vars['value'];
     }
 }

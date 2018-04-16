@@ -1,8 +1,10 @@
 <?php
 namespace Hillrange\Form\Type\Transform;
 
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -13,8 +15,20 @@ class EntityToStringTransformer implements DataTransformerInterface
 	 * @var \Doctrine\Common\Persistence\ObjectManager
 	 */
 	private $om;
+
+    /**
+     * @var string
+     */
 	private $entityClass;
+
+    /**
+     * @var
+     */
 	private $entityType;
+
+    /**
+     * @var ServiceEntityRepositoryInterface
+     */
 	private $entityRepository;
 
 	/**
@@ -75,6 +89,10 @@ class EntityToStringTransformer implements DataTransformerInterface
 			{
 				return $entity->toArray();
 			}
+
+
+		if (is_object($entity) && $entity instanceof $this->entityClass)
+		    return $entity->getId();
 
 		throw new \Exception('What to do with: ' . json_encode($entity));
 	}
@@ -138,4 +156,12 @@ class EntityToStringTransformer implements DataTransformerInterface
 
 		return $this;
 	}
+
+    /**
+     * @return null|string
+     */
+    public function getEntityClass(): ?string
+    {
+        return $this->entityClass;
+    }
 }
