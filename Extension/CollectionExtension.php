@@ -58,18 +58,18 @@ class CollectionExtension extends AbstractExtension
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function renderCollectionWidget(FormView $collection)
+    public function renderCollectionWidget(FormView $collection, $replaceContent = false, $displayScript = true)
     {
-        if ($collection->vars['display_script'])
-            $x = '';
-        else
-            $x = '<section id="'.$collection->vars['id'].'_target">';
+        $x = '';
+        if (! $replaceContent)
+            $x .= '<section id="'.$collection->vars['id'].'_target">';
         $x .= $this->twig->render('@HillrangeForm/Script/collection_widget.html.twig',
             [
-                'collection' => $collection,
+                'collection'        => $collection,
+                'display_script'    => $displayScript,
             ]
         );
-        if ($collection->vars['display_script'])
+        if ($replaceContent)
             $x .= '';
         else
             $x .= '</section>';
@@ -84,18 +84,18 @@ class CollectionExtension extends AbstractExtension
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function renderCollectionRow(FormView $collection)
+    public function renderCollectionRow(FormView $collection, $replaceContent = false, $displayScript = true)
     {
-        if ($collection->vars['display_script'])
-            $x = '';
-        else
-            $x = '<section id="'.$collection->vars['id'].'_target">';
+        $x = '';
+        if (! $replaceContent)
+            $x .= '<section id="'.$collection->vars['id'].'_target">';
         $x .= $this->twig->render('@HillrangeForm/Script/collection_row.html.twig',
             [
-                'collection' => $collection,
+                'collection'        => $collection,
+                'display_script'    => $displayScript,
             ]
         );
-        if ($collection->vars['display_script'])
+        if ($replaceContent)
             $x .= '';
         else
             $x .= '</section>';

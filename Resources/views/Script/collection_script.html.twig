@@ -1,32 +1,28 @@
-<!-- Collection Script -->
+<!-- Collection Script {{ collection_class_name(collection) }} -->
 <div class="{{ collection_class_name(collection) }}" data-collection="{{ collection.vars.id }}"></div>
 <script type="text/javascript" language="JavaScript">
-    if (typeof jQuery == 'function') {
-        $(".{{ collection_class_name(collection) }}").collection({
-            name_prefix: '{{ collection.vars.full_name }}',
-            add: '{{ collection.vars.add_button|default(addButton())|raw }}',
-            remove: '{{ collection.vars.remove_button|default(removeButton())|raw }}',
-            up: '{{ collection.vars.up_button|default(upButton())|raw }}',
-            down: '{{ collection.vars.down_button|default(downButton())|raw }}',
-            duplicate: '{{ collection.vars.duplicate_button|default(duplicateButton())|raw }}',
-            add_at_the_end: true,
-            allow_up: {% if collection.vars.allow_up %}true{% else %}false{% endif %},
-            allow_down: {% if collection.vars.allow_down %}true{% else %}false{% endif %},
-            allow_duplicate: {% if collection.vars.allow_duplicate %}true{% else %}false{% endif %},
-            drag_drop: {% if collection.vars.allow_up or collection.vars.allow_down %}true{% else %}false{% endif %},
-            before_remove: function (collection, element) {
-                {% if collection.vars.route is not empty %}
+    $(".{{ collection_class_name(collection) }}").collection({
+        name_prefix: '{{ collection.vars.full_name }}',
+        add: '{{ collection.vars.add_button|default(addButton())|raw }}',
+        remove: '{{ collection.vars.remove_button|default(removeButton())|raw }}',
+        up: '{{ collection.vars.up_button|default(upButton())|raw }}',
+        down: '{{ collection.vars.down_button|default(downButton())|raw }}',
+        duplicate: '{{ collection.vars.duplicate_button|default(duplicateButton())|raw }}',
+        add_at_the_end: true,
+        allow_up: {% if collection.vars.allow_up %}true{% else %}false{% endif %},
+        allow_down: {% if collection.vars.allow_down %}true{% else %}false{% endif %},
+        allow_duplicate: {% if collection.vars.allow_duplicate %}true{% else %}false{% endif %},
+        drag_drop: {% if collection.vars.allow_up or collection.vars.allow_down %}true{% else %}false{% endif %},
+        before_remove: function (collection, element) {
+            {% if collection.vars.route is not empty %}
+            {% set route_params = collection.vars.route_params|merge({id: app.request.get('id'), cid: '__cid__'}) %}
+            var path = '{{ path(collection.vars.route, route_params) }}';
 
-                {% set route_params = collection.vars.route_params|merge({id: app.request.get('id'), cid: '__cid__'}) %}
+            var target = '{{ collection.vars.id }}_target';
 
-                var path = '{{ path(collection.vars.route, route_params) }}';
-
-                var target = '{{ collection.vars.id }}_target';
-
-                manageCollection(path, target, element);
-                {% endif %}
-                return true;
-            }
-        });
-    }
+            manageCollection(path, target, element);
+            {% endif %}
+            return true;
+        }
+    });
 </script>

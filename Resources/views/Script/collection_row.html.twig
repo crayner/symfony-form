@@ -1,2 +1,4 @@
 {{ form_row(collection) }}
-{{ collection_script(collection) }}
+{% if display_script %}
+    {{ collection_script(collection)|raw }}
+{% endif %}

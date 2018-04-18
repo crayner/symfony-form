@@ -1,2 +1,4 @@
 {{ form_widget(collection) }}
-{{ collection_script(collection)|raw }}
+{% if display_script %}
+    {{ collection_script(collection)|raw }}
+{% endif %}
