@@ -53,12 +53,15 @@ class CollectionExtension extends AbstractExtension
 
     /**
      * @param FormView $collection
+     * @param bool $replaceContent
+     * @param bool $displayScript
+     * @param string $callable
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function renderCollectionWidget(FormView $collection, $replaceContent = false, $displayScript = true)
+    public function renderCollectionWidget(FormView $collection, bool $replaceContent = false, bool $displayScript = true, string $callable = '')
     {
         $x = '';
         if (! $replaceContent)
@@ -67,6 +70,7 @@ class CollectionExtension extends AbstractExtension
             [
                 'collection'        => $collection,
                 'display_script'    => $displayScript,
+                'callable'          => $callable,
             ]
         );
         if ($replaceContent)
@@ -79,12 +83,15 @@ class CollectionExtension extends AbstractExtension
 
     /**
      * @param FormView $collection
+     * @param bool $replaceContent
+     * @param bool $displayScript
+     * @param string $callable
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function renderCollectionRow(FormView $collection, $replaceContent = false, $displayScript = true)
+    public function renderCollectionRow(FormView $collection, bool $replaceContent = false, bool $displayScript = true, string $callable = '')
     {
         $x = '';
         if (! $replaceContent)
@@ -93,6 +100,7 @@ class CollectionExtension extends AbstractExtension
             [
                 'collection'        => $collection,
                 'display_script'    => $displayScript,
+                'callable'          => $callable,
             ]
         );
         if ($replaceContent)
@@ -105,16 +113,18 @@ class CollectionExtension extends AbstractExtension
 
     /**
      * @param FormView $collection
+     * @param string $callable
      * @return \Twig_Markup
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function renderCollectionScript(FormView $collection)
+    public function renderCollectionScript(FormView $collection, string $callable)
     {
         $x = $this->twig->render('@HillrangeForm/Script/collection_script.html.twig',
             [
                 'collection' => $collection,
+                'callable' => $callable,
             ]
         );
 

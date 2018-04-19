@@ -25,4 +25,8 @@
             return true;
         }
     });
+
+    {% if callable is not empty %}
+    {{ callable }}();
+    {% endif %}
 </script>
