@@ -1,32 +1,38 @@
 <!-- Toggle Script -->
 <script type="text/javascript" lang="jquery">
-$(document).on('click', '[data-toggle="buttons"]', function () {
-    // toggle style
-    var swap = $(this).attr('toggle_swap');
-    $(this).toggleClass(swap);
+    $(document).on('click', '[data-toggle="buttons"]', function () {
+        // toggle style
+        var swap = $(this).attr('toggle_swap');
+        $(this).toggleClass(swap);
 
-    // toggle input
-    var $chk = $(this).find('[type=hidden]');
-    var $val = $chk.val();
+        // toggle input
+        var chk = $(this).find('[type=hidden]');
+        var val = chk.val();
 
-    if ($val === "1")
-        $val = "0";
-    else
-        $val = "1";
+        if (val === "1")
+            val = "0";
+        else
+            val = "1";
 
-    $chk.val($val);
+        chk.val(val);
 
-    return false;
-});
+        var callable = $(this).attr('toggle_call');
 
-$(document).ready(function(){
+        if (typeof callable != 'undefined')
+        {
+            window[callable](this, val);
+        }
 
-    if (document.createStyleSheet){  // Bloody IE
-        document.createStyleSheet('{{ asset('bundles/hillrangeform/css/toggle.css') }}');
-    }
-    else {
-        $("head").append($("<link rel='stylesheet' href='{{ asset('bundles/hillrangeform/css/toggle.css') }}' type='text/css' media='screen' />"));
-    }
-});
+        return false;
+    });
 
+    $(document).ready(function(){
+
+        if (document.createStyleSheet){  // Bloody IE
+            document.createStyleSheet('{{ asset('bundles/hillrangeform/css/toggle.css') }}');
+        }
+        else {
+            $("head").append($("<link rel='stylesheet' href='{{ asset('bundles/hillrangeform/css/toggle.css') }}' type='text/css' media='screen' />"));
+        }
+    });
 </script>

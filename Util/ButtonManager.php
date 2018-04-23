@@ -302,7 +302,7 @@ XXX;
      *
      * @return string
      */
-    public function upDownButton(array $details = [])
+    public function upDownButton(array $details = []): string
     {
         return $this->generateCollectionButton($this->buttons['down'], $details) . $this->generateCollectionButton($this->buttons['up'], $details);
     }
@@ -312,55 +312,41 @@ XXX;
      *
      * @return string
      */
-    public function toggleButton(array $details)
+    public function toggleButton(array $details): string
     {
-        $toggle = '<div class="divClass"><input type="checkbox" attributes inputClass></div>';
+        $toggle = '
+<span class="%class%" toggle_swap="%toggle_swap%" data-toggle="buttons" id="%id%_span" style="%style%" %callable%>
+    <input type="hidden" value="%value%" id="%id%" name="%name%" />
+</span>
+<label class="control_label" for="%id%">%label%
+</label>';
 
-        $details['class'] = empty($details['class']) ? 'toggle form-control' : $details['class'] . ' toggle form-control';
-        $vars             = $details['form']->vars;
-
-        $toggle = str_replace('divClass', $vars['div_class'], $toggle);
-
-        $attributes = [];
-
-        $attributes['data-toggle'] = 'toggle';
-
-        $attributes['data-off'] = empty($vars['attr']['data-off']) ? '<span class=\'far fa-thumbs-down\'></span>' : $vars['attr']['data-off'];
-
-        $attributes['data-on'] = empty($vars['attr']['data-on']) ? '<span class=\'far fa-thumbs-up\'></span>' : $vars['attr']['data-on'];
-
-        $attributes['data-size'] = empty($vars['attr']['data-size']) ? 'small' : $vars['attr']['data-size'];
-
-        $attributes['data-onstyle'] = empty($vars['attr']['data-onstyle']) ? 'success' : $vars['attr']['data-onstyle'];
-
-        $attributes['data-offstyle'] = empty($vars['attr']['data-offstyle']) ? 'danger' : $vars['attr']['data-offstyle'];
-
-        $attributes['data-height'] = empty($vars['attr']['data-height']) ? '' : $vars['attr']['data-height'];
-
-        $attributes['data-width'] = empty($vars['attr']['data-width']) ? '' : $vars['attr']['data-width'];
-
-        $attributes['name'] = $vars['full_name'];
-
-        $attributes['id'] = $vars['id'];
-
-        if (isset($attributes['value']))
-            $attributes['value'] = $vars['value'];
-
-        if ($vars['checked'])
-            $attributes['checked'] = 'checked';
-
-        $attributes['style'] = empty($vars['attr']['style']) ? 'float: right;' : $vars['attr']['style'];
-
-        $attrib = '';
-        foreach ($attributes as $name => $value)
+        if (isset($details['form']))
         {
-            $attrib .= ' ' . $name . '="' . $value . '"';
-            $attrib = trim($attrib);
+            $vars               = $details['form']->vars;
+
+            $details['name']    = $vars['full_name'];
+
+            $details['id']      = $vars['id'];
         }
 
-        $vars['attr']['class'] = empty($vars['attr']['class']) ? '' : 'class="' . $vars['attr']['class'] . '"';
-        $toggle                = str_replace('attributes', $attrib . ' data-height=20 data-width=40', $toggle);
-        $toggle                = str_replace('inputClass', $vars['attr']['class'], $toggle);
+        $details['toggle_swap'] = isset($details['toggle_swap']) ? $details['toggle_swap'] : 'btn-danger btn-success fa-thumbs-down fa-thumbs-up';
+
+        $details['class']       = isset($details['class']) ? $details['class'] : 'btn far btn-success fa-thumbs-up toggleRight';
+
+        $details['class']       .= empty($details['mergeClass']) ? '' : ' ' . $details['mergeClass'];
+
+        $details['label']       = empty($details['label']) ? '' : $details['label'];
+
+        $details['style']       = isset($details['style']) ? $details['style'] : 'float: right; ';
+
+        $details['callable']    = isset($details['callable']) ? 'toggle_call="' . $details['callable'] . '"' : '';
+
+        $toggle = str_replace(
+            ['%toggle_swap%', '%class%', '%id%', '%name%', '%value%', '%label%', '%style%', '%callable%'],
+            [$details['toggle_swap'], $details['class'], $details['id'], $details['name'], $details['value'], $details['label'], $details['style'], $details['callable']],
+            $toggle
+        );
 
         return $toggle;
     }
@@ -370,7 +356,7 @@ XXX;
      *
      * @return string
      */
-    public function onButton($details = [])
+    public function onButton($details = []): string
     {
         return $this->generateButton($this->buttons['on'], $details);
     }
@@ -380,7 +366,7 @@ XXX;
      *
      * @return string
      */
-    public function offButton($details = [])
+    public function offButton($details = []): string
     {
         return $this->generateButton($this->buttons['off'], $details);
     }
@@ -390,29 +376,33 @@ XXX;
      *
      * @return string
      */
-    public function onOffButton($details = [])
+    public function onOffButton($details = []): string
     {
         if (!isset($details['value']) && ! is_bool($details['value']))
             throw new \InvalidArgumentException('You must set a boolean value for the On/Off Button.  value = ?');
         $details['on'] = isset($details['on']) ? $details['on'] : [];
         $details['off'] = isset($details['off']) ? $details['off'] : [];
-        if (isset($details['title']))
+        if (isset($details['title']) && is_string($details['title']))
         {
             $details['on']['title'] = isset($details['on']['title'])? $details['on']['title'] : $details['title'].'.on';
             $details['off']['title'] = isset($details['off']['title'])? $details['off']['title'] : $details['title'].'.off';
+            unset($details['title']);
         }
 
-        if (isset($details['transDomain']))
+        if (isset($details['title']) && is_array($details['title']))
         {
-            $details['on']['transDomain'] = isset($details['on']['transDomain']) ? $details['on']['transDomain'] : $details['transDomain'];
-            $details['off']['transDomain'] = isset($details['off']['transDomain']) ? $details['off']['transDomain'] : $details['transDomain'];
+            $details['on']['title']['message'] = isset($details['on']['title']['message'])? $details['on']['title']['message'] : $details['title']['message'].'.on';
+            $details['off']['title']['message'] = isset($details['off']['title']['message'])? $details['off']['title']['message'] : $details['title']['message'].'.off';
+
+            $details['on']['title']['params'] = $details['off']['title']['params'] = $details['title']['params'];
+            unset($details['title']);
         }
 
-        if (isset($details['style']))
-        {
-            $details['on']['style'] = isset($details['on']['style']) ? $details['on']['style'] : $details['style'];
-            $details['off']['style'] = isset($details['off']['style']) ? $details['off']['style'] : $details['style'];
-        }
+        $on = $details['on'];
+        $off = $details['off'];
+        unset($details['on'], $details['off']);
+        $details['on'] = array_merge($on, $details);
+        $details['off'] = array_merge($off, $details);
 
         if ($details['value'])
             return $this->generateButton($this->buttons['on'], $details['on']);
@@ -425,7 +415,7 @@ XXX;
      *
      * @return string
      */
-    public function duplicateButton($details = [])
+    public function duplicateButton($details = []): string
     {
         return $this->generateCollectionButton($this->buttons['duplicate'], $details);
     }
