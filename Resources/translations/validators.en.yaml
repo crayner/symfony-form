@@ -1,0 +1,1 @@
+enum.invalid.message: '%{value} is not found in %{enum}'
