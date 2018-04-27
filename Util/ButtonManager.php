@@ -473,6 +473,9 @@ XXX;
             $details['attr'] = trim($details['attr']);
         }
 
+        if (isset($details['disabled']) && $details['disabled'])
+            $details['attr'] =  isset($details['attr']) ? $details['attr'] . ' disabled' : 'disabled';
+
         if (!empty($details['windowOpen']))
         {
             $target                = empty($details['windowOpen']['target']) ? '_self' : $this->translator->trans($details['windowOpen']['target'], array(), empty($details['transDomain']) ? 'FormTheme' : $details['transDomain']);
