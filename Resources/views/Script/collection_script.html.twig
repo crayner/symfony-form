@@ -1,6 +1,6 @@
 <!-- Collection Script {{ collection_class_name(collection) }} -->
 <div class="{{ collection_class_name(collection) }}" data-collection="{{ collection.vars.id }}"></div>
-<script type="text/javascript" language="JavaScript">
+<script type="text/javascript" language="JavaScript">{% dump %}
     $(".{{ collection_class_name(collection) }}").collection({
         name_prefix: '{{ collection.vars.full_name }}',
         add: '{{ collection.vars.add_button|default(addButton())|raw }}',

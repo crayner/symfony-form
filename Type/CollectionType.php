@@ -103,8 +103,8 @@ class CollectionType extends AbstractType
                 $options['duplicate_button'] = $this->buttonManager->duplicateButton(['mergeClass' => $options['button_merge_class']]);
         }
 
-        $view->vars['allow_up']             = $options['sort_manage'] ?: $options['up_button'];
-        $view->vars['allow_down']           = $options['sort_manage'] ?: $options['down_button'];
+        $view->vars['allow_up']             = $options['sort_manage'];
+        $view->vars['allow_down']           = $options['sort_manage'];
         $view->vars['allow_duplicate']      = $options['allow_duplicate'];
         $view->vars['unique_key']           = $options['unique_key'];
         $view->vars['route']                = $options['route'];
