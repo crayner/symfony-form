@@ -1,6 +1,10 @@
 <!-- Toggle Script -->
 <script type="text/javascript" lang="jquery">
     $(document).on('click', '[data-toggle="buttons"]', function () {
+        var disabled = $(this).hasClass('disabled');
+        if (disabled) {
+            return false;
+        }
         // toggle style
         var swap = $(this).attr('toggle_swap');
         $(this).toggleClass(swap);

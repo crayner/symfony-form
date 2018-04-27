@@ -221,8 +221,8 @@
         {% set value = value|default('0') %}
 
         <label class="{{ label_class }}"{{ label_id|default('') }}>
-            <span class="{{ button_class }} {{ div_class }}" toggle_swap="{{ swap_list|trim }}" data-toggle="buttons" id="{{ id ~ '_span' }}">
-            <input type="hidden" value="{{ value }}" id="{{ id }}" name="{{ full_name }}" {{ inputClass }} /></span>
+            <span class="{{ button_class }} {{ div_class }}{% if disabled %} disabled{% endif %}" toggle_swap="{{ swap_list|trim }}" data-toggle="buttons" id="{{ id ~ '_span' }}">
+            <input type="hidden" value="{{ value }}" id="{{ id }}" name="{{ full_name }}" {{ inputClass }}{% if disabled %} disabled{% endif %} /></span>
             {{ (translation_domain is same as(false) ? label : label|trans({}, translation_domain)) }}
         {% if required %}
             <br/><span class="field-required">&nbsp;{{ 'form.required'|trans({}, 'FormTheme') }}</span>
