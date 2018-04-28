@@ -119,7 +119,7 @@ class CollectionExtension extends AbstractExtension
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function renderCollectionScript(FormView $collection, string $callable)
+    public function renderCollectionScript(FormView $collection, string $callable = '')
     {
         $x = $this->twig->render('@HillrangeForm/Script/collection_script.html.twig',
             [
