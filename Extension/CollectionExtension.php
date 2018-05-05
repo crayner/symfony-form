@@ -183,9 +183,10 @@ class CollectionExtension extends AbstractExtension
         foreach($id as $w)
             $class .= ucfirst(strtolower($w));
 
-        if (empty($class))
+        if (empty($class)) {
+            dump($collection);
             throw new \InvalidArgumentException('Hey programmer,  You stuffed up this one...  Must be a valid collection in a form or the collection ID.');
-
+        }
         return 'class'.$class;
     }
 
