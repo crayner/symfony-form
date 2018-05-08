@@ -2,6 +2,7 @@
 namespace Hillrange\Form\Util;
 
 use Symfony\Component\Form\FormView;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Yaml\Yaml;
 
@@ -18,13 +19,19 @@ class ButtonManager
     private $translator;
 
     /**
+     * @var RouterInterface
+     */
+    private $router;
+
+    /**
      * ButtonExtension constructor.
      *
      * @param TranslatorInterface $translator
      */
-    public function __construct(TranslatorInterface $translator)
+    public function __construct(TranslatorInterface $translator, RouterInterface $router)
     {
         $this->translator = $translator;
+        $this->router = $router;
         $buttons = <<<XXX
 save:
     class: "fas fa-download btn btn-success"
@@ -478,6 +485,10 @@ XXX;
 
         if (!empty($details['windowOpen']))
         {
+            if (isset($details['windowOpen']['route_params']))
+            {
+                $details['windowOpen']['route'] = $this->router->generate($details['windowOpen']['route'], $details['windowOpen']['route_params']) ;
+            }
             $target                = empty($details['windowOpen']['target']) ? '_self' : $this->translator->trans($details['windowOpen']['target'], array(), empty($details['transDomain']) ? 'FormTheme' : $details['transDomain']);
             $route                 = 'onClick="window.open(\'' . $details['windowOpen']['route'] . '\',\'' . $target . '\'';
             $route                 = empty($details['windowOpen']['params']) ? $route . ')"' : $route . ',\'' . $details['windowOpen']['params'] . '\')"';

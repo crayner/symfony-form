@@ -6,4 +6,5 @@ collection:
     child.delete.restricted: 'The child entity "%{class}" is locked, and removal is restricted.'
     parent.child.remove.missing: 'The method to remove the child from the parent %{class} is missing. %{remove}'
     child.removed: '%{class}-%{id} was removed successfully.'
+    removal.warning: 'alert("Removal of the collection element is only completed after the form is saved.");'
 Close Message: Close Message

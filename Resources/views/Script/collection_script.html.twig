@@ -22,6 +22,9 @@
 
             manageCollection(path, target, element);
             {% endif %}
+            {% if collection.vars.removal_warning %}
+            {{ 'collection.removal.warning'|trans|raw }}
+            {% endif %}
             return true;
         }
     });

@@ -62,6 +62,7 @@ class CollectionType extends AbstractType
                 'down_button'           => '',
                 'duplicate_button'      => '',
                 'button_merge_class'    => '',
+                'removal_warning'       => null,
             ]
         );
     }
@@ -114,6 +115,7 @@ class CollectionType extends AbstractType
         $view->vars['remove_button']        = $options['remove_button'];
         $view->vars['up_button']            = $options['up_button'];
         $view->vars['down_button']          = $options['down_button'];
+        $view->vars['removal_warning']      = $options['removal_warning'];
 
     }
 }
