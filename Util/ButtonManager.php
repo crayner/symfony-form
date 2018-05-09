@@ -489,7 +489,7 @@ XXX;
             {
                 $details['windowOpen']['route'] = $this->router->generate($details['windowOpen']['route'], $details['windowOpen']['route_params']) ;
             }
-            $target                = empty($details['windowOpen']['target']) ? '_self' : $this->translator->trans($details['windowOpen']['target'], array(), empty($details['transDomain']) ? 'FormTheme' : $details['transDomain']);
+            $target                = empty($details['windowOpen']['target']) || $details['windowOpen']['target'] === '_self' ? '_self' : $this->translator->trans($details['windowOpen']['target'], [], empty($details['transDomain']) ? 'FormTheme' : $details['transDomain']);
             $route                 = 'onClick="window.open(\'' . $details['windowOpen']['route'] . '\',\'' . $target . '\'';
             $route                 = empty($details['windowOpen']['params']) ? $route . ')"' : $route . ',\'' . $details['windowOpen']['params'] . '\')"';
             $details['attr'] = empty($details['attr']) ? $route : trim($details['attr'] . ' ' . $route);
