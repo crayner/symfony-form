@@ -532,9 +532,9 @@ XXX;
             {
                 if (in_array($q, ['title', 'prompt']))
                     if (is_array($defaults[$q]))
-                        $defaults[$q] = $this->translator->trans($defaults[$q]['message'], $defaults[$q]['params'], empty($details['transDomain']) ? 'messages' : $details['transDomain']);
+                        $defaults[$q] = $this->trans($defaults[$q]['message'], $defaults[$q]['params'], empty($details['transDomain']) ? 'FormTheme' : $details['transDomain']);
                     else
-                        $defaults[$q] = $this->translator->trans($defaults[$q], [], empty($details['transDomain']) ? 'FormTheme' : $details['transDomain']);
+                        $defaults[$q] = $this->trans($defaults[$q], [], empty($details['transDomain']) ? 'FormTheme' : $details['transDomain']);
                 $button = str_replace('%' . $q . '%', $defaults[$q], $button);
             }
         }
@@ -546,5 +546,24 @@ XXX;
             $button = str_replace(['btn-default', 'btn-success', 'btn-info', 'btn-warning', 'btn-danger', 'btn-primary', 'btn-link', 'btn-light', 'btn-dark'], 'btn-' . $details['colour'], $button);
 
         return $button;
+    }
+
+    /**
+     * trans
+     *
+     * @param string $message
+     * @param array $params
+     * @param string $domain
+     * @return string
+     */
+    private function trans(string $message, array $params, string $domain = 'FormTheme'): string
+    {
+        if (isset($params['transChoice'])) {
+            $transChoice = intval($params['transChoice']);
+            unset($params['transChoice']);
+            $x = $this->translator->transChoice($message, $transChoice, $params, $domain);
+            return $x;
+        }
+        return $this->translator->trans($message, $params, $domain);
     }
 }
