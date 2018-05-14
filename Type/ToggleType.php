@@ -51,6 +51,8 @@ class ToggleType extends AbstractType
 		);
         $view->vars['button_class_off'] = $options['button_class_off'] ?: $this->buttonClassOff;
         $view->vars['button_toggle_swap'] = $options['button_toggle_swap'] ?: $this->buttonToggleSwap;
+        $view->vars['button_class_off'] .= ' ' . $options['button_merge_class'];
+        $view->vars['button_class_off'] = trim($view->vars['button_class_off']);
 	}
 
     /**
@@ -65,6 +67,7 @@ class ToggleType extends AbstractType
 				'div_class'  => 'toggleRight',
 				'button_class_off' => null,
 				'button_toggle_swap' => null,
+                'button_merge_class'    => '',
 			)
 		);
 	}

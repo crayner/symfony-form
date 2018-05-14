@@ -554,9 +554,9 @@ XXX;
      * @param string $message
      * @param array $params
      * @param string $domain
-     * @return string
+     * @return null|string
      */
-    private function trans(string $message, array $params, string $domain = 'FormTheme'): string
+    private function trans(string $message, array $params, string $domain = 'FormTheme'): ?string
     {
         if (isset($params['transChoice'])) {
             $transChoice = intval($params['transChoice']);
