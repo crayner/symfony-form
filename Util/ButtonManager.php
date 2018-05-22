@@ -460,13 +460,55 @@ XXX;
      */
     private function generateButton($defaults, $details = []): string
     {
-        $button = '<button name="%name%" title="%title%" type="%type%" class="%class%" style="%style%" %attr%>%prompt%</button>';
+        $button = '<button name="%name%" title="%title%" type="%type%" class="%class%" style="%style%" %attr%>%prompt%<span%icon%></span></button>';
 
-        if (isset($details['mergeClass']))
-        {
-            if (isset($defaults['class']))
-                $defaults['class'] .= ' ' . $details['mergeClass'];
+        if (isset($details['class'])) {
+            $defaults['class'] = $details['class'];
+            unset($details['class']);
         }
+
+        if (isset($details['mergeClass']) && isset($defaults['class']))
+                $defaults['class'] .= ' ' . $details['mergeClass'];
+
+        if (isset($details['icon'])) {
+            if (is_array($details['icon'])) {
+                $icon = '';
+                foreach($details['icon'] as $name=>$value)
+                    $icon .= $name . '="' . $value . '" ';
+                $defaults['icon'] = ' ' . trim($icon);
+            }
+            unset($details['icon']);
+        } else {
+            $icon = '';
+            if (preg_match('#^far | far | far$#', $defaults['class'], $matches) > 0) {
+                $icon .= 'far ';
+                $defaults['class'] = str_replace($matches, '', $defaults['class']);
+            }
+
+            if (preg_match('#^fas | fas | fas$#', $defaults['class'], $matches) > 0) {
+                $icon .= 'fas ';
+                $defaults['class'] = str_replace($matches, '', $defaults['class']);
+            }
+
+            if (preg_match('#^fal | fal | fal$#', $defaults['class'], $matches) > 0) {
+                $icon .= 'fal ';
+                $defaults['class'] = str_replace($matches, '', $defaults['class']);
+            }
+
+            if (preg_match('#^fab | fab | fab$#', $defaults['class'], $matches) > 0) {
+                $icon .= 'fab ';
+                $defaults['class'] = str_replace($matches, '', $defaults['class']);
+            }
+
+            if (preg_match('#fa-([\S][\w-]*)#', $defaults['class'], $matches) > 0) {
+                $icon .= $matches[0] . ' ';
+                $defaults['class'] = str_replace($matches, '', $defaults['class']);
+            }
+
+            $defaults['icon'] = ' class="' . trim($icon) . '"';
+        }
+
+        $defaults['class'] = trim(str_replace('  ', ' ', $defaults['class']));
 
         if (! empty($details['additional']))
             $details['attr'] = $details['additional'];
