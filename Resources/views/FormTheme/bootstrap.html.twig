@@ -63,7 +63,7 @@
         {% if form.parent %}<small class="form-text text-danger">{% endif %}
         <ul class="list-unstyled">
         {%- for error in errors -%}
-            <li class="text-danger fas fa-exclamation-circle"> {{ (translation_domain is same as(false) ? error.message : error.message|trans({}, translation_domain)) }}</li>
+            <li class="text-danger"><span class="fas fa-exclamation-circle"></span> {{ (translation_domain is same as(false) ? error.message : error.message|trans({}, translation_domain)) }}</li>
         {%- endfor -%}
         </ul>
         {% if form.parent %}</small>{% endif %}
