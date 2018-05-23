@@ -9,15 +9,27 @@
         var swap = $(this).attr('toggle_swap');
         $(this).toggleClass(swap);
 
+        var icon = $(this).children('svg');
+
         // toggle input
         var chk = $(this).find('[type=hidden]');
         var val = chk.val();
 
-        if (val === "1")
+        if (val === "1") {
             val = "0";
-        else
+            $(this).removeClass($(this).attr('toggle_on')).addClass($(this).attr('toggle_off'));
+            if (typeof icon != 'undefined') {
+                $(icon).removeClass($(icon).attr('icon_on')).addClass($(icon).attr('icon_off'));
+                $(icon).attr('data-prefix', $(icon).attr('type_off'));
+            }
+        } else {
             val = "1";
-
+            $(this).removeClass($(this).attr('toggle_off')).addClass($(this).attr('toggle_on'));
+            if (typeof icon != 'undefined') {
+                $(icon).removeClass($(icon).attr('icon_off')).addClass($(icon).attr('icon_on'));
+                $(icon).attr('data-prefix', $(icon).attr('type_on'));
+            }
+        }
         chk.val(val);
 
         var callable = $(this).attr('toggle_call');

@@ -2,7 +2,6 @@
 namespace Hillrange\Form\DependencyInjection;
 
 use Hillrange\Form\Type\EventSubscriber\ImageSubscriber;
-use Hillrange\Form\Type\Extension\ToggleTypeExtension;
 use Hillrange\Form\Type\ToggleType;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
@@ -46,34 +45,31 @@ class HillrangeFormExtension extends Extension
     {
         if (!empty($config['button_class_off'])) {
             $container
-                ->getDefinition(ToggleTypeExtension::class)
-                ->addMethodCall('setButtonClassOff', [$config['button_class_off']]);
-            $container
                 ->getDefinition(ToggleType::class)
                 ->addMethodCall('setButtonClassOff', [$config['button_class_off']]);
         } else {
             $container
-                ->getDefinition(ToggleTypeExtension::class)
-                ->addMethodCall('setButtonClassOff', []);
-            $container
                 ->getDefinition(ToggleType::class)
-                ->addMethodCall('setButtonClassOff', []);
+                ->addMethodCall('setButtonClassOff', ['']);
         }
 
-        if (!empty($config['button_toggle_swap'])) {
-            $container
-                ->getDefinition(ToggleTypeExtension::class)
-                ->addMethodCall('setButtonToggleSwap', [$config['button_toggle_swap']]);
+        if (!empty($config['button_class_on'])) {
             $container
                 ->getDefinition(ToggleType::class)
-                ->addMethodCall('setButtonToggleSwap', [$config['button_toggle_swap']]);
+                ->addMethodCall('setButtonClassOn', [$config['button_class_on']]);
         } else {
             $container
-                ->getDefinition(ToggleTypeExtension::class)
-                ->addMethodCall('setButtonToggleSwap', []);
+                ->getDefinition(ToggleType::class)
+                ->addMethodCall('setButtonClassOn', ['']);
+        }
+        if (empty($config['use_font_awesome'])) {
             $container
                 ->getDefinition(ToggleType::class)
-                ->addMethodCall('setButtonToggleSwap', []);
+                ->addMethodCall('setUseFontAwesome', [false]);
+        } else {
+            $container
+                ->getDefinition(ToggleType::class)
+                ->addMethodCall('setUseFontAwesome', [true]);
         }
     }
 }

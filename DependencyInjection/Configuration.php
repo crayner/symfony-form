@@ -14,10 +14,9 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->scalarNode('upload_path')->end()
                 ->scalarNode('button_class_off')->end()
-                ->arrayNode('button_toggle_swap')
-                    ->requiresAtLeastOneElement()
-                    ->prototype('scalar')->end()
-            ->end();
+                ->scalarNode('button_class_on')->end()
+                ->scalarNode('use_font_awesome')->end()
+            ;
 
         return $treeBuilder;
     }

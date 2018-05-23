@@ -324,6 +324,7 @@ XXX;
         $toggle = '
 <span class="%class%" toggle_swap="%toggle_swap%" data-toggle="buttons" id="%id%_span" style="%style%" %callable%>
     <input type="hidden" value="%value%" id="%id%" name="%name%" />
+    <span%icon%></span>
 </span>
 <label class="control_label" for="%id%">%label%
 </label>';
@@ -337,6 +338,43 @@ XXX;
             $details['id']      = $vars['id'];
         }
 
+        if (isset($details['icon'])) {
+            if (is_array($details['icon'])) {
+                $icon = '';
+                foreach($details['icon'] as $name=>$value)
+                    $icon .= $name . '="' . $value . '" ';
+                $defaults['icon'] = ' ' . trim($icon);
+            }
+            unset($details['icon']);
+        } else {
+            $icon = '';
+            if (preg_match('#^far | far | far$#', $details['class'], $matches) > 0) {
+                $icon .= 'far ';
+                $details['class'] = str_replace($matches, '', $details['class']);
+            }
+
+            if (preg_match('#^fas | fas | fas$#', $details['class'], $matches) > 0) {
+                $icon .= 'fas ';
+                $details['class'] = str_replace($matches, '', $details['class']);
+            }
+
+            if (preg_match('#^fal | fal | fal$#', $details['class'], $matches) > 0) {
+                $icon .= 'fal ';
+                $details['class'] = str_replace($matches, '', $details['class']);
+            }
+
+            if (preg_match('#^fab | fab | fab$#', $details['class'], $matches) > 0) {
+                $icon .= 'fab ';
+                $details['class'] = str_replace($matches, '', $details['class']);
+            }
+
+            if (preg_match('#fa-([\S][\w-]*)#', $details['class'], $matches) > 0) {
+                $icon .= $matches[0] . ' ';
+                $details['class'] = str_replace($matches, '', $details['class']);
+            }
+
+            $details['icon'] = ' class="' . trim($icon) . '"';
+        }
         $details['toggle_swap'] = isset($details['toggle_swap']) ? $details['toggle_swap'] : 'btn-danger btn-success fa-thumbs-down fa-thumbs-up';
 
         $details['class']       = isset($details['class']) ? $details['class'] : 'btn far btn-success fa-thumbs-up toggleRight';
@@ -350,8 +388,8 @@ XXX;
         $details['callable']    = isset($details['callable']) ? 'toggle_call="' . $details['callable'] . '"' : '';
 
         $toggle = str_replace(
-            ['%toggle_swap%', '%class%', '%id%', '%name%', '%value%', '%label%', '%style%', '%callable%'],
-            [$details['toggle_swap'], $details['class'], $details['id'], $details['name'], $details['value'], $details['label'], $details['style'], $details['callable']],
+            ['%toggle_swap%', '%class%', '%id%', '%name%', '%value%', '%label%', '%style%', '%callable%', '%icon%'],
+            [$details['toggle_swap'], $details['class'], $details['id'], $details['name'], $details['value'], $details['label'], $details['style'], $details['callable'], $details['icon']],
             $toggle
         );
 
