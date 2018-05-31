@@ -231,14 +231,20 @@
     </div>
 {%- endblock hillrange_toggle_widget %}
 
-{% block hillrange_message_row -%}{% dump %}{{- form_widget(form) -}}{{- form_errors(form) -}}{%- endblock hillrange_message_row %}
-{% block hillrange_message_label -%}{% dump %}
+{% block hillrange_message_row -%}
+    {{- form_label(form) -}}
+    {{- form_widget(form) -}}
+    {{- form_errors(form) -}}
+{%- endblock hillrange_message_row %}
+
+{% block hillrange_message_label -%}
     {% if translation_domain is same as(false) %}
         <label class="form-control-label required" for="{{ id }}">{{ label }}</label>
     {% else %}
         <label class="form-control-label required" for="{{ id }}">{{ label|trans({}, translation_domain|default('System')) }}</label>
     {% endif %}
 {%- endblock hillrange_message_label %}
+
 {% block hillrange_message_errors -%}{%- endblock hillrange_message_errors %}
 
 {% block hillrange_message_widget -%}
