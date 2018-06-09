@@ -1,0 +1,5 @@
+form:
+    on: On
+    off: Off
+    required: Required
+    save: Save
