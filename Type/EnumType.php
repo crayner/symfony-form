@@ -5,6 +5,8 @@ use Hillrange\Form\Type\EventSubscriber\EnumSubscriber;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class EnumType extends AbstractType
@@ -22,16 +24,12 @@ class EnumType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-         $resolver->setRequired(
-             [
-                 'choice_list_class',
-                 'choice_list_method',
-             ]
-         );
          $resolver->setDefaults(
              [
                  // Translations Prefix
-                 'choice_list_prefix' => 'hillrange_enum_choice',
+                 'choice_list_prefix' => null,
+                 'choice_list_class' => null,
+                 'choice_list_method' => null,
              ]
          );
     }

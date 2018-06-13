@@ -1,12 +1,14 @@
 <?php
 namespace Hillrange\Form\Type\EventSubscriber;
 
+use App\Exception\MissingClassException;
 use Hillrange\Form\Validator\Enum;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Validator\Constraints\Choice;
+use Symfony\Component\Validator\Exception\MissingOptionsException;
 
 class EnumSubscriber implements EventSubscriberInterface
 {
@@ -31,9 +33,27 @@ class EnumSubscriber implements EventSubscriberInterface
 
         $options = $form->getConfig()->getOptions();
         $name    = $form->getName();
-
         $className = $options['choice_list_class'];
         $method = $options['choice_list_method'];
+
+        if (empty($className))
+            if (is_object($form->getParent()->getConfig()->getOption('data')))
+                $className = get_class($form->getParent()->getConfig()->getOption('data'));
+        if (empty($className))
+            $className = $form->getParent()->getConfig()->getOption('data_class');
+
+        if (empty($method))
+            $method = 'get' . ucfirst($name) . 'List';
+        if (empty($options['choice_list_prefix']) || $options['choice_list_prefix'] === 'hillrange_enum_choice') {
+            $x = explode("\\", $className);
+            $options['choice_list_prefix'] = strtolower(array_pop($x) . '.' . $name);
+        }
+
+        if (empty($className)) {
+            dump([$className, $method, $form->getParent()->getConfig()->getOption('data_class')]);
+            throw new MissingClassException(sprintf('The enum form of name "%s" has not defined a valid Choice List Class', $name), $options);
+        }
+
         $class = new $className();
         $raw = $class->$method();
 
