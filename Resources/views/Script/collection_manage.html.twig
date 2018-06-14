@@ -25,7 +25,7 @@
                 mergeCollectionMessage(data.message);
             },
             error: function (req, status, err) {
-                var message = '<div class="alert alert-__level__ alert-dismissable show hide">__message__<button title="{{ 'Close Message'|trans }}" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true" class="far fa-times-circle"></span></button></div>';
+                var message = '<div class="alert alert-__level__ alert-dismissable show hide">__message__<button title="{{ 'Close Message'|trans({}, 'System') }}" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true" class="far fa-times-circle"></span></button></div>';
                 message = message.replace('__level__', 'danger');
                 message = message.replace('__message__', err);
                 mergeCollectionMessage(message);

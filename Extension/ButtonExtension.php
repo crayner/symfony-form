@@ -11,6 +11,10 @@ class ButtonExtension extends AbstractExtension
      */
 	private $buttonManager;
 
+    /**
+     * @var \Twig_Environment
+     */
+	private $twig;
 	/**
 	 * @return string
 	 */
@@ -44,7 +48,8 @@ class ButtonExtension extends AbstractExtension
 			new \Twig_SimpleFunction('onOffButton', array($this->buttonManager, 'onOffButton')),
 			new \Twig_SimpleFunction('upDownButton', array($this->buttonManager, 'upDownButton')),
 			new \Twig_SimpleFunction('toggleButton', array($this->buttonManager, 'toggleButton')),
-			new \Twig_SimpleFunction('duplicateButton', array($this->buttonManager, 'duplicateButton')),
+            new \Twig_SimpleFunction('duplicateButton', array($this->buttonManager, 'duplicateButton')),
+            new \Twig_SimpleFunction('toggle_script', array($this, 'renderToggleScript')),
 		];
 	}
 
@@ -52,8 +57,24 @@ class ButtonExtension extends AbstractExtension
      * ButtonExtension constructor.
      * @param ButtonManager $buttonManager
      */
-    public function __construct(ButtonManager $buttonManager)
+    public function __construct(\Twig_Environment $twig, ButtonManager $buttonManager)
     {
         $this->buttonManager = $buttonManager;
+        $this->twig = $twig;
+    }
+
+    /**
+     * @param FormView $collection
+     * @param string $callable
+     * @return \Twig_Markup
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function renderToggleScript()
+    {
+        $x = $this->twig->render('@HillrangeForm/Toggle/script.html.twig');
+
+        return new \Twig_Markup($x, 'html');
     }
 }

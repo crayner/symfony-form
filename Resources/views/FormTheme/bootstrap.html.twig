@@ -157,7 +157,10 @@
 {%- endblock auto_complete_widget -%}
 
 {% block hillrange_toggle_row -%}
-    {{- form_widget(form) -}}
+    <div class="toggle-label">
+        {{- form_widget(form) -}}
+        {{- form_label(form) -}}
+    </div>
     {{- form_errors(form) -}}
 {%- endblock hillrange_toggle_row %}
 
@@ -202,7 +205,6 @@
         {% endif %}
     {% endif %}
 
-    <div class="toggle-label">
         {%- set parent_label_class = parent_label_class|default(label_attr.class|default('')) -%}
         {% set inputClass = '' %}
         {% if attr.class is defined %}{% set inputClass = 'class=' ~ attr.class  %}{% endif %}
@@ -215,21 +217,23 @@
 
         {% set value = value|default('0') %}
 
-        <label class="{{ label_class }}"{{ label_id|default('') }}>
-            <div class="{{ div_class }}">
-            <span class="{{ button_class }}{% if disabled %} disabled{% endif %}" toggle_on="{{ button_class_on|default('toggle toggle-thumbs-up') }}" toggle_off="{{ button_class_off|default('toggle toggle-thumbs-down') }}" data-toggle="buttons" id="{{ id ~ '_span' }}">
-                <input type="hidden" value="{{ value }}" id="{{ id }}" name="{{ full_name }}" {{ inputClass }}{% if disabled %} disabled{% endif %} />
-                {% if use_font_awesome is same as(true) %}
-                    <span class="{{ icon_class|trim }}" icon_on="{{ icon_class_on|default('far fa-thumbs-up') }}" icon_off="{{ icon_class_off|default('far fa-thumbs-down') }}" type_on="{{ fa_type_on|default('far') }}" type_off="{{ fa_type_off|default('far') }}"></span>
-                {% endif %}
-            </span></div>
-            {{ (translation_domain is same as(false) ? label : label|trans({}, translation_domain)) }}
-            {% if required %}
-                <br/><span class="field-required">&nbsp;{{ 'form.required'|trans({}, 'FormTheme') }}</span>
+        <span class="{{ div_class }}{{ button_class }}{% if disabled %} disabled{% endif %}" toggle_on="{{ button_class_on|default('toggle toggle-thumbs-up') }}" toggle_off="{{ button_class_off|default('toggle toggle-thumbs-down') }}" data-toggle="buttons" id="{{ id ~ '_span' }}">
+            <input type="hidden" value="{{ value }}" id="{{ id }}" name="{{ full_name }}" {{ inputClass }}{% if disabled %} disabled{% endif %} />
+            {% if use_font_awesome is same as(true) %}
+                <span class="{{ icon_class|trim }}" icon_on="{{ icon_class_on|default('far fa-thumbs-up') }}" icon_off="{{ icon_class_off|default('far fa-thumbs-down') }}" type_on="{{ fa_type_on|default('far') }}" type_off="{{ fa_type_off|default('far') }}"></span>
             {% endif %}
-        </label>
-    </div>
+        </span>
 {%- endblock hillrange_toggle_widget %}
+
+
+{% block hillrange_toggle_label -%}
+    <label class="{{ label_class }}"{{ label_id|default('') }}>
+        {{ (translation_domain is same as(false) ? label : label|trans({}, translation_domain)) }}
+        {% if required %}
+            <br/><span class="field-required">&nbsp;{{ 'form.required'|trans({}, 'FormTheme') }}</span>
+        {% endif %}
+    </label>
+{%- endblock hillrange_toggle_label %}
 
 {% block hillrange_message_row -%}
     {{- form_label(form) -}}
