@@ -1,5 +1,5 @@
 <!-- Collection Script {{ collection_class_name(collection) }} -->
-<div class="{{ collection_class_name(collection) }}" data-collection="{{ collection.vars.id }}"></div>
+<div class="{{ collection_class_name(collection) }}" data-collection="{{ collection.vars.id }}"></div>{% dump(collection) %}
 <script type="text/javascript" language="JavaScript">
     if (typeof jQuery != 'undefined') {
         $(".{{ collection_class_name(collection) }}").collection({
@@ -10,6 +10,8 @@
             down: '{{ collection.vars.down_button|default(downButton())|raw }}',
             duplicate: '{{ collection.vars.duplicate_button|default(duplicateButton())|raw }}',
             add_at_the_end: true,
+            allow_add: {% if collection.vars.allow_add %}true{% else %}false{% endif %},
+            allow_remove: {% if collection.vars.allow_delete %}true{% else %}false{% endif %},
             allow_up: {% if collection.vars.allow_up %}true{% else %}false{% endif %},
             allow_down: {% if collection.vars.allow_down %}true{% else %}false{% endif %},
             allow_duplicate: {% if collection.vars.allow_duplicate %}true{% else %}false{% endif %},
