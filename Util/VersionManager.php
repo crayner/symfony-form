@@ -1,11 +1,20 @@
 <?php
 namespace Hillrange\Form\Util;
 
+/**
+ * Class VersionManager
+ * @package Hillrange\Form\Util
+ */
 class VersionManager
 {
-    const VERSION = '0.1.76';
+    /**
+     * String
+     */
+    const VERSION = '0.1.77';
 
     /**
+     * getVersion
+     *
      * @return string
      */
     public function getVersion(): string
