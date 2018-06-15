@@ -54,6 +54,7 @@ class CollectionType extends AbstractType
                 'allow_down'            => false,
                 'allow_duplicate'       => false,
                 'route'                 => '',
+                'redirect_route'        => '',
                 'route_params'          => [],
                 'display_script'        => false,
                 'add_button'            => '',
@@ -109,6 +110,7 @@ class CollectionType extends AbstractType
         $view->vars['allow_duplicate']      = $options['allow_duplicate'];
         $view->vars['unique_key']           = $options['unique_key'];
         $view->vars['route']                = $options['route'];
+        $view->vars['redirect_route']       = $options['redirect_route'];
         $view->vars['route_params']         = $options['route_params'];
         $view->vars['display_script']       = $options['display_script'];
         $view->vars['add_button']           = $options['add_button'];

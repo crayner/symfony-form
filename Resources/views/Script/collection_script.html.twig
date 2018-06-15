@@ -17,19 +17,39 @@
             allow_duplicate: {% if collection.vars.allow_duplicate %}true{% else %}false{% endif %},
             drag_drop: {% if collection.vars.allow_up or collection.vars.allow_down %}true{% else %}false{% endif %},
             before_remove: function (collection, element) {
-                {% if collection.vars.route is not empty %}
                 {% set route_params = collection.vars.route_params|merge({id: app.request.get('id'), cid: '__cid__'}) %}
-                var path = '{{ path(collection.vars.route, route_params) }}';
 
-                var target = '{{ collection.vars.id }}_target';
+                {% if collection.vars.route is not empty %}
+                    var path = '{{ path(collection.vars.route, route_params) }}';
 
-                manageCollection(path, target, element);
+                    var target = '{{ collection.vars.id }}_target';
+
+                    manageCollection(path, target, element);
                 {% endif %}
                 {% if collection.vars.removal_warning %}
-                {{ 'collection.removal.warning'|trans|raw }}
+                    {{ 'collection.removal.warning'|trans|raw }}
+                {% endif %}
+
+                {% if collection.vars.redirect_route is not empty %}
+                    var path = '{{ path(collection.vars.redirect_route, route_params) }}';
+                    var source = $(element[0]).find('.removeElement');
+
+                    if (source.is('select')) {
+                        var cid = source.val();
+                    } else {
+                        var cid = source.attr('value');
+                    }
+
+                    if (typeof cid === 'undefined' || (!cid)) {
+                        cid = 'ignore';
+                    }
+
+                    path = path.replace('__cid__', cid);
+                    window.open(path,'_self');
                 {% endif %}
                 return true;
             }
+
         });
 
         {% if callable is not empty %}
