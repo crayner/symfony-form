@@ -10,7 +10,7 @@
             {% if form.parent.vars.value.name is defined %}
                 {% set imageDelete = form.parent.vars.value.name %}
             {% endif %}
-            {{ deleteButton({title: 'photo.delete', transDomain: translation_domain, windowOpen: {route: deletePhoto|replace({'__imageDelete__': imageDelete}), target: deleteTarget, params: deleteParams}, colour: 'warning', mergeClass: 'btn-sm'})|raw }}
+            {{ deleteButton({title: 'photo.delete'|trans({}, 'FormTheme'), transDomain: false, windowOpen: {route: deletePhoto|replace({'__imageDelete__': imageDelete}), target: deleteTarget, params: deleteParams}, colour: 'warning', mergeClass: 'btn-sm'})|raw }}
         {% endif %}
     {% else %}
         {{- form_label(form) -}}

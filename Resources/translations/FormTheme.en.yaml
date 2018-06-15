@@ -3,3 +3,4 @@ form:
     off: Off
     required: Required
     save: Save
+photo.delete: Delete Photo
