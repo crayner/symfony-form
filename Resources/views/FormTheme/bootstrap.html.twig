@@ -214,7 +214,7 @@
 
         {% set value = value|default('0') %}
 
-        <span class="{{ div_class }}{{ button_class }}{% if disabled %} disabled{% endif %}" toggle_on="{{ button_class_on|default('toggle toggle-thumbs-up') }}" toggle_off="{{ button_class_off|default('toggle toggle-thumbs-down') }}" data-toggle="buttons" id="{{ id ~ '_span' }}">
+        <span class="{{ div_class }} {{ button_class }}{% if disabled %} disabled{% endif %}" toggle_on="{{ button_class_on|default('toggle toggle-thumbs-up') }}" toggle_off="{{ button_class_off|default('toggle toggle-thumbs-down') }}" data-toggle="buttons" id="{{ id ~ '_span' }}">
             <input type="hidden" value="{{ value }}" id="{{ id }}" name="{{ full_name }}" {{ inputClass }}{% if disabled %} disabled{% endif %} />
             {% if use_font_awesome is same as(true) %}
                 <span class="{{ icon_class|trim }}" icon_on="{{ icon_class_on|default('far fa-thumbs-up') }}" icon_off="{{ icon_class_off|default('far fa-thumbs-down') }}" type_on="{{ fa_type_on|default('far') }}" type_off="{{ fa_type_off|default('far') }}"></span>

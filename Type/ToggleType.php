@@ -51,6 +51,8 @@ class ToggleType extends AbstractType
 		);
         $view->vars['button_class_off'] = $options['button_class_off'] ?: $this->buttonClassOff;
         $view->vars['button_class_off'] .= ' ' . $options['button_merge_class'];
+        $view->vars['label_class'] = $options['label_class'];
+        $view->vars['label_id'] = $options['label_id'];
         $view->vars['button_class_off'] = trim($view->vars['button_class_off']);
         $view->vars['button_class_on'] = $options['button_class_on'] ?: $this->buttonClassOn;
         $view->vars['button_class_on'] .= ' ' . $options['button_merge_class'];
@@ -147,6 +149,8 @@ class ToggleType extends AbstractType
 				'button_class_on' => null,
                 'button_merge_class'    => '',
                 'use_font_awesome' => false,
+                'label_class' => null,
+                'label_id' => null,
 			)
 		);
 	}
