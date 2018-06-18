@@ -7,5 +7,7 @@ form:
     down: Down
     duplicate: Duplicate
     remove: Remove
+    add: Add
+    delete: Delete
 photo.delete: Delete Photo
 colour.definition: 'Colours are defined at - <a href="https://www.w3schools.com/cssref/css_colors_legal.asp" target="_blank"> W3Schools - CSS Legal Colour Values</a>'

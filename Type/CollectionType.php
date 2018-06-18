@@ -118,6 +118,7 @@ class CollectionType extends AbstractType
         $view->vars['up_button']            = $options['up_button'];
         $view->vars['down_button']          = $options['down_button'];
         $view->vars['removal_warning']      = $options['removal_warning'];
-
+        $view->vars['allow_add']            = $options['allow_add'];
+        $view->vars['allow_delete']         = $options['allow_delete'];
     }
 }

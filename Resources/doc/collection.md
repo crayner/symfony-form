@@ -266,7 +266,7 @@ uses a lot of addition features of the form package that are documented elsewher
 
 {% block activity_tutor_widget %}
     {% spaceless %}
-        {% set h3Content = '<div class="collection-actions collection-panel">' %}
+        {% set h3Content = '<div class="collection-actions">' %}
         {% set h3Content = h3Content ~ saveButton() %}
         {% set h3Content = h3Content ~ deleteButton({title: 'activity.activity_tutor.remove.title', transDomain: 'Calendar', mergeClass: 'collection-remove collection-action'}) %}
         {% set h3Content = h3Content ~ '<span style="float: right;">&nbsp;</span>' %}
