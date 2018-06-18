@@ -88,7 +88,7 @@
     {% if help is defined and help is not empty %}
         {% set help_params = help_params|default({}) %}
         {% if translation_domain is not same as(false) %}
-            {% set help = help|trans(help_params, translation_domain) %}{% endif %}
+            {% set help = help|raw|trans(help_params, translation_domain) %}{% endif %}
         {% if help is not empty %}
             <small class="form-text text-muted">{{ help }}</small>
         {% endif %}
@@ -254,9 +254,16 @@
         <small class="form-text text-danger">
             <ul class="list-unstyled">
                 <li class="text-danger">
-                    <span class="fas fa-exclamation-circle"></span>&nbsp;{{ help|trans(help_params, 'System') }}
+                    <span class="fas fa-exclamation-circle"></span>&nbsp;{{ help|raw|trans(help_params, 'System') }}
                 </li>
             </ul>
         </small>
     </div>
 {%- endblock hillrange_message_widget %}
+
+{% block hillrange_colour_label -%}
+    {{- form_label(form) -}}
+    <small class="form-text text-muted">{{ 'colour.definition'|trans({}, 'FormTheme')|raw }}</small>
+{%- endblock hillrange_colour_label %}
+
+

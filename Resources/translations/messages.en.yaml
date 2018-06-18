@@ -8,3 +8,9 @@ collection:
     child.removed: '%{class}-%{id} was removed successfully.'
     removal.warning: 'alert("Removal of the collection element is only completed after the form is saved.");'
 Close Message: Close Message
+form:
+    add: Add
+    remove: Remove
+    up: Up
+    down: Down
+    duplicate: Duplicate
