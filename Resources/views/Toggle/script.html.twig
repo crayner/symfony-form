@@ -5,9 +5,6 @@
         if (disabled) {
             return false;
         }
-        // toggle style
-        var swap = $(this).attr('toggle_swap');
-        $(this).toggleClass(swap);
 
         var icon = $(this).children('svg');
 
@@ -17,16 +14,16 @@
 
         if (val === "1") {
             val = "0";
-            $(this).removeClass($(this).attr('toggle_on')).addClass($(this).attr('toggle_off'));
+            $(this).toggleClass($(this).attr('toggle_on')).toggleClass($(this).attr('toggle_off'));
             if (typeof icon != 'undefined') {
-                $(icon).removeClass($(icon).attr('icon_on')).addClass($(icon).attr('icon_off'));
+                $(icon).toggleClass($(icon).attr('icon_on')).toggleClass($(icon).attr('icon_off'));
                 $(icon).attr('data-prefix', $(icon).attr('type_off'));
             }
         } else {
             val = "1";
-            $(this).removeClass($(this).attr('toggle_off')).addClass($(this).attr('toggle_on'));
+            $(this).toggleClass($(this).attr('toggle_off')).toggleClass($(this).attr('toggle_on'));
             if (typeof icon != 'undefined') {
-                $(icon).removeClass($(icon).attr('icon_off')).addClass($(icon).attr('icon_on'));
+                $(icon).toggleClass($(icon).attr('icon_off')).toggleClass($(icon).attr('icon_on'));
                 $(icon).attr('data-prefix', $(icon).attr('type_on'));
             }
         }

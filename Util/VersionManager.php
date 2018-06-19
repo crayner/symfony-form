@@ -10,7 +10,7 @@ class VersionManager
     /**
      * String
      */
-    const VERSION = '0.1.82';
+    const VERSION = '0.1.83';
 
     /**
      * getVersion

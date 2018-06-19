@@ -1,22 +1,7 @@
 {% autoescape false %}
 <script src="{{ asset('bundles/hillrangeform/js/jquery.collection.js') }}"></script>
 <script type="text/javascript" language="JavaScript">
-    function manageCollection(path, contentTarget, element) {
-        if (element !== '') {
-            var source = $(element[0]).find('.removeElement');
-
-            if (source.is('select')) {
-                var cid = source.val();
-            } else {
-                var cid = source.attr('value');
-            }
-
-            if (typeof cid === 'undefined' || (!cid)) {
-                cid = 'ignore';
-            }
-
-            path = path.replace('__cid__', cid);
-        }
+    function manageCollection(path, contentTarget) {
         $.ajax({
             url: path,
             type: "POST",
@@ -48,6 +33,21 @@
 
         $("#collectionMessage").html(exists + message);
         $("#collectionMessage").fadeIn(100);
+    }
+
+    function removeCollectionElement(path) {
+        $.ajax({
+            url: path,
+            type: "POST",
+            success: function (data) {
+                mergeCollectionMessage(data.message);
+            },
+            error: function (req, status, err) {
+                var message = '<div class="alert alert-danger alert-dismissable show hide">__message__<button title="{{ 'Close Message'|trans({}, 'System') }}" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true" class="far fa-times-circle"></span></button></div>';
+                message = message.replace('__message__', err);
+                mergeCollectionMessage(message);
+            }
+        });
     }
 
     $(document).ready(function () {

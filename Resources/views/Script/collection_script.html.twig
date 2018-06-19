@@ -17,21 +17,7 @@
             allow_duplicate: {% if collection.vars.allow_duplicate %}true{% else %}false{% endif %},
             drag_drop: {% if collection.vars.allow_up or collection.vars.allow_down %}true{% else %}false{% endif %},
             before_remove: function (collection, element) {
-                {% set route_params = collection.vars.route_params|merge({id: app.request.get('id'), cid: '__cid__'}) %}
-
-                {% if collection.vars.route is not empty %}
-                    var path = '{{ path(collection.vars.route, route_params) }}';
-
-                    var target = '{{ collection.vars.id }}_target';
-
-                    manageCollection(path, target, element);
-                {% endif %}
-                {% if collection.vars.removal_warning %}
-                    {{ 'collection.removal.warning'|trans|raw }}
-                {% endif %}
-
-                {% if collection.vars.redirect_route is not empty %}
-                    var path = '{{ path(collection.vars.redirect_route, route_params) }}';
+                if (element !== '') {
                     var source = $(element[0]).find('.removeElement');
 
                     if (source.is('select')) {
@@ -44,8 +30,36 @@
                         cid = 'ignore';
                     }
 
+                } else {
+                    var cid = 'ignore';
+                }
+
+                {% set route_params = collection.vars.route_params|merge({id: app.request.get('id'), cid: '__cid__'}) %}
+
+                {% if collection.vars.route is not empty %}
+                    var path = '{{ path(collection.vars.route, route_params) }}';
+                    path = path.replace('__cid__', cid);
+
+                    var target = '{{ collection.vars.id }}_target';
+
+                    manageCollection(path, target);
+                {% endif %}
+                {% if collection.vars.removal_warning %}
+                    {{ 'collection.removal.warning'|trans|raw }}
+                {% endif %}
+
+                {% if collection.vars.redirect_route is not empty %}
+                    var path = '{{ path(collection.vars.redirect_route, route_params) }}';
+
                     path = path.replace('__cid__', cid);
                     window.open(path,'_self');
+                {% endif %}
+
+                {% if collection.vars.remove_element_route is not empty %}
+                    var path = '{{ path(collection.vars.remove_element_route, route_params) }}';
+                    path = path.replace('__cid__', cid);
+
+                    removeCollectionElement(path, cid);
                 {% endif %}
                 return true;
             }
