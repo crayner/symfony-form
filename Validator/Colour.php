@@ -14,7 +14,12 @@ class Colour extends Constraint
     /**
      * @var string
      */
-    public $transDomain = 'validators';
+    public $transDomain = 'FormTheme';
+
+    /**
+     * @var string
+     */
+    public $enforceType = 'any';
 
     /**
      * @return string

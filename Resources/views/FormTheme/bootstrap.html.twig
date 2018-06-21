@@ -80,15 +80,15 @@
         {% if form.parent %}<small class="form-text text-danger">{% endif %}
         <ul class="list-unstyled">
             {%- for error in errors -%}
-                <li class="text-danger"><span class="fas fa-exclamation-circle"></span> {{ (translation_domain is same as(false) ? error.message : error.message|trans({}, translation_domain)) }}</li>
+                <li class="text-danger"><span class="fas fa-exclamation-circle"></span> {{ (translation_domain is same as(false) ? error.message : error.message|trans({}, translation_domain))|raw }}</li>
             {%- endfor -%}
         </ul>
         {% if form.parent %}</small>{% endif %}
     {%- endif %}
     {% if help is defined and help is not empty %}
-        {% set help_params = help_params|default({}) %}
         {% if translation_domain is not same as(false) %}
-            {% set help = help|raw|trans(help_params, translation_domain) %}{% endif %}
+            {% set help_params = help_params|default({}) %}
+            {% set help = help|trans(help_params, translation_domain)|raw %}{% endif %}
         {% if help is not empty %}
             <small class="form-text text-muted">{{ help }}</small>
         {% endif %}

@@ -50,7 +50,6 @@ class EnumSubscriber implements EventSubscriberInterface
         }
 
         if (empty($className)) {
-            dump([$className, $method, $form->getParent()->getConfig()->getOption('data_class')]);
             throw new MissingClassException(sprintf('The enum form of name "%s" has not defined a valid Choice List Class', $name), $options);
         }
 

@@ -9,5 +9,9 @@ form:
     remove: Remove
     add: Add
     delete: Delete
+    misc: Miscellaneous
 photo.delete: Delete Photo
 colour.definition: 'Colours are defined at - <a href="https://www.w3schools.com/cssref/css_colors_legal.asp" target="_blank"> W3Schools - CSS Legal Colour Values</a>'
+colour.validation:
+    error: 'The format of "%{colour}" is not valid for the selected style "%{format}". Colours are defined at - <a href="https://www.w3schools.com/cssref/css_colors_legal.asp" target="_blank"> W3Schools - CSS Legal Colour Values</a>'
+    enforce_type: "The colour format type '%{format}' must be one of ['any', 'hex', 'rgb', 'rgba', 'hsl', 'hsla']."
