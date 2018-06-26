@@ -281,12 +281,12 @@
             {% if justify is same as('right') %}
                 <div class="form-check">
                     <label class="form-check-label" for="{{ child.vars.id }}">{{ child.vars.label|trans({}, translation_domain) }}&nbsp;
-                    <input type="checkbox" id="{{ child.vars.id }}" name="{{ child.vars.full_name }}" autocomplete="off" value="{{ child.vars.value }}"></label>
+                    <input type="checkbox" id="{{ child.vars.id }}" name="{{ child.vars.full_name }}" autocomplete="off" value="{{ child.vars.value }}"{% if child.vars.data is same as(true) %} checked{% endif %}></label>
                 </div>
             {% else %}
                 <div class="form-check">
                     <label class="form-check-label" for="{{ child.vars.id }}">
-                    <input type="checkbox" id="{{ child.vars.id }}" name="{{ child.vars.full_name }}" autocomplete="off" value="{{ child.vars.value }}">
+                    <input type="checkbox" id="{{ child.vars.id }}" name="{{ child.vars.full_name }}" autocomplete="off" value="{{ child.vars.value }}"{% if child.vars.data is same as(true) %} checked{% endif %}>
                     &nbsp;{{ child.vars.label|trans({}, translation_domain) }}</label>
                 </div>
             {% endif %}
