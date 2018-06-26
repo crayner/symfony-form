@@ -267,3 +267,43 @@
 {%- endblock hillrange_colour_label %}
 
 
+{% block hillrange_multiple_expanded_choice_widget -%}
+    {% set class = 'text-right' %}
+    {% if justify is same as('left') %}
+        {% set class = 'text-left' %}
+    {% endif %}
+    {% set class = expanded_attr.class|default('') ~ ' ' ~ class %}
+    {% set expanded_attr = expanded_attr|merge({class: class|trim}) %}
+    {% set expanded_attr = expanded_attr|merge({id: id}) %}
+    {% spaceless %}
+    <div {{ block('expanded_attributes') }}>
+        {%- for child in form %}
+            {% if justify is same as('right') %}
+                <div class="form-check">
+                    <label class="form-check-label" for="{{ child.vars.id }}">{{ child.vars.label|trans({}, translation_domain) }}&nbsp;
+                    <input type="checkbox" id="{{ child.vars.id }}" name="{{ child.vars.full_name }}" autocomplete="off" value="{{ child.vars.value }}"></label>
+                </div>
+            {% else %}
+                <div class="form-check">
+                    <label class="form-check-label" for="{{ child.vars.id }}">
+                    <input type="checkbox" id="{{ child.vars.id }}" name="{{ child.vars.full_name }}" autocomplete="off" value="{{ child.vars.value }}">
+                    &nbsp;{{ child.vars.label|trans({}, translation_domain) }}</label>
+                </div>
+            {% endif %}
+        {% endfor -%}
+    </div>
+    {% endspaceless %}
+{%- endblock hillrange_multiple_expanded_choice_widget %}
+
+{% block expanded_attributes -%}
+    {%- for attrname, attrvalue in expanded_attr -%}
+        {{- " " -}}
+        {%- if attrname in ['placeholder', 'title'] -%}
+            {{- attrname }}="{{ translation_domain is same as(false) ? attrvalue : attrvalue|trans({}, translation_domain) }}"
+        {%- elseif attrvalue is same as(true) -%}
+            {{- attrname }}="{{ attrname }}"
+        {%- elseif attrvalue is not same as(false) -%}
+            {{- attrname }}="{{ attrvalue }}"
+        {%- endif -%}
+    {%- endfor -%}
+{%- endblock expanded_attributes -%}
