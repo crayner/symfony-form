@@ -56,21 +56,24 @@ class EnumSubscriber implements EventSubscriberInterface
         $class = new $className();
         $raw = $class->$method();
 
-        $choices = [];
-        $validation = [];
-        foreach($raw as $q=>$w)
-            if (is_array($w))
-            {
-                $e = [];
-                foreach($w as $r)
-                    $e[strtolower($options['choice_list_prefix'].'.'.$r)] = $r;
-                $choices[strtolower($options['choice_list_prefix'].'.'.$q)] = $e;
-                $validation = array_merge($validation, $e);
-            }
-            else {
-                $choices[strtolower($options['choice_list_prefix'] . '.' . $w)] = $w;
-                $validation[] = $w;
-            }
+        if ($options['choice_translation_domain'] === false) {
+            $choices = $raw;
+            $validation = $raw;
+        } else {
+            $choices = [];
+            $validation = [];
+            foreach ($raw as $q => $w)
+                if (is_array($w)) {
+                    $e = [];
+                    foreach ($w as $r)
+                        $e[strtolower($options['choice_list_prefix'] . '.' . $r)] = $r;
+                    $choices[strtolower($options['choice_list_prefix'] . '.' . $q)] = $e;
+                    $validation = array_merge($validation, $e);
+                } else {
+                    $choices[strtolower($options['choice_list_prefix'] . '.' . $w)] = $w;
+                    $validation[] = $w;
+                }
+        }
         $options['choices'] = $choices;
 
         unset($options['choice_list_class'], $options['choice_list_method'], $options['choice_list_prefix']);

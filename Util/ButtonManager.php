@@ -141,14 +141,14 @@ down:
     attr: ''
     prompt: ''
 on:
-    class: "far fa-thumbs-up btn btn-danger"
+    class: "far fa-thumbs-up btn btn-success"
     type: button
     title: 'form.on'
     style: 'float: right;'
     attr: ''
     prompt: ''
 off:
-    class: "far fa-thumbs-down btn btn-success"
+    class: "far fa-thumbs-down btn btn-danger"
     type: button
     title: 'form.off'
     style: 'float: right;'
@@ -448,7 +448,6 @@ XXX;
         unset($details['on'], $details['off']);
         $details['on'] = array_merge($on, $details);
         $details['off'] = array_merge($off, $details);
-
         if ($details['value'])
             return $this->generateButton($this->buttons['on'], $details['on']);
         else
