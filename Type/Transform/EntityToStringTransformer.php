@@ -94,7 +94,10 @@ class EntityToStringTransformer implements DataTransformerInterface
 		if (is_object($entity) && $entity instanceof $this->entityClass)
 		    return $entity->getId();
 
-		throw new \Exception('What to do with: ' . json_encode($entity));
+        if (is_null($entity))
+            return null;
+
+		throw new \Exception('What to do with: ' . json_encode($entity) . ' for class ' . $this->entityClass);
 	}
 
 	/**
