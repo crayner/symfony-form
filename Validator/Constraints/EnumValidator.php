@@ -19,7 +19,6 @@ class EnumValidator extends ConstraintValidator
 		$class = new $constraint->class;
 		$source = $class->$method();
         $t = in_array($value, $source);
-dump([$value, $source, $t]);
 
         if (empty($value))
             return;
