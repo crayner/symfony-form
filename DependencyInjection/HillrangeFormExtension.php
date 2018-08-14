@@ -1,7 +1,7 @@
 <?php
 namespace Hillrange\Form\DependencyInjection;
 
-use Hillrange\Form\Type\EventSubscriber\ImageSubscriber;
+use Hillrange\Form\Type\EventSubscriber\FileSubscriber;
 use Hillrange\Form\Type\ToggleType;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
@@ -24,12 +24,12 @@ class HillrangeFormExtension extends Extension
 
         if (!empty($config['upload_path'])) {
             $container
-                ->getDefinition(ImageSubscriber::class)
+                ->getDefinition(FileSubscriber::class)
                 ->addMethodCall('setTargetDir', [$config['upload_path']]);
             $container->setParameter('upload_path', $config['upload_path']);
         } else {
             $container
-                ->getDefinition(ImageSubscriber::class)
+                ->getDefinition(FileSubscriber::class)
                 ->addMethodCall('setTargetDir', ['uploads']);
             $container->setParameter('upload_path', 'uploads');
         }

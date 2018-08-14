@@ -12,3 +12,7 @@ services:
     Hillrange\Form\Type\Extension\FieldHelpTypeExtension:
         tags:
             - { name: 'form.type_extension', extended_type: 'Symfony\Component\Form\Extension\Core\Type\FormType' }
+
+    Hillrange\Form\Util\UploadFileManager:
+        arguments:
+        - '%upload_path%'

@@ -6,8 +6,9 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Translation\Extractor\PhpStringTokenParser;
 
-class ImageSubscriber implements EventSubscriberInterface
+class FileSubscriber implements EventSubscriberInterface
 {
 	/**
 	 * @var string
@@ -60,9 +61,18 @@ class ImageSubscriber implements EventSubscriberInterface
 
 		if ($data instanceof UploadedFile)
 		{
-			$fName = $form->getConfig()->getOption('fileName') . '_' . mb_substr(md5(uniqid()), mb_strlen($form->getConfig()->getOption('fileName')) + 1) . '.' . $data->guessExtension();
 
-			$path = $this->targetDir;
+		    $extension = $data->guessExtension();
+		    $original = pathinfo($data->getClientOriginalExtension());
+
+            $original = $original["filename"];
+
+		    if (strtolower($extension) === 'mpga' && strtolower($original) === 'mp3' )
+		        $extension = 'mp3';
+
+			$fName = $form->getConfig()->getOption('fileName') . '_' . mb_substr(md5(uniqid()), mb_strlen($form->getConfig()->getOption('fileName')) + 1) . '.' . $extension;
+
+            $path = $this->targetDir;
 			$data->move($path, $fName);
 
 			$file = new File($path . DIRECTORY_SEPARATOR . $fName, true);

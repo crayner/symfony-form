@@ -1,7 +1,6 @@
 <?php
 namespace Hillrange\Form\Util;
 
-use App\Core\Manager\SettingManager;
 use Symfony\Component\Filesystem\Filesystem;
 
 class UploadFileManager extends Filesystem
@@ -18,11 +17,11 @@ class UploadFileManager extends Filesystem
 
     /**
      * UploadFileManager constructor.
-     * @param SettingManager $settingManager
+     * @param string $uploadPath
      */
-    public function __construct(SettingManager $settingManager)
+    public function __construct(string $uploadPath)
     {
-        $this->setUploadPath($settingManager->getParameter('upload_path', 'uploads'));
+        $this->setUploadPath($uploadPath ?: 'uploads');
     }
 
     /**

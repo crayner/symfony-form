@@ -3,14 +3,11 @@ namespace Hillrange\Form\Type;
 
 use Hillrange\Form\Type\Transform\ImageToStringTransformer;
 use Hillrange\Form\Type\EventSubscriber\FileSubscriber;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 
-class ImageType extends AbstractType
+class FileType extends AbstractType
 {
 	/**
 	 * @var FileSubscriber
@@ -37,15 +34,11 @@ class ImageType extends AbstractType
 				'compound'     => false,
 				'multiple'     => false,
 				'type'         => 'file',
-				'deleteTarget' => '_self',
-				'deleteParams' => null,
-                'imageClass'   => null,
 			]
 		);
 
 		$resolver->setRequired(
 			[
-				'deletePhoto',
 				'fileName',
 			]
 		);
@@ -56,7 +49,7 @@ class ImageType extends AbstractType
 	 */
 	public function getBlockPrefix()
 	{
-		return 'image';
+		return 'hillrange_file';
 	}
 
 	/**
@@ -64,7 +57,7 @@ class ImageType extends AbstractType
 	 */
 	public function getParent()
 	{
-		return FileType::class;
+		return \Symfony\Component\Form\Extension\Core\Type\FileType::class;
 	}
 
 	/**
@@ -76,18 +69,5 @@ class ImageType extends AbstractType
 		$builder->addModelTransformer(new ImageToStringTransformer());
 		$builder->addEventSubscriber($this->fileSubscriber);
 
-	}
-
-	/**
-	 * @param FormView      $view
-	 * @param FormInterface $form
-	 * @param array         $options
-	 */
-	public function buildView(FormView $view, FormInterface $form, array $options)
-	{
-		$view->vars['deletePhoto']  = $options['deletePhoto'];
-		$view->vars['deleteTarget'] = $options['deleteTarget'];
-        $view->vars['deleteParams'] = $options['deleteParams'];
-        $view->vars['imageClass']   = $options['imageClass'];
 	}
 }
