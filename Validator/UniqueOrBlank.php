@@ -1,48 +1,36 @@
 <?php
+/**
+ * Created by PhpStorm.
+ *
+ * This file is part of the Busybee Project.
+ *
+ * (c) Craig Rayner <craig@craigrayner.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * User: craig
+ * Date: 27/08/2018
+ * Time: 19:07
+ */
 namespace Hillrange\Form\Validator;
 
 use Hillrange\Form\Validator\Constraints\UniqueOrBlankValidator;
-use Symfony\Component\Validator\Constraint;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
-class UniqueOrBlank extends Constraint
+/**
+ * Class UniqueOrBlank
+ * @package Hillrange\Form\Validator
+ */
+class UniqueOrBlank extends UniqueEntity
 {
     /**
-     * @var string
-     */
-	public $message = 'unique.blank.invalid';
-
-    /**
-     * @var
-     */
-	public $data_class;
-
-    /**
-     * @var string
-     */
-	public $field;
-
-    /**
-     * @var string
-     */
-    public $transDomain = 'validators';
-
-    /**
+     * validatedBy
+     *
      * @return string
      */
     public function validatedBy()
-	{
-		return UniqueOrBlankValidator::class;
-	}
-
-    /**
-     * @return array
-     */
-    public function getRequiredOptions()
-	{
-		return [
-			'field',
-			'data_class',
-		];
-	}
-
+    {
+        return UniqueOrBlankValidator::class;
+    }
 }

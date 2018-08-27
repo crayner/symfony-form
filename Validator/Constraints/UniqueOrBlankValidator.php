@@ -1,59 +1,47 @@
 <?php
+/**
+ * Created by PhpStorm.
+ *
+ * This file is part of the Busybee Project.
+ *
+ * (c) Craig Rayner <craig@craigrayner.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * User: craig
+ * Date: 27/08/2018
+ * Time: 19:08
+ */
 namespace Hillrange\Form\Validator\Constraints;
 
-use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntityValidator;
 use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\ConstraintValidator;
 
-class UniqueOrBlankValidator extends ConstraintValidator
+/**
+ * Class UniqueOrBlankValidator
+ * @package Hillrange\Form\Validator\Constraints
+ */
+class UniqueOrBlankValidator extends UniqueEntityValidator
 {
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $om;
 
-	/**
-	 * UniqueOrBlankValidator constructor.
-	 *
-	 * @param EntityManagerInterface $sm
-	 */
-	public function __construct(EntityManagerInterface $om)
-	{
-		$this->om = $om;
-	}
+    public function validate($entity, Constraint $constraint)
+    {
+        $blank = true;
+        foreach($constraint->fields as $field)
+        {
+            if (method_exists($entity, 'get' . ucfirst($field)))
+            {
+                $method = 'get' . ucfirst($field);
+                if (!empty($entity->$method()))
+                {
+                    $blank = false;
+                    break;
+                }
+            }
+        }
 
-	/**
-	 * @param mixed      $value
-	 * @param Constraint $constraint
-	 */
-	public function validate($value, Constraint $constraint)
-	{
-		if (empty($value))
-		{
-			$value = null;
-
-			return;
-		}
-
-		$entity = $this->context->getObject();
-
-		$where = 'p.' . $constraint->field . ' = :identifier';
-
-		$result = $this->om->getRepository($constraint->data_class)->createQueryBuilder('p')
-			->where($where)
-			->andWhere('p.id != :id')
-			->setParameter('identifier', $value)
-			->setParameter('id', $entity->getId())
-			->getQuery()
-			->getResult();
-		if (!empty($result))
-		{
-			$this->context->buildViolation($constraint->message)
-				->setParameter('%string%', $value)
-                ->setTranslationDomain($constraint->transDomain)
-				->addViolation();
-		}
-
-		return;
-	}
+        if (! $blank)
+            return parent::validate($entity, $constraint);
+    }
 }
