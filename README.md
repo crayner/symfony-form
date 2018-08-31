@@ -3,7 +3,7 @@ Symfony 4 Form Extension Bundle
 
 Version
 -------
-0.1.93
+0.1.94
 
 Development ONLY
 ----------------
