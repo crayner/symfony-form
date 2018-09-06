@@ -6,7 +6,6 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\Translation\Extractor\PhpStringTokenParser;
 
 class FileSubscriber implements EventSubscriberInterface
 {
