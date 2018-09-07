@@ -9,6 +9,10 @@ services:
         resource: "../../"
         exclude: "../../{Entity,Tests}"
 
+    Hillrange\Form\Controller\:
+        resource: '../../Controller/'
+        tags: ['controller.service_arguments']
+
     Hillrange\Form\Type\Extension\FieldHelpTypeExtension:
         tags:
             - { name: 'form.type_extension', extended_type: 'Symfony\Component\Form\Extension\Core\Type\FormType' }

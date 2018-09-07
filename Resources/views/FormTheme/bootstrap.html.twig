@@ -15,18 +15,42 @@
     <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
     {% if imageExists(data) %}
         <div>
-        {% if attr.imageClass is defined %}{% set imageClass = attr.imageClass %}{% endif %}
-        <img src="{{ asset( imagePath(data) ) }}" class="{{ imageClass }} card-img"/><!-- Hillrange Image -->
-        {% if deletePhoto is not null %}
-            {% set imageDelete = 0 %}
-            {% if form.parent.vars.value.name is defined %}
-                {% set imageDelete = form.parent.vars.value.name %}
+            {% if attr.imageClass is defined %}{% set imageClass = attr.imageClass %}{% endif %}
+            <img src="{{ asset( imagePath(data) ) }}" class="{{ imageClass }} card-img"/><!-- Hillrange Image -->
+            {% if deletePhoto is not null %}
+                {% set imageDelete = 0 %}
+                {% if form.parent.vars.value.name is defined %}
+                    {% set imageDelete = form.parent.vars.value.name %}
+                {% endif %}
+                {{ deleteButton({title: 'photo.delete'|trans({}, 'FormTheme'), transDomain: false, windowOpen: {route: deletePhoto|replace({'__imageDelete__': imageDelete}), target: deleteTarget, params: deleteParams}, colour: 'warning', mergeClass: 'btn-sm'})|raw }}
+                {{ miscButton({title: 'photo.download'|trans({}, 'FormTheme'), transDomain: false, windowOpen: {route: path('document_download' , {'fileName': imagePath(data)|url_encode}), target: '_blank'}, class: 'btn btn-sm btn-success fas fa-cloud-download-alt'})|raw }}
             {% endif %}
-            {{ deleteButton({title: 'photo.delete'|trans({}, 'FormTheme'), transDomain: false, windowOpen: {route: deletePhoto|replace({'__imageDelete__': imageDelete}), target: deleteTarget, params: deleteParams}, colour: 'warning', mergeClass: 'btn-sm'})|raw }}
-        {% endif %}
         </div>
     {% endif %}
 {%- endblock image_widget %}
+
+{% block document_widget -%}
+    {%- set attr = attr|merge({class: (attr.class|default('form-control'))|trim}) -%}
+    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+    {% if imageExists(data) %}
+        <div>
+            {% if attr.imageClass is defined %}{% set imageClass = attr.imageClass %}{% endif %}
+            {% if isImage %}
+                <img src="{{ asset( imagePath(data) ) }}" class="{{ imageClass }} card-img"/><!-- Hillrange Document -->
+            {% else %}
+                {{ 'document.available'|trans({}, 'FormTheme') }}
+            {% endif %}
+            {% if deletePhoto is not null %}
+                {% set imageDelete = 0 %}
+                {% if form.parent.vars.value.name is defined %}
+                    {% set imageDelete = form.parent.vars.value.name %}
+                {% endif %}
+                {{ deleteButton({title: 'document.delete'|trans({}, 'FormTheme'), transDomain: false, windowOpen: {route: deletePhoto|replace({'__imageDelete__': imageDelete}), target: deleteTarget, params: deleteParams}, colour: 'warning', mergeClass: 'btn-sm'})|raw }}
+                {{ miscButton({title: 'document.download'|trans({}, 'FormTheme'), transDomain: false, windowOpen: {route: path('document_download' , {'fileName': imagePath(data)|url_encode}), target: '_blank'}, class: 'btn btn-sm btn-success fas fa-cloud-download-alt'})|raw }}
+            {% endif %}
+        </div>
+    {% endif %}
+{%- endblock document_widget %}
 
 {% block file_widget -%}
     {%- set attr = attr|merge({class: (attr.class|default('form-control'))|trim}) -%}

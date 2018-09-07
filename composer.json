@@ -42,5 +42,9 @@
         "symfony": {
             "allow-contrib": "true"
         }
+    },
+    "scripts": {
+        "post-install-cmd": "php -r \"copy('vendor/hillrange/symfony-form/Resources/config/routes.yaml', 'config/routes/hillrange_form.yaml')\"",
+        "post-update-cmd": "php -r \"copy('vendor/hillrange/symfony-form/Resources/config/routes.yaml', 'config/routes/hillrange_form.yaml')\""
     }
 }
