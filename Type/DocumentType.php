@@ -104,7 +104,7 @@ class DocumentType extends AbstractType
         $view->vars['imageClass']   = $options['imageClass'];
 
         $view->vars['isImage'] = false;
-        if(! empty($view->vars['data'])){
+        if(! empty($view->vars['data']) && file_exists($view->vars['data'])){
             $file = new File($view->vars['data']);
             $mime = $file->getMimeType();
             if (mb_strpos($mime, 'image/') !== false)
