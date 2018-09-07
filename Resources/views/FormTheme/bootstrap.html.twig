@@ -67,6 +67,11 @@
 
 {% block form_label -%}
     {%- set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' form-control-label')|trim}) -%}
+    {% set label_param = {} %}
+    {% if label is iterable %}
+        {% set label_param = label[1] %}
+        {% set label = label[0] %}
+    {% endif %}
     {% if label is not same as(false) -%}
         {% if not compound -%}
             {% set label_attr = label_attr|merge({'for': id}) %}
@@ -84,15 +89,14 @@
                 {% set label = name|humanize %}
             {%- endif -%}
         {%- endif -%}
-        <{{ element|default('label') }}{% if label_attr %}{% with { attr: label_attr } %}{{ block('attributes') }}{% endwith %}{% endif %}>{{ translation_domain is same as(false) ? label : label|trans({}, translation_domain) }}</{{ element|default('label') }}>
+        <{{ element|default('label') }}{% if label_attr %}{% with { attr: label_attr } %}{{ block('attributes') }}{% endwith %}{% endif %}>{{ translation_domain is same as(false) ? label : label|trans(label_param, translation_domain) }}</{{ element|default('label') }}>
     {%- endif -%}
     {% set required_printed = false %}
     {% if required and not required_printed %}{% spaceless %}<span
             class="field-required">
         &nbsp;{{ 'form.required'|trans({}, 'FormTheme') }} </span>&nbsp;{% endspaceless %}{% set required_printed = true %}{% endif %}
     {% if setting_name is defined %}
-        {% spaceless %}<small class="form-text text-info"
-                              title="{{ 'setting.choice.name'|trans({'%name%': setting_display_name}, 'System') }}"
+        {% spaceless %}<small class="form-text text-info" title="{{ 'setting.choice.name'|trans({'%name%': setting_display_name}, 'System') }}"
                               onclick="window.open('{{ path('setting_edit_name', {name: setting_name, closeWindow: 'closeWindow'}) }}', 'SettingManage', 'width=1200,height=900')">
             <span class="fas fa-info-circle"></span>&nbsp;{{ 'setting.choice.name'|trans({'%name%': setting_display_name}, 'System') }}</small>{% endspaceless %}
     {% endif %}
