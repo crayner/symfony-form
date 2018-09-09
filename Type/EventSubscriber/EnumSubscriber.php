@@ -2,13 +2,11 @@
 namespace Hillrange\Form\Type\EventSubscriber;
 
 use App\Exception\MissingClassException;
-use Hillrange\Form\Validator\Enum;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Validator\Constraints\Choice;
-use Symfony\Component\Validator\Exception\MissingOptionsException;
 
 class EnumSubscriber implements EventSubscriberInterface
 {

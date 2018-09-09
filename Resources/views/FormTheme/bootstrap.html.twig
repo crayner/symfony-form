@@ -183,8 +183,10 @@
 
 {% block hillrange_toggle_row -%}
     <div class="toggle-label">
-        {{- form_widget(form) -}}
-        {{- form_label(form) -}}
+        <label class="form-control-label" for="{{ id }}" style="width: 100%;">
+            {{- form_widget(form) -}}
+            {{ (translation_domain is same as(false) ? label : label|trans({}, translation_domain)) }}
+        </label>
     </div>
     {{- form_errors(form) -}}
 {%- endblock hillrange_toggle_row %}
@@ -250,13 +252,9 @@
         </span>
 {%- endblock hillrange_toggle_widget %}
 
-
 {% block hillrange_toggle_label -%}
     <label class="{{ label_class }}"{{ label_id|default('') }}>
         {{ (translation_domain is same as(false) ? label : label|trans({}, translation_domain)) }}
-        {% if required %}
-            <br/><span class="field-required">&nbsp;{{ 'form.required'|trans({}, 'FormTheme') }}</span>
-        {% endif %}
     </label>
 {%- endblock hillrange_toggle_label %}
 
