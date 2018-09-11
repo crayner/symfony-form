@@ -68,7 +68,12 @@ class CollectionSubscriber implements EventSubscriberInterface
         $parentData = $event->getForm()->getParent()->getData();
         $getName = 'get' . ucfirst($event->getForm()->getConfig()->getName());
 
-        $this->setCollection($parentData->$getName());
+        if (is_array($parentData->$getName()))
+            $collection = new ArrayCollection($parentData->$getName());
+        else
+            $collection = $parentData->$getName();
+
+        $this->setCollection($collection);
 
         if ($this->getOption('sort_manage') === true)
             $data = $this->manageSequence($data);

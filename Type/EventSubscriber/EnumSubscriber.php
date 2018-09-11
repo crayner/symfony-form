@@ -77,7 +77,7 @@ class EnumSubscriber implements EventSubscriberInterface
         unset($options['choice_list_class'], $options['choice_list_method'], $options['choice_list_prefix']);
 
         $options['constraints'] = [
-            new Choice(['choices' => $validation])
+            new Choice(['choices' => $validation, 'multiple' => $options['multiple']]),
         ];
 
         //Replace the existing form element.

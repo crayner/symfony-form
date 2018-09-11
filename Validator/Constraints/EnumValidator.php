@@ -12,22 +12,27 @@ class EnumValidator extends ConstraintValidator
 	 */
 	public function validate($value, Constraint $constraint)
 	{
-	    $this->context->buildViolation('here at '.__METHOD__.':'.__LINE__)
-            ->addViolation();
-
 		$method = $constraint->method;
 		$class = new $constraint->class;
 		$source = $class->$method();
-        $t = in_array($value, $source);
+        $t = true;
+        $value = is_array($value) ? $value : [$value];
+        foreach($value as $q=>$w)
+            if (! in_array($w, $source))
+            {
+                $t = false;
+                break;
+            } else {
+                unset($value[$q]);
+            }
 
-        if (empty($value))
+        if (empty($value) && $t)
             return;
 
-        if (! $t)
-			$this->context->buildViolation($constraint->message)
-				->setParameter('%{value}', $value)
-				->setParameter('%{enum}', implode(', ', $source))
-                ->setTranslationDomain($constraint->transDomain)
-				->addViolation();
+        $this->context->buildViolation($constraint->message)
+            ->setParameter('%{value}', $value)
+            ->setParameter('%{enum}', implode(', ', $source))
+            ->setTranslationDomain($constraint->transDomain)
+            ->addViolation();
 	}
 }
