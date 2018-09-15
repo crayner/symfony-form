@@ -537,9 +537,10 @@ XXX;
                 $defaults['class'] = str_replace($matches, '', $defaults['class']);
             }
 
-            if (preg_match('#fa-([\S][\w-]*)#', $defaults['class'], $matches) > 0) {
-                $icon .= $matches[0] . ' ';
-                $defaults['class'] = str_replace($matches, '', $defaults['class']);
+            if (preg_match_all('#fa-([\S][\w-]*)#', $defaults['class'], $matches) > 0) {
+                foreach($matches[0] as $match)
+                    $icon .= $match . ' ';
+                $defaults['class'] = str_replace($matches[0], '', $defaults['class']);
             }
 
             $defaults['icon'] = ' class="' . trim($icon) . '"';
