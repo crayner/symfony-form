@@ -105,6 +105,14 @@ reset:
     name: Reset
     prompt: ''
     attr: ''
+refresh:
+    class: "fas fa-redo btn btn-warning"
+    type: reset
+    title: 'form.reset'
+    style: 'float: right;'
+    name: Refresh
+    prompt: ''
+    attr: ''
 misc:
     class: ""
     type: button
@@ -254,8 +262,9 @@ XXX;
     }
 
     /**
-     * @param array $details
+     * miscButton
      *
+     * @param array $details
      * @return string
      */
     public function miscButton($details = [])
@@ -264,8 +273,20 @@ XXX;
     }
 
     /**
-     * @param array $details
+     * refreshButton
      *
+     * @param array $details
+     * @return string
+     */
+    public function refreshButton($details = array())
+    {
+        return $this->generateButton($this->buttons['refresh'], $details);
+    }
+
+    /**
+     * resetButton
+     *
+     * @param array $details
      * @return string
      */
     public function resetButton($details = array())
