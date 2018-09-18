@@ -268,7 +268,13 @@
     {% if translation_domain is same as(false) %}
         <label class="form-control-label required" for="{{ id }}">{{ label }}</label>
     {% else %}
-        <label class="form-control-label required" for="{{ id }}">{{ label|trans({}, translation_domain|default('System')) }}</label>
+        {% if label is iterable %}
+            {% set label_params = label[1] %}
+            {% set label = label[0] %}
+        {% else %}
+            {% set label_params = {} %}
+        {% endif %}
+        <label class="form-control-label required" for="{{ id }}">{{ label|trans(label_params, translation_domain|default('System')) }}</label>
     {% endif %}
 {%- endblock hillrange_message_label %}
 
