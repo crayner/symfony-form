@@ -2,15 +2,12 @@
 namespace Hillrange\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class DateType extends AbstractType
 {
-	/**
-	 * @var SettingManager
-	 */
-	private $format;
-
 	/**
 	 * {@inheritdoc}
 	 */
@@ -23,11 +20,21 @@ class DateType extends AbstractType
 		);
 	}
 
+    /**
+     * getParent
+     *
+     * @return null|string
+     */
 	public function getParent()
-	{
-		return \Symfony\Component\Form\Extension\Core\Type\DateType::class;
-	}
+    {
+        return \Symfony\Component\Form\Extension\Core\Type\DateType::class;
+    }
 
+    /**
+     * getBlockPrefix
+     *
+     * @return null|string
+     */
 	public function getBlockPrefix()
 	{
 		return 'hillrange_date';
