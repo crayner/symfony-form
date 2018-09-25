@@ -27,30 +27,8 @@ class ColourValidator extends ConstraintValidator
             return ;
         }
 
-        $colour = str_replace(' ', '', $colour);
-
-        $regex = "/^(#?([a-f\d]{3}|[a-f\d]{6}))$/";
-        if (preg_match($regex, $colour) && in_array($constraint->enforceType, ['any', 'hex']))
-            return $colour;
-
-        $regex = "/^rgb\((0|255|25[0-4]|2[0-4]\d|1\d\d|0?\d?\d),(0|255|25[0-4]|2[0-4]\d|1\d\d|0?\d?\d),(0|255|25[0-4]|2[0-4]\d|1\d\d|0?\d?\d)\)$/";
-
-        if (preg_match($regex, $colour) && in_array($constraint->enforceType, ['any', 'rgb']))
-            return $colour;
-
-        $regex = "/^rgba\((0|255|25[0-4]|2[0-4]\d|1\d\d|0?\d?\d),(0|255|25[0-4]|2[0-4]\d|1\d\d|0?\d?\d),(0|255|25[0-4]|2[0-4]\d|1\d\d|0?\d?\d),(0?\.([\d]{1,2})|1(\.0)?)\)$/";
-
-        if (preg_match($regex, $colour) && in_array($constraint->enforceType, ['any', 'rgba']))
-            return $colour;
-
-        $regex = "/^hsl\((0|360|35\d|3[0-4]\d|[12]\d\d|0?\d?\d),(0|100|\d{1,2})%,(0|100|\d{1,2})%\)$/";
-
-        if (preg_match($regex, $colour) && in_array($constraint->enforceType, ['any', 'hsl']))
-            return $colour;
-
-        $regex = "/^hsla\((0|360|35\d|3[0-4]\d|[12]\d\d|0?\d?\d),(0|100|\d{1,2})%,(0|100|\d{1,2})%,(0?\.\d|1(\.0)?)\)$/";
-
-        if (preg_match($regex, $colour) && in_array($constraint->enforceType, ['any', 'hsla']))
+        $colour = self::isColour($colour, $constraint->enforceType);
+        if ($colour !== false)
             return $colour;
 
         $this->context->buildViolation($constraint->message)
@@ -60,12 +38,46 @@ class ColourValidator extends ConstraintValidator
             ->addViolation();
 
         return $colour;
-/*
+    }
 
-        $regex = "/^(#?([a-f\d]{3}|[a-f\d]{6})|
-        rgb\((0|255|25[0-4]|2[0-4]\d|1\d\d|0?\d?\d),(0|255|25[0-4]|2[0-4]\d|1\d\d|0?\d?\d),(0|255|25[0-4]|2[0-4]\d|1\d\d|0?\d?\d)\)|
-        rgba\((0|255|25[0-4]|2[0-4]\d|1\d\d|0?\d?\d),(0|255|25[0-4]|2[0-4]\d|1\d\d|0?\d?\d),(0|255|25[0-4]|2[0-4]\d|1\d\d|0?\d?\d),(0?\.([\d]{1,2})|1(\.0)?)\)|
-        hsl\((0|360|35\d|3[0-4]\d|[12]\d\d|0?\d?\d),(0|100|\d{1,2})%,(0|100|\d{1,2})%\)|hsla\((0|360|35\d|3[0-4]\d|[12]\d\d|0?\d?\d),(0|100|\d{1,2})%,(0|100|\d{1,2})%,(0?\.\d|1(\.0)?)\))$/";
-*/
+    /**
+     * isColour
+     *
+     * @param null|string $colour
+     * @param string $enforceType
+     * @return string|false
+     */
+    public static function isColour(?string $colour, string $enforceType = 'any') 
+    {
+        if (! in_array($enforceType, ['any', 'hex', 'rgb', 'rgba', 'hsl', 'hsla']) || empty($colour))
+            return false;
+
+        $colour = str_replace(' ', '', $colour);
+
+        $regex = "/^(#?([a-f\d]{3}|[a-f\d]{6}))$/";
+        if (preg_match($regex, $colour) && in_array($enforceType, ['any', 'hex']))
+            return $colour;
+
+        $regex = "/^rgb\((0|255|25[0-4]|2[0-4]\d|1\d\d|0?\d?\d),(0|255|25[0-4]|2[0-4]\d|1\d\d|0?\d?\d),(0|255|25[0-4]|2[0-4]\d|1\d\d|0?\d?\d)\)$/";
+
+        if (preg_match($regex, $colour) && in_array($enforceType, ['any', 'rgb']))
+            return $colour;
+
+        $regex = "/^rgba\((0|255|25[0-4]|2[0-4]\d|1\d\d|0?\d?\d),(0|255|25[0-4]|2[0-4]\d|1\d\d|0?\d?\d),(0|255|25[0-4]|2[0-4]\d|1\d\d|0?\d?\d),(0?\.([\d]{1,2})|1(\.0)?)\)$/";
+
+        if (preg_match($regex, $colour) && in_array($enforceType, ['any', 'rgba']))
+            return $colour;
+
+        $regex = "/^hsl\((0|360|35\d|3[0-4]\d|[12]\d\d|0?\d?\d),(0|100|\d{1,2})%,(0|100|\d{1,2})%\)$/";
+
+        if (preg_match($regex, $colour) && in_array($enforceType, ['any', 'hsl']))
+            return $colour;
+
+        $regex = "/^hsla\((0|360|35\d|3[0-4]\d|[12]\d\d|0?\d?\d),(0|100|\d{1,2})%,(0|100|\d{1,2})%,(0?\.\d|1(\.0)?)\)$/";
+
+        if (preg_match($regex, $colour) && in_array($enforceType, ['any', 'hsla']))
+            return $colour;
+
+        return false;
     }
 }
