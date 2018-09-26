@@ -55,9 +55,17 @@ class ColourValidator extends ConstraintValidator
         $colour = str_replace(' ', '', $colour);
 
         $regex = "/^(#?([a-f\d]{3}|[a-f\d]{6}))$/";
-        if (preg_match($regex, $colour) && in_array($enforceType, ['any', 'hex']))
+        if (preg_match($regex, $colour) && in_array($enforceType, ['any', 'hex'])) {
+            if (strlen($colour) === 6)
+                $colour = '#'.$colour;
+            if (strlen($colour) === 3) {
+                $x = '#';
+                for($i=0; $i<3; $i++)
+                    $x .= $colour[$i].$colour[$i];
+                $colour = $x;
+            }
             return $colour;
-
+        }
         $regex = "/^rgb\((0|255|25[0-4]|2[0-4]\d|1\d\d|0?\d?\d),(0|255|25[0-4]|2[0-4]\d|1\d\d|0?\d?\d),(0|255|25[0-4]|2[0-4]\d|1\d\d|0?\d?\d)\)$/";
 
         if (preg_match($regex, $colour) && in_array($enforceType, ['any', 'rgb']))
