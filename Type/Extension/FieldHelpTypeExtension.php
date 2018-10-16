@@ -24,7 +24,6 @@ class FieldHelpTypeExtension extends AbstractTypeExtension
      */
 	public function buildView(FormView $view, FormInterface $form, array $options)
 	{
-		$view->vars['help'] = $options['help'];
         $view->vars['help_params'] = $options['help_params'];
         $view->vars['element_class'] = $options['element_class'];
         $attr = empty($options['attr']) ? [] : $options['attr'];
@@ -46,7 +45,6 @@ class FieldHelpTypeExtension extends AbstractTypeExtension
 	{
 		$resolver->setDefaults(
 			[
-				'help'  => false,
 				'help_params' => [],
                 'element_class' => '',
                 'auto_complete' => 'off',
