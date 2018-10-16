@@ -9,6 +9,7 @@ class AlwaysInValidValidator extends ConstraintValidator
     public function validate($value, Constraint $constraint)
     {
         $this->context->buildViolation($constraint->message)
+            ->setParameter('%{name}', $this->context->getObject()->getConfig()->getName())
             ->addViolation();
     }
 }

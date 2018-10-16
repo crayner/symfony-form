@@ -9,7 +9,7 @@ class AlwaysInValid extends Constraint
     /**
      * @var string
      */
-    public $message = 'This field is always invalid';
+    public $message = 'This field %{name} is always invalid';
 
     /**
      * @var string
