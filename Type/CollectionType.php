@@ -122,5 +122,6 @@ class CollectionType extends AbstractType
         $view->vars['allow_add']            = $options['allow_add'];
         $view->vars['allow_delete']         = $options['allow_delete'];
         $view->vars['remove_element_route'] = $options['remove_element_route'];
+        $view->vars['button_merge_class']   = $options['button_merge_class'];
     }
 }

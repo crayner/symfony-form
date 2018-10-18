@@ -4,6 +4,10 @@ namespace Hillrange\Form\Validator;
 use Hillrange\Form\Validator\Constraints\AlwaysInValidValidator;
 use Symfony\Component\Validator\Constraint;
 
+/**
+ * Class AlwaysInValid
+ * @package Hillrange\Form\Validator
+ */
 class AlwaysInValid extends Constraint
 {
     /**
