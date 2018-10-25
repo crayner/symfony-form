@@ -56,6 +56,8 @@ return [
 ```
 Features
 --------
+###[React Form Display](Resources/doc/react.md)
+Display a form using react-bootstrap-symfony
 
 ToDo
 ----

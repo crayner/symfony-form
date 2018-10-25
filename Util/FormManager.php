@@ -89,7 +89,7 @@ class FormManager
     /**
      * @var array
      */
-    private $buttonTypeList = ['save','submit', 'add', 'delete', 'return'];
+    private $buttonTypeList = ['save','submit', 'add', 'delete', 'return', 'duplicate'];
 
     /**
      * CollectionManager constructor.
