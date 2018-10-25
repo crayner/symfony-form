@@ -1,0 +1,14 @@
+<!-- Form React Script -->
+<script language="JavaScript" type="text/javascript">
+    window.FORM_PROPS = {{ props|json_encode|raw }}
+    $(document).ready(function(){
+
+        if (document.createStyleSheet){  // Bloody IE
+            document.createStyleSheet('{{ asset('build/form.css') }}');
+        }
+        else {
+            $("head").append($("<link rel='stylesheet' href='{{ asset('bundles/hillrangeform/build/form.css') }}' type='text/css' media='screen' />"));
+        }
+    });
+</script>
+<script src="{{ asset('bundles/hillrangeform/build/form.js') }}" language="JavaScript" type="text/javascript"></script>

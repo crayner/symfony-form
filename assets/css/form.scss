@@ -1,0 +1,8 @@
+.has-error {
+    border-color: red;
+    background-color: #fff0e8;
+    &:focus {
+        color: red;
+        border-color: red;
+    }
+}

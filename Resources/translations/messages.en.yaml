@@ -14,3 +14,4 @@ form:
     up: Up
     down: Down
     duplicate: Duplicate
+"All errors must be cleared before the form can be saved!": "All errors must be cleared before the form can be saved!"
