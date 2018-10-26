@@ -37,10 +37,14 @@ export default function ToggleType(props) {
             className={element.errors.length > 0 ? 'has-danger' : ''}
             key={element.id + value}
             >
-            <button type={'button'} className={buttonClass} onClick={(e) => elementClick(e, element.id)} value={element.value}>
-                <FontAwesomeIcon icon={iconClass} fixedWidth={true}/>
-            </button>
-            <FormLabel label={element.label}/>
+            <div className={'toggle-label'}>
+                <label className={'control-label'} for={element.id}>
+                    <button type={'button'} className={buttonClass} onClick={(e) => elementClick(e, element.id)} value={element.value}>
+                        <FontAwesomeIcon icon={iconClass} fixedWidth={true}/>
+                    </button>
+                    {element.label}
+                </label>
+            </div>
             {style === 'row' ? <span>
                 <FormErrors errors={element.errors}/>
                 <FormHelp help={element.help}/>
