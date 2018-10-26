@@ -8,6 +8,7 @@ import FormHelp from './FormHelp'
 import FormRequired from './FormRequired'
 import FormErrors from './FormErrors'
 import '../../css/form.scss';
+import ToggleType from './ToggleType'
 
 
 export default function FormTypes(props) {
@@ -16,16 +17,18 @@ export default function FormTypes(props) {
         style,
         elementChange,
         getElementData,
+        ...otherProps
     } = props
 
     let element = {...form}
     
-    const prefix = element.block_prefixes.reverse()
+    let prefix = element.block_prefixes.slice(0).reverse()
 
     const content = prefix.find(type => {
         if (isFunction(type))
             return type
     })
+    console.log(prefix,content)
 
     if (!content || /^\s*$/.test(content)){
         console.error('No element type found')
@@ -39,6 +42,8 @@ export default function FormTypes(props) {
     }
 
     switch (content) {
+        case 'hillrange_toggle':
+            return toggleType()
         case 'hidden':
             return hiddenType()
         case 'choice':
@@ -48,11 +53,12 @@ export default function FormTypes(props) {
         case 'time':
             return timeType()
         default:
-            return elementType()
+            return FormType()
     }
 
     function isFunction(type) {
         switch (type) {
+            case 'hillrange_toggle':
             case 'hidden':
             case 'choice':
             case 'time':
@@ -63,7 +69,7 @@ export default function FormTypes(props) {
         }
     }
 
-    function renderElementGroup(content, style, options){
+    function renderFormGroup(content, style, options){
         if (typeof options !== 'object')
             options = {}
         return (
@@ -84,7 +90,7 @@ export default function FormTypes(props) {
     function textType() {
         if (style === 'widget')
             return textTypeWidget()
-        return renderElementGroup(textTypeWidget(), 'text')
+        return renderFormGroup(textTypeWidget(), 'text')
     }
 
     function textTypeWidget(){
@@ -101,13 +107,14 @@ export default function FormTypes(props) {
         )
     }
 
-    function elementType() {
+    function FormType() {
+        console.log(prefix)
         if (style === 'widget')
             return elementTypeWidget()
-        return renderElementGroup(elementTypeWidget(), 'element')
+        return renderFormGroup(elementTypeWidget(), 'element')
     }
 
-    function elementTypeWidget(){
+    function FormTypeWidget(){
         return (
             <FormControl
                 type="text"
@@ -121,7 +128,7 @@ export default function FormTypes(props) {
     function timeType() {
         if (style === 'widget')
             return timeTypeWidget()
-        return renderElementGroup(timeTypeWidget(), 'time')
+        return renderFormGroup(timeTypeWidget(), 'time')
     }
 
     function timeTypeWidget(){
@@ -190,7 +197,7 @@ export default function FormTypes(props) {
     function choiceType() {
         if (style === 'widget')
             return choiceTypeWidget()
-        return renderElementGroup(choiceTypeWidget(), 'choice')
+        return renderFormGroup(choiceTypeWidget(), 'choice')
     }
 
     function getChoiceList(){
@@ -225,6 +232,18 @@ export default function FormTypes(props) {
             <FormControl
                 type="hidden"
                 value={getElementData(element.id)}
+            />
+        )
+    }
+
+    function toggleType() {
+        console.log(element)
+        return (
+            <ToggleType
+                element={element}
+                style={style}
+                value={getElementData(element.id)}
+                {...otherProps}
             />
         )
     }

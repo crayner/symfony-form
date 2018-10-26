@@ -24,6 +24,7 @@ export default class FormControl extends Component {
             form: this.form
         }
         this.elementChange = this.elementChange.bind(this)
+        this.elementClick = this.elementClick.bind(this)
         this.deleteButtonHandler = this.deleteButtonHandler.bind(this)
         this.addButtonHandler = this.addButtonHandler.bind(this)
         this.closeButtonHandler = this.closeButtonHandler.bind(this)
@@ -36,6 +37,7 @@ export default class FormControl extends Component {
         this.formControl = {
             translations: this.translations,
             elementChange: this.elementChange,
+            elementClick: this.elementClick,
             getElementData: this.getElementData,
             deleteButtonHandler: this.deleteButtonHandler,
             closeButtonHandler: this.closeButtonHandler,
@@ -58,6 +60,21 @@ export default class FormControl extends Component {
             })
         else
             this.cancelMessageByName(element.id)
+        this.setFormElement(element,this.form)
+        this.setState({
+            messages: this.messages,
+            form: this.form
+        })
+    }
+
+    // Used from Checkbox, radio, etc.
+    elementClick(event, id){
+        let element = this.getFormElementById(id)
+        if (element.block_prefixes.includes('hillrange_toggle')){
+            element.value = element.value === '1' ? '0' : '1'
+            element.data = element.value === '1'
+        }
+        element = FormValidation(element)
         this.setFormElement(element,this.form)
         this.setState({
             messages: this.messages,

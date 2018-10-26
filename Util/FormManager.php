@@ -723,7 +723,7 @@ class FormManager
                     $found = true;
                 }
                 if (! $found)
-                    trigger_error(sprintf('The form url does not have an option %s in the entity.', $w), E_USER_ERROR);
+                    trigger_error(sprintf('The form url does not have an option %s in the entity %s.', $w, get_class($this->getTemplateManager()->getEntity())), E_USER_ERROR);
             }
         }
 
