@@ -9,7 +9,9 @@ export default function FormRequired(props) {
     } = props
 
     if (required === '')
-        return {required}
+        return (
+            <span></span>
+        )
 
     return (
         <span className="field-required">&nbsp;{required}</span>

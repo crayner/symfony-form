@@ -89,7 +89,12 @@ class FormManager
     /**
      * @var array
      */
-    private $buttonTypeList = ['save','submit', 'add', 'delete', 'return', 'duplicate'];
+    private $props;
+
+    /**
+     * @var array
+     */
+    private $buttonTypeList = ['save','submit', 'add', 'delete', 'return', 'duplicate', 'close'];
 
     /**
      * CollectionManager constructor.
@@ -137,10 +142,12 @@ class FormManager
          $props['template'] = $this->getTemplate($templateName);
          $props['form'] =  $this->extractForm($form->createView());
          $props['errors'] = $this->getFormErrors($form);
+         $props['target_div'] = $this->getTargetDivision();
          $props['translations'] = [
              'object' => 'Must be an Object, not an Array',
              'All errors must be cleared before the form can be saved!' => $this->getTranslator()->trans('All errors must be cleared before the form can be saved!', [], 'messages'),
          ];
+         $this->props = $props;
 
          return new \Twig_Markup($this->getTwig()->render('@HillrangeForm/renderForm.html.twig',
              [
@@ -383,7 +390,7 @@ class FormManager
     {
         if (!$form->isSubmitted() || false) return [];
 
-        $messages = new MessageManager();
+        $messages = $this->getMessageManager();
 
         $errorList = $this->getParser()->parseErrors($form);
         $errorList = is_array($errorList) ? $errorList: [];
@@ -488,6 +495,7 @@ class FormManager
             'class' => false,
             'buttons' => false,
             'container' => false,
+            'rows' => false,
             'collection_actions' => false,
         ]);
         $resolver->setAllowedTypes('class', ['boolean','string']);
@@ -495,13 +503,21 @@ class FormManager
         $resolver->setAllowedTypes('label', ['boolean', 'string']);
         $resolver->setAllowedTypes('label_params', ['array']);
         $resolver->setAllowedTypes('container', ['boolean', 'array']);
+        $resolver->setAllowedTypes('rows', ['boolean', 'array']);
         $resolver->setAllowedTypes('form', ['array', 'boolean']);
         $resolver->setAllowedTypes('collection_actions', ['boolean']);
         $column = $resolver->resolve($column);
+
+        if ($column['rows'] && $column['container'])
+            trigger_error(sprintf('A column must not have a container and rows assign. Choose either container or rows or neither.'), E_USER_ERROR);
+
         $column['container'] = $this->validateContainer($column['container']);
+        $column['rows'] = $this->validateRows($column['rows']);
         $column['buttons'] = $this->validateButtons($column['buttons']);
         if (is_array($column['form']))
             $this->addFormTabMap(key($column['form']));
+
+        $column['label'] = $column['label'] ? $this->getTranslator()->trans($column['label'], $column['label_params'], $this->getTranslationDomain()) : false;
 
         return $column;
     }
@@ -527,8 +543,6 @@ class FormManager
         if ($container === false)
             return $container;
         $resolver = new OptionsResolver();
-        $resolver->setRequired([
-        ]);
         $resolver->setDefaults([
             'panel' => false,
             'class' => false,
@@ -760,6 +774,14 @@ class FormManager
 
         }
 
+
+        $x = 0;
+        foreach($tabs as $tab)
+            if ($tab['name'] === $this->getRequestedTab())
+                break;
+            else
+                $x++;
+        $tabs['selectedTab'] = $x;
         return $tabs;
     }
 
@@ -875,5 +897,57 @@ class FormManager
         if ($this->getTemplateManager()->isLocale() === false)
             return false;
         return $this->getRequest()->get('_locale') ?: 'en';
+    }
+
+    /**
+     * getProps
+     *
+     * @return array
+     */
+    public function getProps(): array
+    {
+        return $this->props;
+    }
+
+    /**
+     * getRequestedTab
+     *
+     * @return null|string
+     */
+    private function getRequestedTab(): ?string
+    {
+        return $this->getRequest()->get('tabName');
+    }
+
+    /**
+     * getTargetDivision
+     *
+     * @return string
+     */
+    private function getTargetDivision(): string
+    {
+        if (method_exists($this->getTemplateManager(), 'getTargetDivision'))
+            return $this->getTemplateManager()->getTargetDivision();
+        return 'pageContent';
+    }
+
+    /**
+     * getTranslatorDomain
+     *
+     * @return string
+     */
+    private function getTranslationDomain(): ?string
+    {
+        return $this->getTemplateManager()->getTranslationDomain() ?: null;
+    }
+
+    /**
+     * getMessageManager
+     *
+     * @return mixed
+     */
+    private function getMessageManager()
+    {
+        return $this->getTemplateManager()->getMessageManager();
     }
 }

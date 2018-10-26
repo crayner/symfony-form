@@ -34,4 +34,11 @@ interface TemplateManagerInterface
      * @return bool
      */
     public function isLocale(): bool;
+
+    /**
+     * getTargetDivision
+     *
+     * @return string
+     */
+    public function getTargetDivision(): string;
 }

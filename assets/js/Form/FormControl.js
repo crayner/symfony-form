@@ -26,6 +26,7 @@ export default class FormControl extends Component {
         this.elementChange = this.elementChange.bind(this)
         this.deleteButtonHandler = this.deleteButtonHandler.bind(this)
         this.addButtonHandler = this.addButtonHandler.bind(this)
+        this.closeButtonHandler = this.closeButtonHandler.bind(this)
         this.saveButtonHandler = this.saveButtonHandler.bind(this)
         this.getElementData = this.getElementData.bind(this)
         this.cancelMessage = this.cancelMessage.bind(this)
@@ -37,6 +38,7 @@ export default class FormControl extends Component {
             elementChange: this.elementChange,
             getElementData: this.getElementData,
             deleteButtonHandler: this.deleteButtonHandler,
+            closeButtonHandler: this.closeButtonHandler,
             addButtonHandler: this.addButtonHandler,
             saveButtonHandler: this.saveButtonHandler,
             cancelMessage:  this.cancelMessage,
@@ -64,7 +66,6 @@ export default class FormControl extends Component {
     }
 
     deleteButtonHandler(button){
-        console.log(button)
         const element = button.row
         const eid = parseInt(element.name)
         const collectionId = element.id.replace('_' + eid, '')
@@ -226,6 +227,11 @@ export default class FormControl extends Component {
     returnButtonHandler(options)
     {
         openPage(options.url)
+    }
+
+    closeButtonHandler()
+    {
+        window.close()
     }
 
     saveButtonHandler() {

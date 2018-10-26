@@ -3,6 +3,7 @@
 import React from "react"
 import PropTypes from 'prop-types'
 import FormContainer from './FormContainer'
+import FormRows from './FormRows'
 import FormElementSelect from './FormElementSelect'
 import ButtonManager from '../Component/Button/ButtonManager'
 
@@ -23,12 +24,26 @@ export default function FormColumn(props) {
 
     if (template.container !== false)
         return (
-            <FormContainer
-                template={template.container}
-                form={{...form}}
-                {...otherProps}
-            />
+            <div className={template.class}>
+                <FormContainer
+                    template={template.container}
+                    form={{...form}}
+                    {...otherProps}
+                />
+            </div>
         )
+
+    if (template.rows !== false)
+        return (
+            <div className={template.class}>
+                <FormRows
+                    template={template.rows}
+                    form={{...form}}
+                    {...otherProps}
+                />
+            </div>
+        )
+
 
     let buttons = []
     if (template.buttons !== false) {

@@ -65,7 +65,7 @@ and the only part of the *Default/template.html.twig* that is important for defi
         {% endblock contentContainer %}
     </div>
 which defines to target for the REACT content.  **id="pageContent"**.  Using the template that I will define below, this results in the following display.
-![REACT Display Tab](ReactRender1.jpg)
+![REACT Display Tab](ReactRender1.jpg)  
 Image One
 
 So lets start the deep dive into the template definition.
@@ -146,16 +146,18 @@ All of the parameters for a Column are optional.
 * class: Defaults to false. The class (React className) applied to the column \<div> element. e.g. col-2
 * buttons: Defaults to false.  Can be set an array of buttons.  See [Button Definition](#button-definition) for details to define a button. 
 * container: See details for a [Container](#container). NB: a recursive call to an container to be built inside the column.
+* rows: See details for a [Row Definition](#row-definition). NB: a recursive call to rows to be built inside the column.
 * collection_actions: Action buttons to be applied to each member of a collection.  If set to true, all the buttons found in this column are rendered for the collection member.
 
 ####Button Definition
 * type *(Mandatory)*: a string that selects the type of button. Allowed values are:
-    * save
-    * submit
-    * add
-    * delete
-    * return
-    * duplicate
+    * save: The save button uses a url to push data to the backend.
+    * ~~submit~~: not currently implemented.
+    * add: Add a member to a collection.  Can use a url to do backend work as required.
+    * delete: Delete a member of a collection. Can use a url to do backend work as required.
+    * return: Return to a previous page using a url.
+    * close: Close the current page.
+    * ~~duplicate~~: Not currently implemented. Duplicate a member of a collection using a url for backend work as required.
 * mergeClass *(optional)*: Defaults to '' (empty string.) Merge this string into button element class.  
 * style *(optional)*: Defaults to false, or an array of style types as defined by REACT (so use camelCase names.) e.g. backgroundColor => 'red'
 * options*(optional)*: An array of details about the form element associated with this button.  The only option avaialable is eid = element identifier.  For a collection, the eid can be set to the name or the id or the full_name of the collection member.  (Smoke and Mirrors.)
@@ -166,6 +168,7 @@ All of the parameters for a Column are optional.
     * redirect: Open a page with the url given. (Replace the page.)
 
 ####Collection Definition
+To use collections in the react form render, you must use the __*ReactCollectionType*__. This adds functionality to the standard *CollectionType* to better handle collection members.  Please ensure that you use this type when you define your Collection, so that the functionality is correctly added so the renderer works correctly.  One of the additions is the use of option **sort_manage**, that sets both *allow_up*, and *allow_down* in the standard CollectionType
 * form *(Mandatory)*: an array of the form name => style, where the style = row ow widget.
 * rows *(Mandatory)*: See [Row Definition](#row-definition).
 * buttons *(optional)*: Defaults to false.  Can be set an array of buttons.  See [Button Definition](#button-definition) for details to define a button. 
@@ -368,5 +371,46 @@ Render Image One above
     
 ![REACT Collection Tab](ReactRender2.jpg)
 
+####Saving a Form Data to the Backend
 
+    /**
+     * editColumnSave
+     *
+     * @param int $id
+     * @param Request $request
+     * @param FormManager $formManager
+     * @param TimetableColumnManager $manager
+     * @return JsonResponse
+     * @throws \Exception
+     * @Route("/timetable/column/{id}/save/", name="edit_column_save")
+     * @Security("is_granted('USE_ROUTE', ['manage_columns'])")
+     */
+    public function editColumnSave(int $id, Request $request, FormManager $formManager, TimetableColumnManager $manager)
+    {
+        $entity = $manager->find($id);
 
+        $form = $this->createForm(TimetableColumnType::class, $entity);
+
+        $data = json_decode($request->getContent(), true);
+
+        $form->submit($data);
+
+        if ($form->isValid())
+        {
+            $manager->getEntityManager()->persist($entity);
+            $manager->getEntityManager()->flush();
+        }
+
+        return new JsonResponse(
+            [
+                'form' => $formManager->extractForm($form),
+                'messages' => $formManager->getFormErrors($form),
+            ],
+            200);
+    }
+For the example I have separated out the save logic.  The data here is posted via a json, and therefore the data is not stored in the Request in the same manner, so the form uses the submit, rather than handleRequest. This applies all of the standard Symfony logic to escape inputs for security and cross site attack and validation.   
+The FormManager has methods to extract the form in the correct format for the react render script.  
+####Message Management
+Messages need to be returned as an array with each message in the format of:
+* message: translated message to be displayed.
+* level: The status level (danger, success, warning, info) using bootstrap colour settings to indicate the message status.  

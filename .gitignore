@@ -2,4 +2,5 @@
 .idea
 /vendor
 /Resources/public/build
-yarn.lock
+*.lock
+*.log

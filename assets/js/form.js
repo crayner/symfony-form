@@ -8,5 +8,5 @@ render(
     <FormControl
         {...window.FORM_PROPS}
     />,
-    document.getElementById('pageContent')
+    document.getElementById(window.FORM_PROPS.target_div)
 )

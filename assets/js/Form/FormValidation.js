@@ -74,10 +74,8 @@ function choiceValidator(element, constraint) {
 
     if (constraint.multiple === true) {
         let ok = true
-        if (typeof str !== 'array')
-            str = [str]
-        str.map(x => {
-            if (! constraint.choices.includes(x))
+        str.map((value,key) => {
+            if (! constraint.choices.includes(value))
                 ok = false
         })
         if (! ok)

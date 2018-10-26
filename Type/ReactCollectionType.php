@@ -57,11 +57,11 @@ class ReactCollectionType extends AbstractType
 
         $view->vars['allow_up']             = $options['allow_up'] = $options['sort_manage'];
         $view->vars['allow_down']           = $options['allow_down'] = $options['sort_manage'];
+        $view->vars['sort_manage']          = $options['sort_manage'];
         $view->vars['allow_duplicate']      = $options['allow_duplicate'];
         $view->vars['unique_key']           = $options['unique_key'];
         $view->vars['allow_add']            = $options['allow_add'];
         $view->vars['allow_delete']         = $options['allow_delete'];
-        $view->vars['template']             = $this->buildTemplate($view, $options);
     }
 
     /**
@@ -82,7 +82,6 @@ class ReactCollectionType extends AbstractType
                 'allow_duplicate'       => false,
                 'duplicate_button'      => '',
                 'button_merge_class'    => '',
-                'template'              => [],
             ]
         );
     }
@@ -99,56 +98,5 @@ class ReactCollectionType extends AbstractType
     public function __construct(ButtonManager $buttonManager)
     {
         $this->buttonManager = $buttonManager;
-    }
-
-    /**
-     * buildTemplate
-     *
-     * @param FormView $view
-     * @param $options
-     * @return array
-     */
-    private function buildTemplate(FormView $view, $options): array
-    {
-        $resolver = new OptionsResolver();
-        $resolver->setDefaults([
-            'actions' => [],
-            'rows' => [],
-        ]);
-        $resolver->setAllowedTypes('rows', 'array');
-        $resolver->setAllowedTypes('actions', 'array');
-        $options['template'] = $resolver->resolve($options['template']);
-
-        if ($options['allow_add'] && empty($options['template']['actions']['add']))
-            $options['template']['actions']['add'] = [];
-
-        if ($options['allow_delete'] && empty($options['template']['actions']['delete']))
-            $options['template']['actions']['delete'] = [];
-
-        if ($options['allow_up'] && empty($options['template']['actions']['up']))
-            $options['template']['actions']['up'] = [];
-
-        if ($options['allow_down'] && empty($options['template']['actions']['down']))
-            $options['template']['actions']['down'] = [];
-
-        if ($options['allow_duplicate'] && empty($options['template']['actions']['duplicate']))
-            $options['template']['actions']['duplicate'] = [];
-
-        $options['template']['actions']['add']['display'] = false;
-        if ($options['allow_add']) $options['template']['actions']['add']['display'] = true;
-
-        $options['template']['actions']['delete']['display'] = false;
-        if ($options['allow_add']) $options['template']['actions']['delete']['display'] = true;
-
-        $options['template']['actions']['up']['display'] = false;
-        if ($options['allow_up']) $options['template']['actions']['up']['display'] = true;
-
-        $options['template']['actions']['down']['display'] = false;
-        if ($options['allow_down']) $options['template']['actions']['down']['display'] = true;
-
-        $options['template']['actions']['duplicate']['display'] = false;
-        if ($options['allow_duplicate']) $options['template']['actions']['duplicate']['display'] = true;
-
-        return $options['template'];
     }
 }

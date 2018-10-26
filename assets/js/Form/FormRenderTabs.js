@@ -38,7 +38,7 @@ export default function FormRenderTabs(props) {
     })
 
     return (
-        <Tabs>
+        <Tabs defaultIndex={template.selectedTab}>
             <TabList>
                 {tabTags}
             </TabList>
