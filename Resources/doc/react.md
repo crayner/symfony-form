@@ -166,6 +166,7 @@ All of the parameters for a Column are optional.
 * url_type *(optional)*: Defaults to 'json', or can be 'redirect'
     * json: Does a json ajax call to the backend and returns the form and messages.
     * redirect: Open a page with the url given. (Replace the page.)
+* display *(optional)*: defaults to true. Add a method name in the TemplateManager to return a boolean result. 
 
 ####Collection Definition
 To use collections in the react form render, you must use the __*ReactCollectionType*__. This adds functionality to the standard *CollectionType* to better handle collection members.  Please ensure that you use this type when you define your Collection, so that the functionality is correctly added so the renderer works correctly.  One of the additions is the use of option **sort_manage**, that sets both *allow_up*, and *allow_down* in the standard CollectionType

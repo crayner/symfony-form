@@ -28,7 +28,6 @@ export default function FormTypes(props) {
         if (isFunction(type))
             return type
     })
-    console.log(prefix,content)
 
     if (!content || /^\s*$/.test(content)){
         console.error('No element type found')
@@ -110,8 +109,8 @@ export default function FormTypes(props) {
     function FormType() {
         console.log(prefix)
         if (style === 'widget')
-            return elementTypeWidget()
-        return renderFormGroup(elementTypeWidget(), 'element')
+            return FormTypeWidget()
+        return renderFormGroup(FormTypeWidget(), 'element')
     }
 
     function FormTypeWidget(){
@@ -201,15 +200,22 @@ export default function FormTypes(props) {
     }
 
     function getChoiceList(){
+        let placeholder = []
+        if (!(!element.placeholder || /^\s*$/.test(element.placeholder)))
+        {
+            placeholder = [(<option key={'placeholder'} value={''}>{element.placeholder}</option>)]
+        }
+        let choices = []
         if (typeof element.choices === 'object')
-            return Object.keys(element.choices).map(index => {
+            choices = Object.keys(element.choices).map(index => {
                 const option = element.choices[index]
                 return (<option key={index} value={option.value}>{option.label}</option>)
             })
-
-        return element.choices.map((option, index) => {
-            return (<option key={index} value={option.value}>{option.label}</option>)
-        })
+        else
+            choices = element.choices.map((option, index) => {
+                return (<option key={index} value={option.value}>{option.label}</option>)
+            })
+        return [...placeholder, ...choices]
     }
 
     function choiceTypeWidget(){
@@ -237,7 +243,6 @@ export default function FormTypes(props) {
     }
 
     function toggleType() {
-        console.log(element)
         return (
             <ToggleType
                 element={element}

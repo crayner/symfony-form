@@ -23,10 +23,14 @@ export default function ToggleType(props) {
         elementClick,
     } = props
 
-    let buttonClass =  value === '1' ? element.button_class_on : element.button_class_off
+    let toggleState = value
+    if (typeof toggleState === 'boolean')
+        toggleState = toggleState === true ? '1' : '0'
+
+    let buttonClass =  toggleState === '1' ? element.button_class_on : element.button_class_off
     buttonClass= (buttonClass + ' ' + element.div_class).trim()
 
-    let iconClass = value === '1' ? element.icon_class_on : element.icon_class_off
+    let iconClass = toggleState === '1' ? element.icon_class_on : element.icon_class_off
     iconClass = iconClass.split(' ')
     iconClass[1] = iconClass[1].replace('fa-', '')
     iconClass[0] = iconClass[0].replace('fa-', '')
@@ -35,11 +39,11 @@ export default function ToggleType(props) {
         <FormGroup
             controlId={element.id}
             className={element.errors.length > 0 ? 'has-danger' : ''}
-            key={element.id + value}
+            key={element.id + (toggleState === '1' ? '_on' : '_off')}
             >
             <div className={'toggle-label'}>
-                <label className={'control-label'} for={element.id}>
-                    <button type={'button'} className={buttonClass} onClick={(e) => elementClick(e, element.id)} value={element.value}>
+                <label className={'control-label'} htmlFor={element.id}>
+                    <button type={'button'} className={buttonClass} onClick={(e) => elementClick(e, element.id)} value={toggleState}>
                         <FontAwesomeIcon icon={iconClass} fixedWidth={true}/>
                     </button>
                     {element.label}
@@ -56,7 +60,10 @@ export default function ToggleType(props) {
 ToggleType.propTypes = {
     element: PropTypes.object.isRequired,
     style: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired,
+    value: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.bool,
+    ]).isRequired,
     elementClick: PropTypes.func.isRequired,
 }
 

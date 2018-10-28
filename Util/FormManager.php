@@ -146,6 +146,7 @@ class FormManager
          $props['translations'] = [
              'object' => 'Must be an Object, not an Array',
              'All errors must be cleared before the form can be saved!' => $this->getTranslator()->trans('All errors must be cleared before the form can be saved!', [], 'messages'),
+             'This value should not be blank.' => $this->getTranslator()->trans('This value should not be blank.', [], 'messages'),
          ];
          $this->props = $props;
 
@@ -274,18 +275,27 @@ class FormManager
             $vars['required'] = '';
 
         if (! empty($vars['label']))
-        $vars['label'] = $this->getTranslator()->trans($vars['label'], [], $vars['translation_domain']);
+            $vars['label'] = $this->getTranslator()->trans($vars['label'], [], $vars['translation_domain']);
         else
             $vars['label'] = '';
+
+        if (! empty($vars['placeholder']))
+            $vars['placeholder'] = $this->getTranslator()->trans($vars['placeholder'], [], $vars['translation_domain']);
 
         if (! empty($vars['help']))
             $vars['help'] = $this->getTranslator()->trans($vars['help'], $vars['help_params'], $vars['translation_domain']);
         else
             $vars['help'] = '';
 
-        if (isset($vars['choices']))
+        if (isset($vars['choices'])) {
+            if (empty($vars['data']) && empty($vars['value']))
+                $vars['data'] = $vars['value'] = $this->getFormInterface($this->form, $vars['id'])->getData();
             $vars['choices'] = $this->translateChoices($vars);
-
+            if (empty($vars['value']) && ! empty('placeholder'))
+                $vars['value'] = $vars['data'] = '';
+            else if (! empty($vars['choices'][0]))
+                $vars['value'] = $vars['data'] = $vars['choices'][0]->value;
+        }
         if ($vars['errors']->count() > 0) {
             $errors = [];
             foreach($vars['errors'] as $error)
@@ -344,9 +354,9 @@ class FormManager
             }
 
         }
-        if ($vars['required'] === 'required' && ! $required)
+        if (! empty($vars['required']) && ! $required)
         {
-            $notBlank['message'] = $this->getTranslator()->trans($result[$q]['message'], [], 'validators');
+            $notBlank['message'] = $this->getTranslator()->trans('The value should not be empty!', [], 'validators');
             $notBlank['class'] = 'NotBlank';
             $result[] = $notBlank;
         }
@@ -657,6 +667,7 @@ class FormManager
             'url' => false,
             'url_options' => [],
             'url_type' => 'json',
+            'display' => true,
         ]);
         $resolver->setAllowedTypes('type', ['string']);
         $resolver->setAllowedTypes('mergeClass', ['string']);
@@ -666,8 +677,10 @@ class FormManager
         $resolver->setAllowedTypes('url', ['boolean','string']);
         $resolver->setAllowedTypes('url_type', ['string']);
         $resolver->setAllowedValues('type', $this->getButtonTypeList());
+        $resolver->setAllowedTypes('display', ['boolean', 'string']);
         $resolver->setAllowedValues('url_type', ['redirect', 'json']);
         $button = $resolver->resolve($button);
+        $button['display'] = $this->displayButton($button['display']);
         return $button;
     }
 
@@ -844,6 +857,7 @@ class FormManager
                 return $vars['choices'];
             $choice->label = $this->getTranslator()->trans($choice->label, [], $domain);
         }
+
         return $vars['choices'];
     }
 
@@ -949,5 +963,13 @@ class FormManager
     private function getMessageManager()
     {
         return $this->getTemplateManager()->getMessageManager();
+    }
+
+    private function displayButton($display): bool
+    {
+        if (is_bool($display))
+            return $display;
+
+        return $this->getTemplateManager()->$display();
     }
 }

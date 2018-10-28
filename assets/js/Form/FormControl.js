@@ -53,6 +53,9 @@ export default class FormControl extends Component {
     elementChange(event, id){
         let element = this.getFormElementById(id)
         element.value = event.target.value
+        if (typeof element.attr.onChange !== 'undefined') {
+            this.followUrl(element.attr.onChange,element)
+        }
         element = FormValidation(element)
         if (element.errors.length > 0)
             element.errors.map(error => {
@@ -141,6 +144,46 @@ export default class FormControl extends Component {
         })
     }
 
+    followUrl(details,element)
+    {
+        const url = details.url
+        const options = (details.url_options && typeof details.url_options === 'object') ? details.url_options : {}
+        const type = (details.url_type && typeof details.url_type === 'string') ? details.url_type : 'redirect'
+        this.handleURLCall(url,options,type,element)
+    }
+
+    handleURLCall(url,options,type,element){
+        if (typeof options !== 'object')
+            options = {}
+        Object.keys(options).map(search => {
+            let replace = element[options[search]]
+            if (search === '{id}' && (!replace || /^\s*$/.test(replace)))
+                replace = 'Add'
+            url = url.replace(search, replace)
+        })
+        if (type === 'redirect') {
+            openPage(url, {method: 'GET'}, this.locale)
+        } else {
+            fetchJson(url, {method: 'GET'}, this.locale)
+                .then(data => {
+                    this.elementList = {}
+                    this.messages = this.messages.concat(data.messages)
+                    this.form = data.form
+                    this.setState({
+                        form: this.form,
+                        messages: this.messages
+                    })
+                }).catch(error => {
+                console.error('Error: ', error)
+                this.messages.push({level: 'danger', message: error})
+                this.setState({
+                    form: this.form,
+                    messages: this.messages
+                })
+            })
+        }
+    }
+
     updateCollectionDetails(element,was,now)
     {
         element.children.map(child => {
@@ -152,21 +195,27 @@ export default class FormControl extends Component {
     }
 
     addButtonHandler(button){
-        const id = button.id.replace('_add','')
-        let collection = this.getFormElementById(id)
-        const key = collection.children.length
-        let prototype = {...collection.prototype}
-        prototype = this.setCollectionMemberKey(prototype, key)
+        let url = button.url
+        if (!(!url || /^\s*$/.test(url)))
+            this.handleURLCall(url, button.url_options, button.url_type, {})
+        else {
 
-        let children = collection.children
-        children[key] = prototype
-        collection.children = children
+            const id = button.id.replace('_add', '')
+            let collection = this.getFormElementById(id)
+            const key = collection.children.length
+            let prototype = {...collection.prototype}
+            prototype = this.setCollectionMemberKey(prototype, key)
 
-        this.setFormElement(collection, this.form)
-        this.setState({
-            form: this.form,
-            messages: this.messages,
-        })
+            let children = collection.children
+            children[key] = prototype
+            collection.children = children
+
+            this.setFormElement(collection, this.form)
+            this.setState({
+                form: this.form,
+                messages: this.messages,
+            })
+        }
     }
 
     getFormElementById(id, refresh = false) {
@@ -225,6 +274,7 @@ export default class FormControl extends Component {
             element.value = element.data
             this.elementList[element.id] = element
         }
+
         return (typeof element.value === 'undefined' || element.value === null) ? '' : element.value
     }
 
@@ -251,9 +301,22 @@ export default class FormControl extends Component {
         window.close()
     }
 
+    isOKtoSave()
+    {
+        if (this.messages.length === 0)
+            return true
+        let ok = true
+        this.messages.map(message => {
+            if (['warning','danger'].includes(message.level))
+                ok = false
+        })
+        return ok
+    }
+
     saveButtonHandler() {
         this.data = this.buildFormData({}, this.form)
-        if (this.messages.length === 0) {
+        if (this.isOKtoSave()) {
+            this.messages = []
             fetchJson(
                 this.template.form.url,
                 {method: this.template.form.method, body: JSON.stringify(this.data)},
