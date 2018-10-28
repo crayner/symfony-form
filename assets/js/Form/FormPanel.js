@@ -24,9 +24,11 @@ export default function FormPanel(props) {
         })
     }
 
+    let colour = ['dark','success','primary','info','danger','secondary'].includes(template.colour) ? template.colour + ' text-white' : template.colour + ' text-dark'
+
     return (
-        <div className={'card card-' + template.colour}>
-            <div className={'card-header'}>
+        <div className={'card card-panel'}>
+            <div className={'card-header bg-' + colour}>
                 {template.buttons === false ?
                     <h3 className={'card-title d-flex mb-12 justify-content-between'}>{template.label}</h3>
                     :

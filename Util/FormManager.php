@@ -668,6 +668,7 @@ class FormManager
             'url_options' => [],
             'url_type' => 'json',
             'display' => true,
+            'colour' => '',
         ]);
         $resolver->setAllowedTypes('type', ['string']);
         $resolver->setAllowedTypes('mergeClass', ['string']);
@@ -675,6 +676,7 @@ class FormManager
         $resolver->setAllowedTypes('options', ['array']);
         $resolver->setAllowedTypes('url_options', ['array']);
         $resolver->setAllowedTypes('url', ['boolean','string']);
+        $resolver->setAllowedTypes('colour', ['null','string']);
         $resolver->setAllowedTypes('url_type', ['string']);
         $resolver->setAllowedValues('type', $this->getButtonTypeList());
         $resolver->setAllowedTypes('display', ['boolean', 'string']);
