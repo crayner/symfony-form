@@ -46,11 +46,13 @@
     "scripts": {
         "post-install-cmd": [
             "php -r \"copy('vendor/hillrange/symfony-form/Resources/config/routes.yaml', 'config/routes/hillrange_form.yaml')\"",
-            "php -r \"copy('vendor/hillrange/symfony-form/Resources/public/dist/', vendor/hillrange/symfony-form/Resources/public/build/')\""
+            "php -r \"mkdir('vendor/hillrange/symfony-form/Resources/public/build', 0755, true)\"",
+            "php -r \"copy('vendor/hillrange/symfony-form/Resources/public/dist/*', vendor/hillrange/symfony-form/Resources/public/build/*')\""
         ],
         "post-update-cmd": [
             "php -r \"copy('vendor/hillrange/symfony-form/Resources/config/routes.yaml', 'config/routes/hillrange_form.yaml')\"",
-            "php -r \"copy('vendor/hillrange/symfony-form/Resources/public/dist/', vendor/hillrange/symfony-form/Resources/public/build/')\""
+            "php -r \"mkdir('vendor/hillrange/symfony-form/Resources/public/build', 0755, true)\"",
+            "php -r \"copy('vendor/hillrange/symfony-form/Resources/public/dist/*', vendor/hillrange/symfony-form/Resources/public/build/*')\""
         ]
     }
 }
