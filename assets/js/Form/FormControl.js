@@ -30,6 +30,7 @@ export default class FormControl extends Component {
         this.closeButtonHandler = this.closeButtonHandler.bind(this)
         this.saveButtonHandler = this.saveButtonHandler.bind(this)
         this.getElementData = this.getElementData.bind(this)
+        this.getElementId = this.getElementId.bind(this)
         this.cancelMessage = this.cancelMessage.bind(this)
         this.getFormElementById = this.getFormElementById.bind(this)
         this.returnButtonHandler = this.returnButtonHandler.bind(this)
@@ -46,28 +47,42 @@ export default class FormControl extends Component {
             cancelMessage:  this.cancelMessage,
             getFormElementById: this.getFormElementById,
             returnButtonHandler: this.returnButtonHandler,
+            getElementId: this.getElementId,
         }
         this.elementList = {}
     }
 
     elementChange(event, id){
-        let element = this.getFormElementById(id)
-        element.value = event.target.value
-        if (typeof element.attr.onChange !== 'undefined') {
-            this.followUrl(element.attr.onChange,element)
-        }
-        element = FormValidation(element)
-        if (element.errors.length > 0)
-            element.errors.map(error => {
-                this.setMessageByName(element.id, element.label + ' (' + element.value.toString() + '): ' + error)
+        if (id !== 'ignore_me') {
+            let element = this.getFormElementById(id)
+            if (element.multiple === true) {
+                let value = element.value
+                const newValue = event.target.value
+                if (value.includes(newValue)) {
+                    const index = value.indexOf(newValue)
+                    value.splice(index, 1)
+                } else {
+                    value.push(newValue)
+                }
+                element.value = value
+            } else
+                element.value = event.target.value
+            if (typeof element.attr.onChange !== 'undefined') {
+                this.followUrl(element.attr.onChange, element)
+            }
+            element = FormValidation(element)
+            if (element.errors.length > 0)
+                element.errors.map(error => {
+                    this.setMessageByName(element.id, element.label + ' (' + element.value.toString() + '): ' + error)
+                })
+            else
+                this.cancelMessageByName(element.id)
+            this.setFormElement(element, this.form)
+            this.setState({
+                messages: this.messages,
+                form: this.form
             })
-        else
-            this.cancelMessageByName(element.id)
-        this.setFormElement(element,this.form)
-        this.setState({
-            messages: this.messages,
-            form: this.form
-        })
+        }
     }
 
     // Used from Checkbox, radio, etc.
@@ -216,6 +231,11 @@ export default class FormControl extends Component {
                 messages: this.messages,
             })
         }
+    }
+
+
+    getElementId(id){
+        return id
     }
 
     getFormElementById(id, refresh = false) {

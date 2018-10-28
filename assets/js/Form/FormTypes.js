@@ -17,6 +17,7 @@ export default function FormTypes(props) {
         style,
         elementChange,
         getElementData,
+        getElementId,
         ...otherProps
     } = props
 
@@ -199,7 +200,7 @@ export default function FormTypes(props) {
         return renderFormGroup(choiceTypeWidget(), 'choice')
     }
 
-    function getChoiceList(){
+    function getChoiceList(multiple){
         let placeholder = []
         if (!(!element.placeholder || /^\s*$/.test(element.placeholder)))
         {
@@ -209,27 +210,43 @@ export default function FormTypes(props) {
         if (typeof element.choices === 'object')
             choices = Object.keys(element.choices).map(index => {
                 const option = element.choices[index]
+                if (multiple)
+                    return (<option key={index} value={option.value} onClick={((e) => elementChange(e, element.id))}>{option.label}</option>)
                 return (<option key={index} value={option.value}>{option.label}</option>)
             })
         else
             choices = element.choices.map((option, index) => {
+                if (multiple)
+                    return (<option key={index} value={option.value} onClick={((e) => elementChange(e, element.id))}>{option.label}</option>)
                 return (<option key={index} value={option.value}>{option.label}</option>)
             })
         return [...placeholder, ...choices]
     }
 
     function choiceTypeWidget(){
-        return (
-            <FormControl
-                componentClass="select"
-                value={getElementData(element.id)}
-                placeholder={element.placeholder}
-                multiple={element.multiple}
-                className={element.attr.class}
-                onChange={((e) => elementChange(e, element.id))}
-            >
-                {getChoiceList()}
-            </FormControl>
+        if (element.multiple === true)
+            return (
+                <FormControl
+                    componentClass="select"
+                    value={getElementData(element.id)}
+                    multiple={true}
+                    className={element.attr.class}
+                    onChange={((e) => elementChange(e, 'ignore_me'))}
+                >
+                    {getChoiceList(true)}
+                </FormControl>
+            )
+        else
+            return (
+                <FormControl
+                    componentClass="select"
+                    value={getElementData(element.id)}
+                    multiple={false}
+                    className={element.attr.class}
+                    onChange={((e) => elementChange(e, element.id))}
+                >
+                    {getChoiceList(false)}
+                </FormControl>
         )
     }
 
@@ -257,6 +274,7 @@ export default function FormTypes(props) {
 FormTypes.propTypes = {
     elementChange: PropTypes.func.isRequired,
     getElementData: PropTypes.func.isRequired,
+    getElementId: PropTypes.func.isRequired,
     form: PropTypes.object.isRequired,
     style: PropTypes.string.isRequired,
 }

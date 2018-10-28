@@ -16,6 +16,7 @@
 namespace Hillrange\Form\Util;
 
 use App\Util\FormErrorsParser;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\Request;
@@ -288,13 +289,24 @@ class FormManager
             $vars['help'] = '';
 
         if (isset($vars['choices'])) {
-            if (empty($vars['data']) && empty($vars['value']))
-                $vars['data'] = $vars['value'] = $this->getFormInterface($this->form, $vars['id'])->getData();
+            if (empty($vars['value'])) {
+                $x = $this->getFormInterface($this->form, $vars['id']);
+                if (empty($vars['value']) && ! empty($x->getViewData()))
+                    $vars['value'] = $x->getViewData();
+                if (empty($vars['value']) && ! empty($x->getNormData()))
+                    $vars['value'] = $x->getNormData();
+                if (empty($vars['value']) && ! empty($x->getData()))
+                    $vars['value'] = $x->getData();
+                $vars['data'] = $vars['value'];
+            }
             $vars['choices'] = $this->translateChoices($vars);
-            if (empty($vars['value']) && ! empty('placeholder'))
+            if (empty($vars['value']) && ! empty($vars['placeholder']))
                 $vars['value'] = $vars['data'] = '';
-            else if (! empty($vars['choices'][0]))
+            else if (! empty($vars['choices'][0]) && ! $vars['multiple'])
                 $vars['value'] = $vars['data'] = $vars['choices'][0]->value;
+            if ($vars['multiple'] && $vars['value'] instanceof Collection)
+                $vars['value'] = $vars['value']->toArray();
+            if ($vars['multiple']) dump($vars);
         }
         if ($vars['errors']->count() > 0) {
             $errors = [];
@@ -310,7 +322,6 @@ class FormManager
             $vars['constraints'] = $this->extractConstraints($vars);
         else
             $vars['constraints'] = [];
-
         return $vars;
     }
 
