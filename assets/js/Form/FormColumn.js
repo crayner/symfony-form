@@ -24,7 +24,7 @@ export default function FormColumn(props) {
 
     if (template.container !== false)
         return (
-            <div className={template.class}>
+            <div className={typeof template.class === 'string' ? template.class : undefined}>
                 <FormContainer
                     template={template.container}
                     form={{...form}}
@@ -86,7 +86,6 @@ export default function FormColumn(props) {
             button = {...default_buttons.up}
             if (typeof collection_buttons.up !== 'undefined')
                 button = {...collection_buttons.up}
-            console.log(button)
             buttons.unshift(buildButton(button, 'up'))
         }
     }
@@ -107,7 +106,7 @@ export default function FormColumn(props) {
         })
 
         return (
-            <div className={template.class}>
+            <div className={typeof template.class === 'string' ? template.class : undefined}>
                 {formElements}
                 {buttons}
             </div>
@@ -125,7 +124,7 @@ export default function FormColumn(props) {
     }
 
     return (
-        <div className={template.class}>
+        <div className={typeof template.class === 'string' ? template.class : undefined}>
             {template.label}
             {buttons}
         </div>

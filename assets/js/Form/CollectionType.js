@@ -6,7 +6,6 @@ import ButtonManager from '../Component/Button/ButtonManager'
 import FormRows from './FormRows'
 import firstBy from 'thenby'
 
-
 export default function CollectionType(props) {
     const {
         form,
@@ -89,9 +88,11 @@ export default function CollectionType(props) {
 
         if (typeof child1.data === 'object')
         {
-            if (typeof child1.data.date !== 'undefined') {
+            if (child1.data && typeof child1.data.date !== 'undefined') {
                 return child1.data.date > child2.data.date ? 1 : -1
             }
+            if (child1.data === null)
+                return 1
             console.error('what type of object is this to sort!')
             console.log(child1.data)
         }

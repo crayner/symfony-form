@@ -43,7 +43,7 @@ export default function ToggleType(props) {
             >
             <div className={'toggle-label'}>
                 <label className={'control-label'} htmlFor={element.id}>
-                    <button type={'button'} className={buttonClass} onClick={(e) => elementClick(e, element.id)} value={toggleState}>
+                    <button type={'button'} className={buttonClass} onClick={(e) => elementClick(e, element.id, 'toggle')} value={toggleState}>
                         <FontAwesomeIcon icon={iconClass} fixedWidth={true}/>
                     </button>
                     {element.label}

@@ -146,8 +146,8 @@ class FormManager
          $props['target_div'] = $this->getTargetDivision();
          $props['translations'] = [
              'object' => 'Must be an Object, not an Array',
-             'All errors must be cleared before the form can be saved!' => $this->getTranslator()->trans('All errors must be cleared before the form can be saved!', [], 'messages'),
-             'This value should not be blank.' => $this->getTranslator()->trans('This value should not be blank.', [], 'messages'),
+             'All errors must be cleared before the form can be saved!' => $this->getTranslator()->trans('All errors must be cleared before the form can be saved!', [], 'validators'),
+             'The value should not be empty!' => $this->getTranslator()->trans('The value should not be empty!', [], 'validators'),
          ];
          $this->props = $props;
 
@@ -302,11 +302,10 @@ class FormManager
             $vars['choices'] = $this->translateChoices($vars);
             if (empty($vars['value']) && ! empty($vars['placeholder']))
                 $vars['value'] = $vars['data'] = '';
-            else if (! empty($vars['choices'][0]) && ! $vars['multiple'])
+            else if (empty($vars['value']) && ! empty($vars['choices'][0]) && ! $vars['multiple'])
                 $vars['value'] = $vars['data'] = $vars['choices'][0]->value;
             if ($vars['multiple'] && $vars['value'] instanceof Collection)
                 $vars['value'] = $vars['value']->toArray();
-            if ($vars['multiple']) dump($vars);
         }
         if ($vars['errors']->count() > 0) {
             $errors = [];
@@ -718,7 +717,7 @@ class FormManager
             'url',
         ]);
         $resolver->setDefaults([
-            'method' => 'post',
+            'method' => 'POST',
             'encType' => 'application/x-www-form-urlencoded',
             'url_options' => [],
         ]);
@@ -727,7 +726,7 @@ class FormManager
         $resolver->setAllowedTypes('method', ['string']);
         $resolver->setAllowedTypes('encType', ['string']);
         $resolver->setAllowedValues('encType', ['application/x-www-form-urlencoded', 'text/plain', 'multipart/form-data']);
-        $resolver->setAllowedValues('method', ['post', 'get']);
+        $resolver->setAllowedValues('method', ['POST', 'GET']);
 
         $form = $resolver->resolve($form);
 

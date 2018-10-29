@@ -1,4 +1,4 @@
-function FormValidation(element) {
+export default function FormValidation(element) {
     element.errors = []
     element.constraints.map(constraint => {
         switch (constraint.class){
@@ -19,9 +19,20 @@ function FormValidation(element) {
     return element
 }
 
-module.exports = FormValidation
-
 function notBlankValidator(element, constraint) {
+    if (element.block_prefixes.includes('time'))
+    {
+        let error = false
+        element.children.map(child => {
+            if (typeof child.value !== 'string') {
+                if (! error) {
+                    error = true
+                    element.errors.push(constraint.message)
+                }
+            }
+        })
+        return element
+    }
     const str = element.value
     if (!str || /^\s*$/.test(str))
     {

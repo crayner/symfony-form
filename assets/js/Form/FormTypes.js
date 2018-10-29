@@ -100,15 +100,14 @@ export default function FormTypes(props) {
                 id={element.id}
                 value={getElementData(element.id)}
                 placeholder="Enter text"
-                className={element.attr.class}
+                className={typeof element.attr.class === 'string' ? element.attr.class : undefined }
                 name={element.full_name}
-                onChange={((e) => elementChange(e, element.id))}
+                onChange={((e) => elementChange(e, element.id, 'text'))}
             />
         )
     }
 
     function FormType() {
-        console.log(prefix)
         if (style === 'widget')
             return FormTypeWidget()
         return renderFormGroup(FormTypeWidget(), 'element')
@@ -120,7 +119,8 @@ export default function FormTypes(props) {
                 type="text"
                 value={element.value}
                 placeholder="Enter text"
-                onChange={((e) => elementChange(e, element.id))}
+                onChange={((e) => elementChange(e, element.id, 'form'))}
+                className={typeof element.attr.class === 'string' ? element.attr.class : undefined }
             />
         )
     }
@@ -132,23 +132,25 @@ export default function FormTypes(props) {
     }
 
     function timeTypeWidget(){
-        const hour = element.children[0]
-        const minute = element.children[1]
-        let second = 'undefined'
-        if (typeof element.children[2] !== 'undefined')
+        let hour = element.children[0]
+
+        let minute = undefined
+        if (element.with_minutes)
+            minute = element.children[1]
+
+        let second = undefined
+        if (element.with_seconds)
             second = element.children[2]
 
-        const width = 90 / element.children.length
-
         return (
-            <div id={element.id} autoComplete={'off'} className={'form-inline' + (typeof element.attr.class === 'undefined' ? '' : ' ' + element.attr.class)}>
+            <div id={element.id} onChange={((e) => elementChange(e, element.id, 'time'))} autoComplete={'off'} className={'form-inline' + (typeof element.attr.class === 'undefined' ? '' : ' ' + element.attr.class)}>
                 <FormControl
                     componentClass="select"
                     id={hour.id}
                     value={getElementData(hour.id)}
-                    className={hour.attr.class}
-                    style={{'width': width + '%'}}
-                    onChange={((e) => elementChange(e, hour.id))}
+                    className={typeof element.attr.class === 'string' ? element.attr.class : undefined }
+                    time-type={'hour'}
+                    onChange={((e) => elementChange(e, 'ignore_me'))}
                 >
                     {
                         hour.choices.map((option, index) => {
@@ -156,40 +158,41 @@ export default function FormTypes(props) {
                         })
                     }
 
-                </FormControl>:
-                <FormControl
-                    componentClass="select"
-                    id={minute.id}
-                    value={getElementData(minute.id)}
-                    style={{'width': width + '%'}}
-                    className={minute.attr.class}
-                    onChange={((e) => elementChange(e, minute.id))}
-                >
-                    {
-                        minute.choices.map((option, index) => {
-                            return (<option key={index} value={option.value}>{option.label}</option>)
-                        })
-                    }
-
                 </FormControl>
-                { second !== 'undefined' ?
-                    <span>:<FormControl
+                { element.with_minutes ? <div>:
+                    <FormControl
                         componentClass="select"
-                        id={second.id}
-                        value={getElementData(second.id)}
-                        style={{'width': width + '%'}}
-                        className={second.attr.class}
-                        onChange={((e) => elementChange(e, second.id))}
+                        id={minute.id}
+                        value={getElementData(minute.id)}
+                        time-type={'minute'}
+                        className={typeof element.attr.class === 'string' ? element.attr.class : undefined }
+                        onChange={((e) => elementChange(e, 'ignore_me'))}
                     >
                         {
-                            second.choices.map((option, index) => {
+                            minute.choices.map((option, index) => {
                                 return (<option key={index} value={option.value}>{option.label}</option>)
                             })
                         }
 
-                    </FormControl></span>
+                    </FormControl>
+                    { element.with_seconds ?
+                        <div>:<FormControl
+                            componentClass="select"
+                            id={second.id}
+                            value={getElementData(second.id)}
+                            time-type={'second'}
+                            className={typeof element.attr.class === 'string' ? element.attr.class : undefined }
+                            onChange={((e) => elementChange(e, 'ignore_me'))}
+                        >
+                            {
+                                second.choices.map((option, index) => {
+                                    return (<option key={index} value={option.value}>{option.label}</option>)
+                                })
+                            }
+
+                        </FormControl></div>
                     : ''
-                }
+                    } </div> : '' }
             </div>
         )
     }
@@ -211,13 +214,13 @@ export default function FormTypes(props) {
             choices = Object.keys(element.choices).map(index => {
                 const option = element.choices[index]
                 if (multiple)
-                    return (<option key={index} value={option.value} onClick={((e) => elementChange(e, element.id))}>{option.label}</option>)
+                    return (<option key={index} value={option.value} onClick={((e) => elementChange(e, element.id, 'choice'))}>{option.label}</option>)
                 return (<option key={index} value={option.value}>{option.label}</option>)
             })
         else
             choices = element.choices.map((option, index) => {
                 if (multiple)
-                    return (<option key={index} value={option.value} onClick={((e) => elementChange(e, element.id))}>{option.label}</option>)
+                    return (<option key={index} value={option.value} onClick={((e) => elementChange(e, element.id, 'choice'))}>{option.label}</option>)
                 return (<option key={index} value={option.value}>{option.label}</option>)
             })
         return [...placeholder, ...choices]
@@ -230,24 +233,25 @@ export default function FormTypes(props) {
                     componentClass="select"
                     value={getElementData(element.id)}
                     multiple={true}
-                    className={element.attr.class}
-                    onChange={((e) => elementChange(e, 'ignore_me'))}
+                    className={typeof element.attr.class === 'string' ? element.attr.class : undefined }
+                    onChange={((e) => elementChange(e, 'ignore_me', 'choice'))}
                 >
                     {getChoiceList(true)}
                 </FormControl>
             )
-        else
+        else {
             return (
                 <FormControl
                     componentClass="select"
                     value={getElementData(element.id)}
                     multiple={false}
-                    className={element.attr.class}
-                    onChange={((e) => elementChange(e, element.id))}
+                    className={typeof element.attr.class === 'string' ? element.attr.class : undefined}
+                    onChange={((e) => elementChange(e, element.id, 'choice'))}
                 >
                     {getChoiceList(false)}
                 </FormControl>
-        )
+            )
+        }
     }
 
     function hiddenType() {

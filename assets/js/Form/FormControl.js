@@ -3,6 +3,7 @@
 import React, { Component } from "react"
 import PropTypes from 'prop-types'
 import FormRender from './FormRender'
+import SetFormElementValue from './SetFormElementValue'
 import FormValidation from './FormValidation'
 import {fetchJson} from '../Component/fetchJson'
 import {openPage} from '../Component/openPage'
@@ -52,31 +53,22 @@ export default class FormControl extends Component {
         this.elementList = {}
     }
 
-    elementChange(event, id){
+    elementChange(event, id, type){
         if (id !== 'ignore_me') {
             let element = this.getFormElementById(id)
-            if (element.multiple === true) {
-                let value = element.value
-                const newValue = event.target.value
-                if (value.includes(newValue)) {
-                    const index = value.indexOf(newValue)
-                    value.splice(index, 1)
-                } else {
-                    value.push(newValue)
-                }
-                element.value = value
-            } else
-                element.value = event.target.value
+            element = SetFormElementValue(event, element, type)
+
             if (typeof element.attr.onChange !== 'undefined') {
                 this.followUrl(element.attr.onChange, element)
             }
-            element = FormValidation(element)
+
             if (element.errors.length > 0)
                 element.errors.map(error => {
-                    this.setMessageByName(element.id, element.label + ' (' + element.value.toString() + '): ' + error)
+                    this.setMessageByName(element.id, (element.label ? element.label : element.name) + + ' (' + (!(!element.value || /^\s*$/.test(element.value)) ? JSON.stringify(element.value) : '{empty}') + '): ' + error)
                 })
             else
                 this.cancelMessageByName(element.id)
+
             this.setFormElement(element, this.form)
             this.setState({
                 messages: this.messages,
@@ -86,21 +78,24 @@ export default class FormControl extends Component {
     }
 
     // Used from Checkbox, radio, etc.
-    elementClick(event, id){
-        let element = this.getFormElementById(id)
-        if (element.block_prefixes.includes('hillrange_toggle')){
-            element.value = element.value === '1' ? '0' : '1'
-            element.data = element.value === '1'
+    elementClick(event, id, type){
+        if (id !== 'ignore_me') {
+            let element = this.getFormElementById(id)
+            element = SetFormElementValue(event, element, type)
+            this.setFormElement(element, this.form)
+            this.setState({
+                messages: this.messages,
+                form: this.form
+            })
         }
-        element = FormValidation(element)
-        this.setFormElement(element,this.form)
-        this.setState({
-            messages: this.messages,
-            form: this.form
-        })
     }
 
-    deleteButtonHandler(button){
+    deleteButtonHandler(button) {
+        let url = button.url
+        if (!(!url || /^\s*$/.test(url))) {
+            this.handleURLCall(url, button.url_options, button.url_type, button.row)
+            return
+        }
         const element = button.row
         const eid = parseInt(element.name)
         const collectionId = element.id.replace('_' + eid, '')
@@ -189,12 +184,12 @@ export default class FormControl extends Component {
                         messages: this.messages
                     })
                 }).catch(error => {
-                console.error('Error: ', error)
-                this.messages.push({level: 'danger', message: error})
-                this.setState({
-                    form: this.form,
-                    messages: this.messages
-                })
+                    console.error('Error: ', error)
+                    this.messages.push({level: 'danger', message: error})
+                    this.setState({
+                        form: this.form,
+                        messages: this.messages
+                    })
             })
         }
     }
@@ -242,11 +237,11 @@ export default class FormControl extends Component {
         if (refresh === true)
             this.elementList = {}
         if (typeof this.elementList[id] === 'undefined')
-            this.elementList = this.buildElementList({})
+            this.elementList = this.buildElementList({}, this.form)
         return this.elementList[id]
     }
 
-    buildElementList(list, form = this.form) {
+    buildElementList(list, form) {
         list[form.id] = form
         form.children.map(child => {
             this.buildElementList(list,child)
@@ -358,7 +353,7 @@ export default class FormControl extends Component {
                 })
             })
         } else {
-            const message = {level: 'danger', message: translateMessage(this.translations, 'All errors must be cleared before the form can be saved!')}
+            const message = {level: 'dark', message: translateMessage(this.translations, 'All errors must be cleared before the form can be saved!')}
             this.messages.push(message)
             this.setState({
                 form: this.form,
@@ -378,8 +373,10 @@ export default class FormControl extends Component {
     cancelMessageByName(name) {
         Object.keys(this.messages).map(key => {
             const message = this.messages[key]
-            if (typeof message.name !== 'undefined' && message.name === name)
-                this.messages.splice(key,1)
+            if (typeof message !== 'undefined')
+                if (typeof message.name !== 'undefined')
+                    if (message.name === name)
+                        this.messages.splice(key,1)
         })
     }
 
@@ -392,8 +389,7 @@ export default class FormControl extends Component {
     setMessageByElementErrors(element){
         element = FormValidation(element)
         element.errors.map(error => {
-            console.log(element.value)
-            this.setMessageByName(element.id, element.label + ' (' + (!(!element.value || /^\s*$/.test(element.value)) ? element.value.toString() : '{empty}') + '): ' + error)
+            this.setMessageByName(element.id, (element.label ? element.label : element.name ) + ' (' + (!(!element.value || /^\s*$/.test(element.value)) ? JSON.stringify(element.value) : '{empty}') + '): ' + error)
         })
     }
 
