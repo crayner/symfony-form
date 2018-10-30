@@ -17,13 +17,24 @@ export default class FormControl extends Component {
         this.template = props.template
         this.translations = props.translations
         this.locale = props.locale
+
         this.otherProps = {...props}
+        delete this.otherProps.form
+        delete this.otherProps.template
+        delete this.otherProps.translations
+        delete this.otherProps.locale
 
         this.messages = []
+        if (!(!this.form.errors || /^\s*$/.test(this.form.errors)))
+            this.messages = this.form.errors.map(message => {
+                return {level: 'danger', message: message}
+            })
+        this.data = {}
         this.state = {
             messages: this.messages,
-            form: this.form
+            form: this.form,
         }
+
         this.elementChange = this.elementChange.bind(this)
         this.elementClick = this.elementClick.bind(this)
         this.deleteButtonHandler = this.deleteButtonHandler.bind(this)
@@ -77,7 +88,7 @@ export default class FormControl extends Component {
         }
     }
 
-    // Used from Checkbox, radio, etc.
+    // Used from checkbox, radio, toggle, etc.
     elementClick(event, id, type){
         if (id !== 'ignore_me') {
             let element = this.getFormElementById(id)
@@ -93,8 +104,8 @@ export default class FormControl extends Component {
     deleteButtonHandler(button) {
         let url = button.url
         if (!(!url || /^\s*$/.test(url))) {
-            this.handleURLCall(url, button.url_options, button.url_type, button.row)
-            return
+            let found = this.handleURLCall(url, button.url_options, button.url_type, button.row)
+            if (found) return
         }
         const element = button.row
         const eid = parseInt(element.name)
@@ -154,23 +165,26 @@ export default class FormControl extends Component {
         })
     }
 
-    followUrl(details,element)
-    {
+    followUrl(details,element) {
         const url = details.url
         const options = (details.url_options && typeof details.url_options === 'object') ? details.url_options : {}
         const type = (details.url_type && typeof details.url_type === 'string') ? details.url_type : 'redirect'
         this.handleURLCall(url,options,type,element)
     }
 
-    handleURLCall(url,options,type,element){
+    handleURLCall(url,options,type,element) {
         if (typeof options !== 'object')
             options = {}
+        let found = true
         Object.keys(options).map(search => {
             let replace = element[options[search]]
             if (search === '{id}' && (!replace || /^\s*$/.test(replace)))
                 replace = 'Add'
             url = url.replace(search, replace)
+            if (replace === undefined || replace === null)
+                found = false
         })
+        if (!found) return false
         if (type === 'redirect') {
             openPage(url, {method: 'GET'}, this.locale)
         } else {
@@ -181,7 +195,7 @@ export default class FormControl extends Component {
                     this.form = data.form
                     this.setState({
                         form: this.form,
-                        messages: this.messages
+                        messages: this.messages,
                     })
                 }).catch(error => {
                     console.error('Error: ', error)
@@ -192,10 +206,10 @@ export default class FormControl extends Component {
                     })
             })
         }
+        return true
     }
 
-    updateCollectionDetails(element,was,now)
-    {
+    updateCollectionDetails(element,was,now) {
         element.children.map(child => {
             child.full_name = child.full_name.replace(was.full_name,now.full_name)
             child.id = child.id.replace(was.id,now.id)
@@ -204,7 +218,7 @@ export default class FormControl extends Component {
         return element
     }
 
-    addButtonHandler(button){
+    addButtonHandler(button) {
         let url = button.url
         if (!(!url || /^\s*$/.test(url)))
             this.handleURLCall(url, button.url_options, button.url_type, {})
@@ -229,7 +243,7 @@ export default class FormControl extends Component {
     }
 
 
-    getElementId(id){
+    getElementId(id) {
         return id
     }
 
@@ -249,8 +263,7 @@ export default class FormControl extends Component {
         return list
     }
 
-    setCollectionMemberKey(prototype, key)
-    {
+    setCollectionMemberKey(prototype, key) {
         let vars = {...prototype}
         vars.children = prototype.children.map(child => {
             return this.setCollectionMemberKey(child,key)
@@ -275,7 +288,7 @@ export default class FormControl extends Component {
         })
     }
 
-    getElementData(id){
+    getElementData(id) {
         let element = this.getFormElementById(id)
 
         if (typeof element === 'undefined' || element.id !== id) {
@@ -288,6 +301,15 @@ export default class FormControl extends Component {
         {
             element.value = element.data
             this.elementList[element.id] = element
+        }
+
+        if (element.block_prefixes.includes('choice'))
+        {
+            if (typeof element.value === 'object' && element.value.length === undefined)
+            {
+                if (element.placeholder === null && typeof element.choices[0] !== 'undefined')
+                    element.value = element.data = element.choices[0].value
+            }
         }
 
         return (typeof element.value === 'undefined' || element.value === null) ? '' : element.value
@@ -316,8 +338,7 @@ export default class FormControl extends Component {
         window.close()
     }
 
-    isOKtoSave()
-    {
+    isOKtoSave() {
         if (this.messages.length === 0)
             return true
         let ok = true
