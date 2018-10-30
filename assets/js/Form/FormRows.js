@@ -23,9 +23,7 @@ export default function FormRows(props) {
         )
     })
 
-    return (
-        <span>{rowContent}</span>
-    )
+    return rowContent
 }
 
 FormRows.propTypes = {

@@ -95,7 +95,7 @@ class FormManager
     /**
      * @var array
      */
-    private $buttonTypeList = ['save','submit', 'add', 'delete', 'return', 'duplicate', 'close'];
+    private $buttonTypeList = ['save','submit', 'add', 'delete', 'return', 'duplicate', 'close', 'up', 'down'];
 
     /**
      * CollectionManager constructor.
@@ -347,6 +347,9 @@ class FormManager
                     $result[$q]['message'] = $this->getTranslator()->trans($result[$q]['message'], [], 'validators');
                     $required = true;
                     break;
+                case 'Colour':
+                    $result[$q]['message'] = $this->getTranslator()->trans($result[$q]['message'], [], 'validators');
+                    break;
                 case 'Length':
                     $result[$q]['maxMessage'] = $this->getTranslator()->transChoice($result[$q]['maxMessage'], $result[$q]['max'], ['{{ limit }}' => $result[$q]['max']], 'validators');
                     $result[$q]['minMessage'] = $this->getTranslator()->transChoice($result[$q]['minMessage'], $result[$q]['min'], ['{{ limit }}' => $result[$q]['min']], 'validators');
@@ -470,8 +473,6 @@ class FormManager
         $resolver->setRequired([
             'class',
             'columns',
-        ]);
-        $resolver->setDefaults([
         ]);
         $resolver->setAllowedTypes('class', 'string');
         $resolver->setAllowedTypes('columns', 'array');
@@ -611,7 +612,7 @@ class FormManager
             'label_params' => [],
             'description_params' => [],
             'rows' => [],
-            'collectionRows' => false,
+            'collection' => false,
             'headerRow' => false,
         ]);
         $resolver->setAllowedTypes('colour', ['string']);
@@ -619,7 +620,7 @@ class FormManager
         $resolver->setAllowedTypes('label_params', ['array']);
         $resolver->setAllowedTypes('rows', ['array']);
         $resolver->setAllowedTypes('headerRow', ['array', 'boolean']);
-        $resolver->setAllowedTypes('collectionRows', ['array', 'boolean']);
+        $resolver->setAllowedTypes('collection', ['array', 'boolean']);
         $resolver->setAllowedTypes('description_params', ['array']);
         $resolver->setAllowedTypes('description', ['boolean', 'string']);
         $resolver->setAllowedTypes('buttons', ['boolean', 'array']);
@@ -627,8 +628,8 @@ class FormManager
 
         $panel['buttons'] = $this->validateButtons($panel['buttons']);
         $panel['rows'] = $this->validateRows($panel['rows']);
-        $panel['collectionRows'] = $this->validateRows($panel['collectionRows']);
-        $panel['headerRow'] = $this->validateRows($panel['headerRow']);
+        $panel['collection'] = $this->validateCollection($panel['collection']);
+        $panel['headerRow'] = $this->validateRow($panel['headerRow']);
 
         if ($panel['label'])
             $panel['label'] = $this->getTranslator()->trans($panel['label'], $panel['label_params'], $this->getTemplateManager()->getTranslationDomain());
@@ -828,14 +829,17 @@ class FormManager
         $resolver->setDefaults([
             'buttons' => [],
             'sortBy' => false,
+            'headerRow' => false,
         ]);
         $resolver->setAllowedTypes('form', ['string']);
         $resolver->setAllowedTypes('rows', ['array']);
         $resolver->setAllowedTypes('buttons', ['array']);
         $resolver->setAllowedTypes('sortBy', ['array', 'boolean']);
+        $resolver->setAllowedTypes('headerRow', ['array', 'boolean']);
         $collection = $resolver->resolve($collection);
         $this->addFormTabMap($collection['form']);
         $collection['rows'] = $this->validateRows($collection['rows']);
+        $collection['headerRow'] = $this->validateRow($collection['headerRow']);
         $collection['buttons'] = $this->validateButtons($collection['buttons']);
         if (is_array($collection['sortBy']) && count($collection['sortBy']) > 3)
             trigger_error(sprintf('The depth of sort for a collection is limited to 3 levels. %d > 3', count($collection['sortBy'])), E_USER_ERROR);

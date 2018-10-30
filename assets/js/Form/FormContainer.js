@@ -14,6 +14,10 @@ export default function FormContainer(props) {
         ...otherProps
     } = props
 
+
+    if (template === false)
+        return ''
+
     if (template.panel !== false){
         return (
             <FormPanel
@@ -65,5 +69,8 @@ export default function FormContainer(props) {
 
 FormContainer.propTypes = {
     form: PropTypes.object.isRequired,
-    template: PropTypes.object.isRequired,
+    template: PropTypes.oneOfType([
+        PropTypes.object,
+        PropTypes.bool,
+    ]).isRequired,
 }

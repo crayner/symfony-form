@@ -11,6 +11,9 @@ export default function FormValidation(element) {
             case 'Choice':
                 element = choiceValidator(element, constraint)
                 break;
+            case 'Colour':
+                element = colourValidator(element, constraint)
+                break;
             default:
                 console.log(element,constraint)
 
@@ -35,9 +38,7 @@ function notBlankValidator(element, constraint) {
     }
     const str = element.value
     if (!str || /^\s*$/.test(str))
-    {
         element.errors.push(constraint.message)
-    }
     return element
 }
 
@@ -92,5 +93,15 @@ function choiceValidator(element, constraint) {
         if (! ok)
             element.errors.push(constraint.multipleMessage)
     }
+    return element
+}
+
+function colourValidator(element, constraint) {
+    let str = element.value
+    if (!str || /^\s*$/.test(str))
+        return element
+    console.log(element)
+    if (!/^#[0-9A-F]{6}$/i.test(str))
+        element.errors.push(constraint.message)
     return element
 }

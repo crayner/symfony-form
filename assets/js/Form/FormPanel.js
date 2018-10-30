@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import FormRows from './FormRows'
 import ButtonManager from '../Component/Button/ButtonManager'
 import FormRow from './FormRow'
+import CollectionType from './CollectionType'
 
 export default function FormPanel(props) {
     const {
@@ -24,7 +25,46 @@ export default function FormPanel(props) {
         })
     }
 
+
     let colour = ['dark','success','primary','info','danger','secondary'].includes(template.colour) ? template.colour + ' text-white' : template.colour + ' text-dark'
+    let content = ''
+    if (template.collection !== false) {
+        const form = otherProps.form
+
+        const collection = form.children.find(element => {
+            if (element.name === template.collection.form)
+                return element
+        })
+
+        content = (
+            <div className={'card-body'}>
+                <FormRow
+                    template={template.headerRow}
+                    {...otherProps}
+                    form={form}
+                />
+                <CollectionType
+                    template={template.collection}
+                    collectionName={template.form}
+                    {...otherProps}
+                    form={collection}
+                />
+            </div>
+        )
+    }
+    else
+        content = (
+            <div className="card-body">
+                <FormRow
+                    template={template.headerRow}
+                    {...otherProps}
+                />
+                <FormRows
+                    template={template.rows}
+                    {...otherProps}
+                />
+            </div>
+        )
 
     return (
         <div className={'card card-panel'}>
@@ -39,16 +79,7 @@ export default function FormPanel(props) {
                 }
                 <p>{template.description}</p>
             </div>
-            <div className="card-body">
-                <FormRow
-                    template={template.headerRow}
-                    {...otherProps}
-                />
-                <FormRows
-                    template={template.rows}
-                    {...otherProps}
-                />
-            </div>
+            {content}
         </div>
     )
 }

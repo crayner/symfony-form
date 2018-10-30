@@ -1,3 +1,5 @@
+'use strict';
+
 import FormValidation from './FormValidation'
 
 export default function SetElementValue(event,element,type) {
@@ -17,9 +19,6 @@ export default function SetElementValue(event,element,type) {
     }
     element = FormValidation(element)
     return element
-
-
-
 
     if (element.block_prefixes.includes('hillrange_toggle')) {
         element.value = element.value === '1' ? '0' : '1'

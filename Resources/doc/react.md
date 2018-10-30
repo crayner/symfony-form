@@ -158,6 +158,8 @@ All of the parameters for a Column are optional.
     * return: Return to a previous page using a url.
     * close: Close the current page.
     * ~~duplicate~~: Not currently implemented. Duplicate a member of a collection using a url for backend work as required.
+    * ~~up~~: Not currently implemented. Move a member of a collection up one position.
+    * ~~down~~: Not currently implemented. Move a member of a collection down one position.
 * mergeClass *(optional)*: Defaults to '' (empty string.) Merge this string into button element class.  
 * style *(optional)*: Defaults to false, or an array of style types as defined by REACT (so use camelCase names.) e.g. backgroundColor => 'red'
 * options*(optional)*: An array of details about the form element associated with this button.  The only option avaialable is eid = element identifier.  For a collection, the eid can be set to the name or the id or the full_name of the collection member.  (Smoke and Mirrors.)

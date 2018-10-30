@@ -2,14 +2,10 @@
 
 import React from "react"
 import PropTypes from 'prop-types'
-import { FormGroup,  FormControl } from 'react-bootstrap'
-import FormLabel from './FormLabel'
-import FormHelp from './FormHelp'
-import FormRequired from './FormRequired'
-import FormErrors from './FormErrors'
+import { FormControl } from 'react-bootstrap'
 import '../../css/form.scss';
 import ToggleType from './ToggleType'
-
+import RenderFormGroup from './RenderFormGroup'
 
 export default function FormTypes(props) {
     const {
@@ -17,12 +13,11 @@ export default function FormTypes(props) {
         style,
         elementChange,
         getElementData,
-        getElementId,
         ...otherProps
     } = props
 
     let element = {...form}
-    
+
     let prefix = element.block_prefixes.slice(0).reverse()
 
     const content = prefix.find(type => {
@@ -42,8 +37,15 @@ export default function FormTypes(props) {
     }
 
     switch (content) {
+        case 'hillrange_colour':
+            return colourType()
         case 'hillrange_toggle':
-            return toggleType()
+            return <ToggleType
+                {...otherProps}
+                element={element}
+                style={style}
+                value={getElementData(element.id)}
+            />
         case 'hidden':
             return hiddenType()
         case 'choice':
@@ -58,6 +60,7 @@ export default function FormTypes(props) {
 
     function isFunction(type) {
         switch (type) {
+            case 'hillrange_colour':
             case 'hillrange_toggle':
             case 'hidden':
             case 'choice':
@@ -69,34 +72,17 @@ export default function FormTypes(props) {
         }
     }
 
-    function renderFormGroup(content, style, options){
-        if (typeof options !== 'object')
-            options = {}
-        return (
-            <FormGroup
-                controlId={element.id}
-                className={element.errors.length > 0 ? 'has-danger' : ''}
-                {...options}
-            >
-                {content}
-                <FormLabel label={element.label}/>
-                <FormRequired required={element.required}/><br/>
-                <FormErrors errors={element.errors}/>
-                <FormHelp help={element.help}/>
-            </FormGroup>
-        )
-    }
 
     function textType() {
         if (style === 'widget')
             return textTypeWidget()
-        return renderFormGroup(textTypeWidget(), 'text')
+        return RenderFormGroup(textTypeWidget('text'), {}, element)
     }
 
-    function textTypeWidget(){
+    function textTypeWidget(type){
         return (
             <FormControl
-                type="text"
+                type={type}
                 id={element.id}
                 value={getElementData(element.id)}
                 placeholder="Enter text"
@@ -109,8 +95,8 @@ export default function FormTypes(props) {
 
     function FormType() {
         if (style === 'widget')
-            return FormTypeWidget()
-        return renderFormGroup(FormTypeWidget(), 'element')
+            return FormTypeWidget('text')
+        return RenderFormGroup(FormTypeWidget('text'), {}, element)
     }
 
     function FormTypeWidget(){
@@ -128,7 +114,7 @@ export default function FormTypes(props) {
     function timeType() {
         if (style === 'widget')
             return timeTypeWidget()
-        return renderFormGroup(timeTypeWidget(), 'time')
+        return RenderFormGroup(timeTypeWidget(), {}, element)
     }
 
     function timeTypeWidget(){
@@ -200,7 +186,7 @@ export default function FormTypes(props) {
     function choiceType() {
         if (style === 'widget')
             return choiceTypeWidget()
-        return renderFormGroup(choiceTypeWidget(), 'choice')
+        return RenderFormGroup(choiceTypeWidget(), {}, element)
     }
 
     function getChoiceList(multiple){
@@ -227,19 +213,21 @@ export default function FormTypes(props) {
     }
 
     function choiceTypeWidget(){
-        if (element.multiple === true)
+        if (element.multiple === true) {
+            if (element.expanded)
+                console.log(element)
             return (
                 <FormControl
                     componentClass="select"
                     value={getElementData(element.id)}
                     multiple={true}
-                    className={typeof element.attr.class === 'string' ? element.attr.class : undefined }
+                    className={typeof element.attr.class === 'string' ? element.attr.class : undefined}
                     onChange={((e) => elementChange(e, 'ignore_me', 'choice'))}
                 >
                     {getChoiceList(true)}
                 </FormControl>
             )
-        else {
+        } else {
             return (
                 <FormControl
                     componentClass="select"
@@ -255,30 +243,19 @@ export default function FormTypes(props) {
     }
 
     function hiddenType() {
-        return (
-            <FormControl
-                type="hidden"
-                value={getElementData(element.id)}
-            />
-        )
+        return textTypeWidget('hidden')
     }
 
-    function toggleType() {
-        return (
-            <ToggleType
-                element={element}
-                style={style}
-                value={getElementData(element.id)}
-                {...otherProps}
-            />
-        )
+    function colourType() {
+        if (style === 'widget')
+            return textTypeWidget('color')
+        return RenderFormGroup(textTypeWidget('color'), {}, element)
     }
 }
 
 FormTypes.propTypes = {
     elementChange: PropTypes.func.isRequired,
     getElementData: PropTypes.func.isRequired,
-    getElementId: PropTypes.func.isRequired,
     form: PropTypes.object.isRequired,
     style: PropTypes.string.isRequired,
 }

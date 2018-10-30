@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import ButtonManager from '../Component/Button/ButtonManager'
 import FormRows from './FormRows'
 import firstBy from 'thenby'
+import FormRow from './FormRow'
 
 export default function CollectionType(props) {
     const {
@@ -18,7 +19,6 @@ export default function CollectionType(props) {
 
     const children = collection.children
     let last = null
-
     Object.keys(children).map(key => {
         let child = children[key]
         last = child.name
@@ -49,15 +49,19 @@ export default function CollectionType(props) {
             let child = children[key]
             return (
                 <FormRows
+                    {...otherProps}
+                    {...collectionProps}
                     key={key}
                     form={child}
                     template={template.rows}
-                    {...collectionProps}
-                    {...otherProps}
                 />
             )
         }
     )
+
+    const headerRow = (
+            <FormRow template={template.headerRow} form={form} {...otherProps} />
+        )
 
     function addButton() {
         if (collection.allow_add) {
@@ -67,9 +71,9 @@ export default function CollectionType(props) {
             button = Object.assign({id: collection.id + '_add'}, {...button})
             return (
                 <ButtonManager
+                    {...otherProps}
                     button={button}
                     addButtonHandler={otherProps.addButtonHandler}
-                    {...otherProps}
                 />
             )
         }
@@ -138,11 +142,12 @@ export default function CollectionType(props) {
                 .thenBy(function (v1, v2) { return sortCollectionTest(sortCriteria[1]['name'], v1, v2) }, sortCriteria[1]['orderBy'])
                 .thenBy(function (v1, v2) { return sortCollectionTest(sortCriteria[2]['name'], v1, v2) }, sortCriteria[2]['orderBy'])
         )
-        return coillection
+        return collection
     }
 
     return (
         <div id={collection.id} autoComplete={'off'}>
+            { headerRow }
             { collectionRows }
             { addButton() }
             <hr />

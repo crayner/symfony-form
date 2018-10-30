@@ -26,9 +26,9 @@ export default function FormColumn(props) {
         return (
             <div className={typeof template.class === 'string' ? template.class : undefined}>
                 <FormContainer
-                    template={template.container}
-                    form={{...form}}
                     {...otherProps}
+                    template={template.container}
+                    form={form}
                 />
             </div>
         )
@@ -37,28 +37,27 @@ export default function FormColumn(props) {
         return (
             <div className={template.class}>
                 <FormRows
-                    template={template.rows}
-                    form={{...form}}
                     {...otherProps}
+                    template={template.rows}
+                    form={form}
                 />
             </div>
         )
-
 
     let buttons = []
     if (template.buttons !== false) {
         buttons = Object.keys(template.buttons).map(key => {
             return (
                 <ButtonManager
+                    {...otherProps}
                     key={key}
                     button={{...template.buttons[key]}}
-                    {...otherProps}
                 />
             )
         })
     }
 
-    if (template.collection_actions){
+    if (template.collection_actions !== false){
         let button = {}
         if (allow_delete){
             button = {...default_buttons.delete}
@@ -70,7 +69,7 @@ export default function FormColumn(props) {
         if (allow_duplicate)
         {
             button = {...default_buttons.duplicate}
-            if (typeof collection_buttons.dumplicate !== 'undefined')
+            if (typeof collection_buttons.duplicate !== 'undefined')
                 button = {...collection_buttons.duplicate}
             buttons.unshift(buildButton(button, 'duplicate'))
         }
@@ -95,12 +94,12 @@ export default function FormColumn(props) {
             const style = template.form[key]
             return (
                 <FormElementSelect
+                    {...otherProps}
                     style={style}
                     name={key}
                     key={key}
                     form={{...form}}
                     template={template}
-                    {...otherProps}
                 />
             )
         })
@@ -116,9 +115,9 @@ export default function FormColumn(props) {
     function buildButton(button, key){
         return (
             <ButtonManager
+                {...otherProps}
                 button={button}
                 key={key}
-                {...otherProps}
             />
         )
     }
@@ -134,7 +133,10 @@ export default function FormColumn(props) {
 FormColumn.propTypes = {
     form: PropTypes.object.isRequired,
     template: PropTypes.object.isRequired,
-    collection_buttons: PropTypes.object,
+    collection_buttons: PropTypes.oneOfType([
+        PropTypes.object,
+        PropTypes.array,
+    ]),
     default_buttons: PropTypes.object,
     allow_delete: PropTypes.bool,
     allow_up: PropTypes.bool,
@@ -149,5 +151,6 @@ FormColumn.defaultProps = {
     allow_up: false,
     allow_down: false,
     allow_duplicate: false,
+    collection_buttons: {},
 }
 
