@@ -2,7 +2,6 @@
 
 import React from "react"
 import PropTypes from 'prop-types'
-import FormLabel from './FormLabel'
 import FormHelp from './FormHelp'
 import FormErrors from './FormErrors'
 import { library } from '@fortawesome/fontawesome-svg-core'

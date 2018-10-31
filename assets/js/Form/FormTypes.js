@@ -6,6 +6,7 @@ import { FormControl } from 'react-bootstrap'
 import '../../css/form.scss';
 import ToggleType from './ToggleType'
 import RenderFormGroup from './RenderFormGroup'
+import ExpandedChoiceType from './ExpandedChoiceType'
 
 export default function FormTypes(props) {
     const {
@@ -215,31 +216,32 @@ export default function FormTypes(props) {
     function choiceTypeWidget(){
         if (element.multiple === true) {
             if (element.expanded)
-                console.log(element)
-            return (
-                <FormControl
-                    componentClass="select"
-                    value={getElementData(element.id)}
-                    multiple={true}
-                    className={typeof element.attr.class === 'string' ? element.attr.class : undefined}
-                    onChange={((e) => elementChange(e, 'ignore_me', 'choice'))}
-                >
-                    {getChoiceList(true)}
-                </FormControl>
-            )
-        } else {
-            return (
-                <FormControl
-                    componentClass="select"
-                    value={getElementData(element.id)}
-                    multiple={false}
-                    className={typeof element.attr.class === 'string' ? element.attr.class : undefined}
-                    onChange={((e) => elementChange(e, element.id, 'choice'))}
-                >
-                    {getChoiceList(false)}
-                </FormControl>
-            )
-        }
+                return (<ExpandedChoiceType {...otherProps} element={element} elementChange={elementChange} />)
+            else
+                return (
+                    <FormControl
+                        componentClass="select"
+                        value={getElementData(element.id)}
+                        multiple={true}
+                        className={typeof element.attr.class === 'string' ? element.attr.class : undefined}
+                        onChange={((e) => elementChange(e, 'ignore_me', 'choice'))}
+                    >
+                        {getChoiceList(true)}
+                    </FormControl>
+                )
+            } else {
+                return (
+                    <FormControl
+                        componentClass="select"
+                        value={getElementData(element.id)}
+                        multiple={false}
+                        className={typeof element.attr.class === 'string' ? element.attr.class : undefined}
+                        onChange={((e) => elementChange(e, element.id, 'choice'))}
+                    >
+                        {getChoiceList(false)}
+                    </FormControl>
+                )
+            }
     }
 
     function hiddenType() {

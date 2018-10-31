@@ -100,7 +100,7 @@ function colourValidator(element, constraint) {
     let str = element.value
     if (!str || /^\s*$/.test(str))
         return element
-    console.log(element)
+
     if (!/^#[0-9A-F]{6}$/i.test(str))
         element.errors.push(constraint.message)
     return element

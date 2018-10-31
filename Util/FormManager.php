@@ -289,8 +289,8 @@ class FormManager
             $vars['help'] = '';
 
         if (isset($vars['choices'])) {
+            $x = $this->getFormInterface($this->form, $vars['id']);
             if (empty($vars['value'])) {
-                $x = $this->getFormInterface($this->form, $vars['id']);
                 if (empty($vars['value']) && ! empty($x->getViewData()))
                     $vars['value'] = $x->getViewData();
                 if (empty($vars['value']) && ! empty($x->getNormData()))
@@ -306,6 +306,12 @@ class FormManager
                 $vars['value'] = $vars['data'] = $vars['choices'][0]->value;
             if ($vars['multiple'] && $vars['value'] instanceof Collection)
                 $vars['value'] = $vars['value']->toArray();
+
+            if (! empty($x->getConfig()->getOption('choice_attr')))
+                foreach($vars['choices'] as $choice)
+                    $choice->attr = $x->getConfig()->getOption('choice_attr');
+            if ($vars['expanded'])
+                $vars['children'] = [];
         }
         if ($vars['errors']->count() > 0) {
             $errors = [];
