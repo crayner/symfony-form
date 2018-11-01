@@ -6,6 +6,10 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Yaml\Yaml;
 
+/**
+ * Class ButtonManager
+ * @package Hillrange\Form\Util
+ */
 class ButtonManager
 {
     /**

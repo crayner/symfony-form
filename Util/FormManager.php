@@ -93,11 +93,6 @@ class FormManager
     private $props;
 
     /**
-     * @var array
-     */
-    private $buttonTypeList = ['save','submit', 'add', 'delete', 'return', 'duplicate', 'close', 'up', 'down', 'misc'];
-
-    /**
      * CollectionManager constructor.
      * @param \Twig_Environment $twig
      */
@@ -663,59 +658,9 @@ class FormManager
 
         foreach($buttons as $q=>$w)
         {
-            $buttons[$q] = $this->validateButton($w);
+            $buttons[$q] = ButtonReactManager::validateButton($w,$this->getTranslator(),$this->getTemplateManager());
         }
         return $buttons;
-    }
-
-    /**
-     * validateButton
-     *
-     * @param $button
-     * @return mixed
-     */
-    private function validateButton($button)
-    {
-        if ($button === false)
-            return $button;
-        $resolver = new OptionsResolver();
-        $resolver->setRequired([
-            'type',
-        ]);
-        $resolver->setDefaults([
-            'mergeClass' => '',
-            'style' => false,
-            'options' => [],
-            'url' => false,
-            'url_options' => [],
-            'url_type' => 'json',
-            'display' => true,
-            'colour' => '',
-            'class' => false,
-            'icon' => false,
-            'title' => '',
-            'title_params' => [],
-        ]);
-        $resolver->setAllowedTypes('type', ['string']);
-        $resolver->setAllowedTypes('mergeClass', ['string']);
-        $resolver->setAllowedTypes('title', ['string']);
-        $resolver->setAllowedTypes('style', ['boolean','array']);
-        $resolver->setAllowedTypes('options', ['array']);
-        $resolver->setAllowedTypes('title_params', ['array']);
-        $resolver->setAllowedTypes('url_options', ['array']);
-        $resolver->setAllowedTypes('url', ['boolean','string']);
-        $resolver->setAllowedTypes('class', ['boolean','string']);
-        $resolver->setAllowedTypes('icon', ['boolean','array']);
-        $resolver->setAllowedTypes('colour', ['null','string']);
-        $resolver->setAllowedTypes('url_type', ['string']);
-        $resolver->setAllowedValues('type', $this->getButtonTypeList());
-        $resolver->setAllowedTypes('display', ['boolean', 'string']);
-        $resolver->setAllowedValues('url_type', ['redirect', 'json']);
-        $button = $resolver->resolve($button);
-        $button['display'] = $this->displayButton($button['display']);
-        if (! empty($button['title']))
-            $button['title'] = $this->getTranslator()->trans($button['title'], $button['title_params'], 'Timetable');
-        return $button;
     }
 
     /**
@@ -1000,14 +945,6 @@ class FormManager
     private function getMessageManager()
     {
         return $this->getTemplateManager()->getMessageManager();
-    }
-
-    private function displayButton($display): bool
-    {
-        if (is_bool($display))
-            return $display;
-
-        return $this->getTemplateManager()->$display();
     }
 
     /**

@@ -1,6 +1,5 @@
 /.idea
 .idea
 /vendor
-/Resources/public/build
 *.lock
 *.log
