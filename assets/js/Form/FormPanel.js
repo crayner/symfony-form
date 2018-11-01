@@ -39,14 +39,14 @@ export default function FormPanel(props) {
         content = (
             <div className={'card-body'}>
                 <FormRow
-                    template={template.headerRow}
                     {...otherProps}
+                    template={template.headerRow}
                     form={form}
                 />
                 <CollectionType
+                    {...otherProps}
                     template={template.collection}
                     collectionName={template.form}
-                    {...otherProps}
                     form={collection}
                 />
             </div>
@@ -56,12 +56,12 @@ export default function FormPanel(props) {
         content = (
             <div className="card-body">
                 <FormRow
-                    template={template.headerRow}
                     {...otherProps}
+                    template={template.headerRow}
                 />
                 <FormRows
-                    template={template.rows}
                     {...otherProps}
+                    template={template.rows}
                 />
             </div>
         )

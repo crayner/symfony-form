@@ -33,6 +33,7 @@ export default class FormControl extends Component {
         this.state = {
             messages: this.messages,
             form: this.form,
+            template: this.template,
         }
 
         this.elementChange = this.elementChange.bind(this)
@@ -46,6 +47,9 @@ export default class FormControl extends Component {
         this.cancelMessage = this.cancelMessage.bind(this)
         this.getFormElementById = this.getFormElementById.bind(this)
         this.returnButtonHandler = this.returnButtonHandler.bind(this)
+        this.miscButtonHandler = this.miscButtonHandler.bind(this)
+        this.callUrl = this.callUrl.bind(this)
+
 
         this.formControl = {
             translations: this.translations,
@@ -59,9 +63,20 @@ export default class FormControl extends Component {
             cancelMessage:  this.cancelMessage,
             getFormElementById: this.getFormElementById,
             returnButtonHandler: this.returnButtonHandler,
+            miscButtonHandler: this.miscButtonHandler,
             getElementId: this.getElementId,
+            callUrl: this.callUrl,
         }
         this.elementList = {}
+    }
+
+    callUrl(event, options){
+        this.handleURLCall(options.url,options.url_options,options.url_type, {})
+    }
+
+    miscButtonHandler(options, event){
+        event.stopPropagation()
+        this.handleURLCall(options.url,options.url_options,options.url_type, {})
     }
 
     elementChange(event, id, type){
@@ -83,7 +98,8 @@ export default class FormControl extends Component {
             this.setFormElement(element, this.form)
             this.setState({
                 messages: this.messages,
-                form: this.form
+                form: this.form,
+                template: this.template,
             })
         }
     }
@@ -96,7 +112,8 @@ export default class FormControl extends Component {
             this.setFormElement(element, this.form)
             this.setState({
                 messages: this.messages,
-                form: this.form
+                template: this.template,
+                form: this.form,
             })
         }
     }
@@ -162,6 +179,7 @@ export default class FormControl extends Component {
         this.setState({
             form: this.form,
             messages: this.messages,
+            template: this.template,
         })
     }
 
@@ -193,16 +211,20 @@ export default class FormControl extends Component {
                     this.elementList = {}
                     this.messages = this.messages.concat(data.messages)
                     this.form = data.form
+                    if (!(!data.template || /^\s*$/.test(data.template)))
+                        this.template = data.template
                     this.setState({
                         form: this.form,
                         messages: this.messages,
+                        template: this.template,
                     })
                 }).catch(error => {
                     console.error('Error: ', error)
                     this.messages.push({level: 'danger', message: error})
                     this.setState({
                         form: this.form,
-                        messages: this.messages
+                        messages: this.messages,
+                        template: this.template,
                     })
             })
         }
@@ -238,6 +260,7 @@ export default class FormControl extends Component {
             this.setState({
                 form: this.form,
                 messages: this.messages,
+                template: this.template,
             })
         }
     }
@@ -361,16 +384,20 @@ export default class FormControl extends Component {
                     this.elementList = {}
                     this.messages = this.messages.concat(data.messages)
                     this.form = data.form
+                    if (!(!data.template || /^\s*$/.test(data.template)))
+                        this.template = data.template
                     this.setState({
                         form: this.form,
-                        messages: this.messages
+                        messages: this.messages,
+                        template: this.template,
                     })
                 }).catch(error => {
                 console.error('Error: ', error)
                 this.messages.push({level: 'danger', message: error})
                 this.setState({
                     form: this.form,
-                    messages: this.messages
+                    messages: this.messages,
+                    template: this.template,
                 })
             })
         } else {
@@ -379,6 +406,7 @@ export default class FormControl extends Component {
             this.setState({
                 form: this.form,
                 messages: this.messages,
+                template: this.template,
             })
         }
     }
@@ -388,6 +416,7 @@ export default class FormControl extends Component {
         this.setState({
             messages: this.messages,
             form: this.form,
+            template: this.template,
         })
     }
 
@@ -417,11 +446,11 @@ export default class FormControl extends Component {
     render() {
         return (
             <FormRender
-                template={this.template}
-                form={{...this.state.form}}
-                messages={this.messages}
-                {...this.formControl}
                 {...this.otherProps}
+                {...this.formControl}
+                template={this.state.template}
+                form={{...this.state.form}}
+                messages={this.state.messages}
             />
         )
     }

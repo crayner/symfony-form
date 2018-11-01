@@ -95,7 +95,7 @@ class FormManager
     /**
      * @var array
      */
-    private $buttonTypeList = ['save','submit', 'add', 'delete', 'return', 'duplicate', 'close', 'up', 'down'];
+    private $buttonTypeList = ['save','submit', 'add', 'delete', 'return', 'duplicate', 'close', 'up', 'down', 'misc'];
 
     /**
      * CollectionManager constructor.
@@ -164,7 +164,7 @@ class FormManager
      * @param array $template
      * @return array
      */
-    private function validateTemplate(array $template): array
+    public function validateTemplate(array $template): array
     {
         $resolver = new OptionsResolver();
         $resolver->setRequired([
@@ -201,7 +201,7 @@ class FormManager
      * @param string $templateName
      * @return array
      */
-    private function getTemplate(string $templateName): array
+    public function getTemplate(string $templateName): array
     {
         if (is_array($this->template))
             return $this->template;
@@ -524,6 +524,8 @@ class FormManager
             'container' => false,
             'rows' => false,
             'collection_actions' => false,
+            'style' => false,
+            'onClick' => false, 
         ]);
         $resolver->setAllowedTypes('class', ['boolean','string']);
         $resolver->setAllowedTypes('buttons', ['boolean','array']);
@@ -531,6 +533,8 @@ class FormManager
         $resolver->setAllowedTypes('label_params', ['array']);
         $resolver->setAllowedTypes('container', ['boolean', 'array']);
         $resolver->setAllowedTypes('rows', ['boolean', 'array']);
+        $resolver->setAllowedTypes('style', ['boolean', 'array']);
+        $resolver->setAllowedTypes('onClick', ['boolean', 'array']);
         $resolver->setAllowedTypes('form', ['array', 'boolean']);
         $resolver->setAllowedTypes('collection_actions', ['boolean']);
         $column = $resolver->resolve($column);
@@ -540,6 +544,7 @@ class FormManager
 
         $column['container'] = $this->validateContainer($column['container']);
         $column['rows'] = $this->validateRows($column['rows']);
+        $column['onClick'] = $this->validateUrl($column['onClick']);
         $column['buttons'] = $this->validateButtons($column['buttons']);
         if (is_array($column['form']))
             $this->addFormTabMap(key($column['form']));
@@ -686,13 +691,21 @@ class FormManager
             'url_type' => 'json',
             'display' => true,
             'colour' => '',
+            'class' => false,
+            'icon' => false,
+            'title' => '',
+            'title_params' => [],
         ]);
         $resolver->setAllowedTypes('type', ['string']);
         $resolver->setAllowedTypes('mergeClass', ['string']);
+        $resolver->setAllowedTypes('title', ['string']);
         $resolver->setAllowedTypes('style', ['boolean','array']);
         $resolver->setAllowedTypes('options', ['array']);
+        $resolver->setAllowedTypes('title_params', ['array']);
         $resolver->setAllowedTypes('url_options', ['array']);
         $resolver->setAllowedTypes('url', ['boolean','string']);
+        $resolver->setAllowedTypes('class', ['boolean','string']);
+        $resolver->setAllowedTypes('icon', ['boolean','array']);
         $resolver->setAllowedTypes('colour', ['null','string']);
         $resolver->setAllowedTypes('url_type', ['string']);
         $resolver->setAllowedValues('type', $this->getButtonTypeList());
@@ -700,6 +713,8 @@ class FormManager
         $resolver->setAllowedValues('url_type', ['redirect', 'json']);
         $button = $resolver->resolve($button);
         $button['display'] = $this->displayButton($button['display']);
+        if (! empty($button['title']))
+            $button['title'] = $this->getTranslator()->trans($button['title'], $button['title_params'], 'Timetable');
         return $button;
     }
 
@@ -993,5 +1008,31 @@ class FormManager
             return $display;
 
         return $this->getTemplateManager()->$display();
+    }
+
+    /**
+     * validateButton
+     *
+     * @param $button
+     * @return mixed
+     */
+    private function validateUrl($url)
+    {
+        if ($url === false)
+            return $url;
+        $resolver = new OptionsResolver();
+        $resolver->setRequired([
+            'url',
+        ]);
+        $resolver->setDefaults([
+            'url_options' => [],
+            'url_type' => 'json',
+        ]);
+        $resolver->setAllowedTypes('url_options', ['array']);
+        $resolver->setAllowedTypes('url', ['string']);
+        $resolver->setAllowedTypes('url_type', ['string']);
+        $resolver->setAllowedValues('url_type', ['redirect', 'json']);
+        $url = $resolver->resolve($url);
+        return $url;
     }
 }

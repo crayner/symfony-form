@@ -21,9 +21,9 @@ export default function FormContainer(props) {
     if (template.panel !== false){
         return (
             <FormPanel
+                {...otherProps}
                 template={template.panel}
                 form={{...form}}
-                {...otherProps}
             />
         )
     }
@@ -37,15 +37,15 @@ export default function FormContainer(props) {
         return (
             <div className={template.class}>
                 <FormRow
+                    {...otherProps}
                     template={template.headerRow}
                     form={{...form}}
-                    {...otherProps}
                 />
                 <CollectionType
+                    {...otherProps}
                     template={template.collection}
                     collectionName={template.form}
                     form={{...collection}}
-                    {...otherProps}
                 />
             </div>
         )
@@ -54,14 +54,14 @@ export default function FormContainer(props) {
     return (
         <div className={template.class}>
             <FormRow
+                {...otherProps}
                 template={template.headerRow}
                 form={{...form}}
-                {...otherProps}
             />
             <FormRows
+                {...otherProps}
                 template={template.rows}
                 form={{...form}}
-                {...otherProps}
             />
         </div>
     )

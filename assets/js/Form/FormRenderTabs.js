@@ -30,8 +30,8 @@ export default function FormRenderTabs(props) {
             <TabPanel key={name}>
                 {page.display ?
                     <FormContainer
-                        template={page.container}
                         {...otherProps}
+                        template={page.container}
                     /> : <div>Empty Tab</div> }
             </TabPanel>
         )

@@ -16,9 +16,9 @@ export default function FormRows(props) {
     const rowContent = template.map((row, key) => {
         return (
             <FormRow
+                {...otherProps}
                 template={row}
                 key={key}
-                {...otherProps}
             />
         )
     })

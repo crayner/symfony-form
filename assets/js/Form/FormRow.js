@@ -16,9 +16,9 @@ export default function FormRow(props) {
     const columns = template.columns.map((column, key) => {
         return (
             <FormColumn
+                {...otherProps}
                 key={key}
                 template={column}
-                {...otherProps}
             />
         )
     })

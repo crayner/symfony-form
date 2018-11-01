@@ -19,8 +19,8 @@ export default function FormRender(props) {
                     {...otherProps}
                 />
                 <FormContainer
-                    template={template.container}
                     {...otherProps}/>
+                    template={template.container}
             </div>
         )
     }
@@ -31,8 +31,8 @@ export default function FormRender(props) {
                 {...otherProps}
             />
             <FormRenderTabs
-                template={template.tabs}
                 {...otherProps}
+                template={template.tabs}
             />
         </div>
     )

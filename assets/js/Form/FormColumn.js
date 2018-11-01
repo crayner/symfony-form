@@ -6,6 +6,7 @@ import FormContainer from './FormContainer'
 import FormRows from './FormRows'
 import FormElementSelect from './FormElementSelect'
 import ButtonManager from '../Component/Button/ButtonManager'
+import Parser from 'html-react-parser';
 
 export default function FormColumn(props) {
     const {
@@ -19,6 +20,7 @@ export default function FormColumn(props) {
         form,
         collection_buttons,
         default_buttons,
+        callUrl,
         ...otherProps
     } = props
 
@@ -28,6 +30,7 @@ export default function FormColumn(props) {
                 <FormContainer
                     {...otherProps}
                     template={template.container}
+                    callUrl={callUrl}
                     form={form}
                 />
             </div>
@@ -40,6 +43,7 @@ export default function FormColumn(props) {
                     {...otherProps}
                     template={template.rows}
                     form={form}
+                    callUrl={callUrl}
                 />
             </div>
         )
@@ -100,6 +104,7 @@ export default function FormColumn(props) {
                     key={key}
                     form={{...form}}
                     template={template}
+                    callUrl={callUrl}
                 />
             )
         })
@@ -122,10 +127,26 @@ export default function FormColumn(props) {
         )
     }
 
+    if (typeof template.label !== 'string')
+        template.label = ''
+
+    let attr = {}
+
+    if (template.style !== false)
+        attr.style = {...template.style}
+
+    if (template.onClick !== false) {
+        attr.onClick = (e) => callUrl(e,template.onClick)
+    }
+
+    if (typeof template.class === 'string')
+        attr.className = template.class
+
+
     return (
-        <div className={typeof template.class === 'string' ? template.class : undefined}>
-            {template.label}
-            {buttons}
+        <div {...attr}>
+            {Parser(template.label)}
+            <span>{buttons}</span>
         </div>
     )
 }
@@ -133,6 +154,7 @@ export default function FormColumn(props) {
 FormColumn.propTypes = {
     form: PropTypes.object.isRequired,
     template: PropTypes.object.isRequired,
+    callUrl: PropTypes.func.isRequired,
     collection_buttons: PropTypes.oneOfType([
         PropTypes.object,
         PropTypes.array,
