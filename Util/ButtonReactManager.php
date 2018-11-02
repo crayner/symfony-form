@@ -28,7 +28,7 @@ class ButtonReactManager
     /**
      * @var array
      */
-    private static $buttonTypeList = ['save','submit', 'add', 'edit', 'delete', 'return', 'duplicate', 'close', 'up', 'down', 'misc'];
+    private static $buttonTypeList = ['save','submit','add','edit','delete','return','duplicate','refresh','close','up','down','misc'];
 
     /**
      * getButtonReactInterface
@@ -85,7 +85,9 @@ class ButtonReactManager
         $resolver->setDefaults([
             'mergeClass' => '',
             'style' => false,
-            'options' => [],
+            'redirect_options' => [],
+            'collection_options' => [],
+            'json_options' => [],
             'url' => false,
             'url_options' => [],
             'url_type' => 'json',
@@ -101,7 +103,9 @@ class ButtonReactManager
         $resolver->setAllowedTypes('type', ['string']);
         $resolver->setAllowedTypes('mergeClass', ['string']);
         $resolver->setAllowedTypes('style', ['boolean','array']);
-        $resolver->setAllowedTypes('options', ['array']);
+        $resolver->setAllowedTypes('redirect_options', ['array']);
+        $resolver->setAllowedTypes('collection_options', ['array']);
+        $resolver->setAllowedTypes('json_options', ['array']);
         $resolver->setAllowedTypes('title', ['string']);
         $resolver->setAllowedTypes('title_params', ['array']);
         $resolver->setAllowedTypes('url_options', ['array']);
