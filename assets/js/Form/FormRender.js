@@ -12,15 +12,16 @@ export default function FormRender(props) {
         ...otherProps
     } = props
 
-    if (template.tabs === false) {
+    if (template.container !== false) {
         return (
             <div className={'container'}>
                 <Messages
                     {...otherProps}
                 />
                 <FormContainer
-                    {...otherProps}/>
+                    {...otherProps}
                     template={template.container}
+                />
             </div>
         )
     }
