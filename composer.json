@@ -13,12 +13,12 @@
     ],
     "require": {
         "php": "^7.1|^7.2",
-        "symfony/asset": "^4.0",
-        "symfony/filesystem": "^4.0",
+        "symfony/asset": "^4.1",
+        "symfony/filesystem": "^4.1",
         "symfony/flex": "^1.0",
-        "symfony/form": "^4.0",
-        "symfony/templating": "^4.0",
-        "symfony/validator": "^4.0"
+        "symfony/form": "^4.1",
+        "symfony/templating": "^4.1",
+        "symfony/validator": "^4.1"
     },
     "require-dev": {
     },
@@ -45,7 +45,7 @@
     },
     "scripts": {
         "post-install-cmd": [
-            "php -r \"copy('vendor/hillrange/symfony-form/Resources/config/routes.yaml', 'config/routes/hillrange_form.yaml');\"",
+            "php -r \"copy('vendor/hillrange/symfony-form/Resources/config/routes.yaml', 'config/routes/hillrange_form.yaml');\""
         ],
         "post-update-cmd": [
         ]
