@@ -12,7 +12,7 @@ export default function CollectionType(props) {
         form,
         template,
         getFormElementById,
-        ...otherProps,
+        ...otherProps
     } = props
 
     const collection = sortCollection(getFormElementById(form.id))

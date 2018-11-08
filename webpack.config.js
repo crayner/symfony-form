@@ -18,7 +18,8 @@ Encore
      * Each entry will result in one JavaScript file (e.g. app.js)
      * and one CSS file (e.g. app.css) if you JavaScript imports CSS.
      */
-    .createSharedEntry('form', './assets/js/form.js')
+    .addEntry('form', './assets/js/form.js')
+    .splitEntryChunks()
 
     /*
      * FEATURE CONFIG
@@ -34,6 +35,7 @@ Encore
     // enables hashed filenames (e.g. app.abc123.css)
     //.enableVersioning(Encore.isProduction())
     .enableReactPreset()
+    .enableSingleRuntimeChunk()
     .configureBabel((babelConfig) => {
         if (Encore.isProduction()) {
             babelConfig.plugins.push(
