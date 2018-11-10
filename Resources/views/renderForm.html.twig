@@ -2,13 +2,18 @@
 <script language="JavaScript" type="text/javascript">
     window.FORM_PROPS = {{ props|json_encode|raw }}
     $(document).ready(function(){
-
+        {% set link = encore_entry_css_files('form') %}
+        {% dump(link) %}
         if (document.createStyleSheet){  // Bloody IE
-            document.createStyleSheet('{{ asset('build/form.css') }}');
+            {% for css in link %}
+                document.createStyleSheet('{{ asset(css) }}');
+            {% endfor %}
         }
         else {
-            $("head").append($("<link rel='stylesheet' href='{{ asset('bundles/hillrangeform/build/form.css') }}' type='text/css' media='screen' />"));
+            {% for css in link %}
+                $("head").append($("<link rel='stylesheet' href='{{ asset(css) }}' type='text/css' media='screen' />"));
+            {% endfor %}
         }
     });
 </script>
-<script src="{{ asset('bundles/hillrangeform/build/form.js') }}" language="JavaScript" type="text/javascript"></script>
+{{ encore_entry_script_tags('form') }}

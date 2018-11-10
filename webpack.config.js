@@ -35,7 +35,7 @@ Encore
     // enables hashed filenames (e.g. app.abc123.css)
     //.enableVersioning(Encore.isProduction())
     .enableReactPreset()
-    .enableSingleRuntimeChunk()
+    .disableSingleRuntimeChunk()
     .configureBabel((babelConfig) => {
         if (Encore.isProduction()) {
             babelConfig.plugins.push(
