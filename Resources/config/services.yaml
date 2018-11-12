@@ -19,4 +19,4 @@ services:
 
     Hillrange\Form\Util\UploadFileManager:
         arguments:
-        - '%upload_path%'
+            - '%upload_path%'
