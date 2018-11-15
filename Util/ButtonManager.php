@@ -38,7 +38,7 @@ class ButtonManager
         $this->router = $router;
         $buttons = <<<XXX
 save:
-    class: "fas fa-download btn btn-success"
+    class: "fas fa-upload btn btn-success"
     type: submit
     title: 'form.save'
     style: 'float: right;'
