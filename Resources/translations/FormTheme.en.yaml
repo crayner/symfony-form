@@ -26,3 +26,5 @@ document:
     delete: Delete Document
     available: Document On File.
     download: Download Document
+'Delete Photo': Delete Photo
+'Download Photo': Download Photo
