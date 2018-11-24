@@ -15,7 +15,6 @@
  */
 namespace Hillrange\Form\Util;
 
-use App\Util\FormErrorsParser;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -141,8 +140,9 @@ class FormManager
          $props['target_div'] = $this->getTargetDivision();
          $props['translations'] = [
              'object' => 'Must be an Object, not an Array',
-             'All errors must be cleared before the form can be saved!' => $this->getTranslator()->trans('All errors must be cleared before the form can be saved!', [], 'validators'),
-             'The value should not be empty!' => $this->getTranslator()->trans('The value should not be empty!', [], 'validators'),
+             'All errors must be cleared before the form can be saved!' => $this->getTranslator()->trans('All errors must be cleared before the form can be saved!', [], 'messages'),
+             'The value should not be empty!' => $this->getTranslator()->trans('The value should not be empty!', [], 'messages'),
+             'Enter Text' => $this->getTranslator()->trans('Enter Text', [], 'messages'),
          ];
          $this->props = $props;
 
