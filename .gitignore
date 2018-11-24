@@ -3,3 +3,4 @@
 /vendor
 *.lock
 *.log
+node_modules
