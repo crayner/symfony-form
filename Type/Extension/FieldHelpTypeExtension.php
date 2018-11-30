@@ -11,7 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * Class FieldHelpTypeExtension
  * @package Hillrange\Form
  *
- * Adda the ability to add help and auto_complete to all elements of a form.
+ * Adda the ability to add help params to all elements of a form.
  */
 class FieldHelpTypeExtension extends AbstractTypeExtension
 {
@@ -28,11 +28,6 @@ class FieldHelpTypeExtension extends AbstractTypeExtension
         $view->vars['element_class'] = $options['element_class'];
         $attr = empty($options['attr']) ? [] : $options['attr'];
 
-        if ($options['auto_complete'] === false || empty($options['auto_complete']))
-            $options['auto_complete'] = 'off';
-        if (! empty($options['auto_complete']) && is_string($options['auto_complete']))
-            $attr = array_merge($attr, ['autocomplete' => $options['auto_complete']]);
-
         $view->vars['attr'] = $attr;
 	}
 
@@ -47,7 +42,6 @@ class FieldHelpTypeExtension extends AbstractTypeExtension
 			[
 				'help_params' => [],
                 'element_class' => '',
-                'auto_complete' => 'off',
 			]
 		);
 	}

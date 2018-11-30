@@ -113,6 +113,7 @@
         </ul>
         {% if form.parent %}</small>{% endif %}
     {%- endif %}
+    <small class="messages form-text text-danger"></small>
     {% if help is defined and help is not empty %}
         {% if translation_domain is not same as(false) %}
             {% set help_params = help_params|default({}) %}

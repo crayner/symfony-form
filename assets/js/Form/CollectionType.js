@@ -146,7 +146,7 @@ export default function CollectionType(props) {
     }
 
     return (
-        <div id={collection.id} autoComplete={'off'}>
+        <div id={collection.id}>
             { headerRow }
             { collectionRows }
             { addButton() }
