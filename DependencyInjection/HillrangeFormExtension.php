@@ -3,6 +3,7 @@ namespace Hillrange\Form\DependencyInjection;
 
 use Hillrange\Form\Type\EventSubscriber\FileSubscriber;
 use Hillrange\Form\Type\ToggleType;
+use Hillrange\Form\Util\ButtonManager;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
@@ -32,6 +33,18 @@ class HillrangeFormExtension extends Extension
                 ->getDefinition(FileSubscriber::class)
                 ->addMethodCall('setTargetDir', ['uploads']);
             $container->setParameter('upload_path', 'uploads');
+        }
+
+        if (!empty($config['translation_domain'])) {
+            $container
+                ->getDefinition(ButtonManager::class)
+                ->addMethodCall('setTransDomain', [$config['translation_domain']]);
+            $container->setParameter('button_translation_domain', $config['translation_domain']);
+        } else {
+            $container
+                ->getDefinition(ButtonManager::class)
+                ->addMethodCall('setTransDomain', ['FormTheme']);
+            $container->setParameter('button_translation_domain', 'FormTheme');
         }
 
         $this->registerButtons($config, $container);

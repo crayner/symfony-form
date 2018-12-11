@@ -637,9 +637,9 @@ XXX;
             {
                 if (in_array($q, ['title', 'prompt']))
                     if (is_array($defaults[$q]))
-                        $defaults[$q] = $this->trans($defaults[$q]['message'], $defaults[$q]['params'], empty($details['transDomain']) ? 'FormTheme' : $details['transDomain']);
+                        $defaults[$q] = $this->trans($defaults[$q]['message'], $defaults[$q]['params'], empty($details['transDomain']) ? $this->getTransDomain() : $details['transDomain']);
                     else
-                        $defaults[$q] = $this->trans($defaults[$q], [], empty($details['transDomain']) ? 'FormTheme' : $details['transDomain']);
+                        $defaults[$q] = $this->trans($defaults[$q], [], empty($details['transDomain']) ? $this->getTransDomain() : $details['transDomain']);
                 $button = str_replace('%' . $q . '%', $defaults[$q], $button);
             }
         }
@@ -670,5 +670,28 @@ XXX;
             return $x;
         }
         return $this->translator->trans($message, $params, $domain);
+    }
+
+    /**
+     * @var string
+     */
+    private $transDomain = 'FormTheme';
+
+    /**
+     * @return string
+     */
+    public function getTransDomain(): string
+    {
+        return $this->transDomain;
+    }
+
+    /**
+     * @param string $transDomain
+     * @return ButtonManager
+     */
+    public function setTransDomain(string $transDomain): ButtonManager
+    {
+        $this->transDomain = $transDomain;
+        return $this;
     }
 }

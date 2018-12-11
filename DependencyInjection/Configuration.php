@@ -16,6 +16,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('button_class_off')->end()
                 ->scalarNode('button_class_on')->end()
                 ->scalarNode('use_font_awesome')->end()
+                ->scalarNode('translation_domain')->end()
             ;
 
         return $treeBuilder;

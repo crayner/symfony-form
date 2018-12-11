@@ -45,7 +45,8 @@
     },
     "scripts": {
         "post-install-cmd": [
-            "php -r \"copy('vendor/hillrange/symfony-form/Resources/config/routes.yaml', 'config/routes/hillrange_form.yaml');\""
+            "php -r \"copy('vendor/hillrange/symfony-form/Resources/config/routes.yaml', 'config/routes/hillrange_form.yaml');\"",
+            "php -r \"copy('vendor/hillrange/symfony-form/Resources/config/hillrange_form.yaml.dist', 'config/packages/hillrange_form.yaml');\""
         ],
         "post-update-cmd": [
         ]
