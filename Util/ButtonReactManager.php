@@ -17,7 +17,7 @@
 namespace Hillrange\Form\Util;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class ButtonReactManager

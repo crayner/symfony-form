@@ -3,8 +3,8 @@ namespace Hillrange\Form\Util;
 
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Yaml\Yaml;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class ButtonManager

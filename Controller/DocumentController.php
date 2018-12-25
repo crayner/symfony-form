@@ -15,7 +15,7 @@
  */
 namespace Hillrange\Form\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -23,7 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * Class DocumentController
  * @package Hillrange\Form\Controller
  */
-class DocumentController extends Controller
+class DocumentController extends AbstractController
 {
     /**
      * downloadFile
