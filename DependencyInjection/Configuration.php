@@ -8,9 +8,8 @@ class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $treeBuilder
-            ->root('hillrange_form')
+        $treeBuilder = new TreeBuilder('hillrange_form');
+        $treeBuilder->getRootNode()
             ->children()
                 ->scalarNode('upload_path')->end()
                 ->scalarNode('button_class_off')->end()
