@@ -73,10 +73,10 @@ your entity by defining this option.
 namespace App\School\Form;
 
 use App\Core\Type\SettingChoiceType;
-use App\Entity\Activity;
-use App\Entity\ActivityTutor;
-use App\Entity\Person;
-use App\Entity\Student;
+use App\Entity\Gibbon\Activity;
+use App\Entity\Gibbon\ActivityTutor;
+use App\Entity\Gibbon\Person;
+use App\Entity\Gibbon\Student;
 use Doctrine\ORM\EntityRepository;
 use Hillrange\Form\Type\EntityType;
 use Hillrange\Form\Type\HiddenEntityType;
