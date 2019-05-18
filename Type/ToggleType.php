@@ -208,4 +208,14 @@ class ToggleType extends AbstractType
         $this->useFontAwesome = $useFontAwesome ? true : false;
         return $this;
     }
+
+    /**
+     * getExtendedType
+     *
+     * @return array
+     */
+    public static function getExtendedTypes()
+    {
+        return [HiddenType::class];
+    }
 }
